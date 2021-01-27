@@ -6,7 +6,8 @@ import { Resolver, Query, buildSchema } from "type-graphql";
 @Resolver()
 class TestResolver {
     @Query(() => String)
-    public async hello(){
+    public hello(){
+        console.log("hello query executed")
         return "hello word"
     };
 }

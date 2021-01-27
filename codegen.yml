@@ -1,0 +1,18 @@
+schema:
+  - http://localhost:8080/graphql:
+      headers:
+        x-site-domain: localhost
+generates:
+  ./src/types.d.tsx:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    documents: ./src/queries/*.graphql
+    config:
+      withComponent: false
+      withHOC: false
+      withHooks: true
+      scalars:
+        DateTime: Date
+        Date: Date

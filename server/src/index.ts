@@ -1,15 +1,11 @@
 import "reflect-metadata";
 import {createExpressApp} from "./core/create-express-app";
+import {createDBConnection} from "./core/create-db-connection";
 import http from "http";
-import {createConnection} from "typeorm";
 
 (async function(){
-    try{
-        await createConnection();
-        console.log("Succes! Connection with db.")
-    } catch (err) {
-        throw new Error (err)
-    }
+
+    await createDBConnection();
 
     const PORT = process.env.PORT || 8080;
     const server = await createExpressApp();

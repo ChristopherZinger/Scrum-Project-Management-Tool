@@ -2,16 +2,25 @@
 
 Boiler plate for application with Typescript, React, Apollo-Client, Apollo-Server-Express, Express, Type-Graphql
 
+### Prerequirements
+
+docker
+docker-compost
+postgres (https://hub.docker.com/_/postgres)
+
 ### Get Started
 
-__Instalation__
-* npm i
-* cd server && npm i
+**Instalation**
 
-__Launching__
-* __/server:__ npm run devstart
-* __/:__ npm run graphql:codegen:watch
-* __/:__ npm run start
+- npm i
+- cd server && npm i
+- **/server:** docker-composet up
+- **/server:** docker exec -it psql -U postgres
+- **>>>** CREATE DATABASE noteexchangedb;
 
+**Launching**
 
-
+- **/server:** docker-composet up
+- **/server:** npm run devstart
+- **/:** npm run graphql:codegen:watch
+- **/:** npm run start

@@ -1,3 +1,5 @@
-query Hello {
-  hello
+query myProfileQuery {
+	myProfile {
+		email
+	}
 }

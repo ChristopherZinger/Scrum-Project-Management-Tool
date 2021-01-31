@@ -8,3 +8,11 @@ services:
       - POSTGRES_PASSWORD=secret
     volumes:
       - ./data/postgres:/var/dist/postgresql/data
+  redis:
+    image: "redis:alpine"
+    ports:
+      - 6379:6379
+    volumes:
+      - /data/redis:/bitnami/redis/data
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes

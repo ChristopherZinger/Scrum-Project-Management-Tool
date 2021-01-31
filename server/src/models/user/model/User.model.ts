@@ -5,8 +5,7 @@ import {
 	OneToOne,
 	JoinColumn
 } from "typeorm";
-import { Student } from "../../student/model/Student.model";
-import { ObjectType, Field, Int, ID } from "type-graphql";
+import { UserProfile } from "../../userProfile/model/Student.model";
 
 @Entity()
 export class User {
@@ -19,7 +18,7 @@ export class User {
 	@Column()
 	public password: string;
 
-	@OneToOne(() => Student, student => student.user)
+	@OneToOne(() => UserProfile, profile => profile.user)
 	@JoinColumn()
-	public student: Student;
+	public profile: UserProfile;
 }

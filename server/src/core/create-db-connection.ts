@@ -1,35 +1,12 @@
-import { createConnection } from "typeorm";
-
-createConnection
+import { createConnection, Connection } from "typeorm";
 
 export async function createDBConnection() {
+    let conn: null | Connection = null;
     try{
-        await createConnection({
-            "type": "postgres",
-            "host": "localhost",
-            "port": 5432,
-            "username": "postgres",
-            "password": "secret",
-            "database": "noteexchangedb",
-            "synchronize": true,
-            "logging": true,
-            "entities": [
-                "src/model/**/*.model.ts"
-            ],
-            "migrations": [
-                "src/db/migrations/**/*.ts"
-            ],
-            "subscribers": [
-                "src/subscriber/**/*.ts"
-            ],
-            "cli": {
-                "entitiesDir": "src/entity",
-                "migrationsDir": "src/migration",
-                "subscribersDir": "src/subscriber"
-            } 
-        });
+        conn = await createConnection();
         console.log("Succes! Connection with db.")
     } catch (err) {
         throw new Error (err)
     }
+    return conn;
 }

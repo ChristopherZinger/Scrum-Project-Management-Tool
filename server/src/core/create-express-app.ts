@@ -1,29 +1,41 @@
 import "reflect-metadata";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { Resolver, Query, buildSchema } from "type-graphql";
-
-@Resolver()
-class TestResolver {
-    @Query(() => String)
-    public hello(){
-        console.log("hello query executed")
-        return "hello word"
-    };
-}
+import { buildSchema } from "type-graphql";
+import { createGQLContext } from "./create-gql-context";
+import path from "path";
+import { createDBConnection } from "./create-db-connection";
+import { setupRedisAndExpressSession } from "./setup-redis-and-express-session";
+import cors from "cors";
 
 export async function createExpressApp() {
+	const connectionDB = await createDBConnection();
+	if (!connectionDB) {
+		throw new Error("Could NOT connect with database.");
+	}
 
-    const schema = await buildSchema({
-        resolvers: [TestResolver],
-    })
+	const schema = await buildSchema({
+		resolvers: [
+			path.join(__dirname, "../models/**/*.{query,mutation,resolver}.{ts,js}")
+		]
+	});
 
-    const apolloServer = new ApolloServer({
-        schema,
-    })
-    
-    const app = express()  
+	const app = express();
 
-    apolloServer.applyMiddleware({ app }); 
-    return app;
+	setupRedisAndExpressSession(app);
+
+	app.use(
+		cors({
+			credentials: true,
+			origin: process.env.FRONTEND_URL
+		})
+	);
+
+	const apolloServer = new ApolloServer({
+		schema,
+		context: ({ req, res }) => createGQLContext(req, res)
+	});
+
+	apolloServer.applyMiddleware({ app });
+	return app;
 }

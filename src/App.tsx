@@ -1,22 +1,19 @@
-import React from 'react';
-import { useHelloQuery } from "./types.d";
+import React from 'react'
 
-
-function App() {
+function App () {
   return (
     <div className="App">
+      sdf
       <Test />
     </div>
   );
 }
 
 const Test = () => {
-  const { data, loading, error } = useHelloQuery();
+
   return (
     <>
-      {data && (data.hello)}
-      {error && (error.message)}
-      {loading && ("loading")}
+
     </>
   )
 }

@@ -9,9 +9,22 @@ import {
 import { AccessGroup } from "./authorization/access-groups";
 import { UserRole } from "../models/user/model/User.model";
 
+type SessionUserType = {
+	id: number;
+	email: string;
+	role: UserRole;
+};
+
+// https://stackoverflow.com/questions/65108033/property-user-does-not-exist-on-type-session-partialsessiondata
+declare module "express-session" {
+	export interface SessionData {
+		user?: SessionUserType;
+	}
+}
+
 export interface ContextType extends AuthorizationContext {
 	// dataloaders: ReturnType<typeof createDataLoaders>;
-	session: Session & Partial<SessionData>;
+	session: Session & Partial<SessionData> & { user?: SessionUserType };
 }
 
 export async function createGQLContext(request: Request, response: Response) {

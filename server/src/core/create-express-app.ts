@@ -6,6 +6,7 @@ import { createGQLContext } from "./create-gql-context";
 import path from "path";
 import { createDBConnection } from "./create-db-connection";
 import { setupRedisAndExpressSession } from "./setup-redis-and-express-session";
+import { customAuthChecker } from "./authorization/auth-checker";
 import cors from "cors";
 
 export async function createExpressApp() {
@@ -17,7 +18,8 @@ export async function createExpressApp() {
 	const schema = await buildSchema({
 		resolvers: [
 			path.join(__dirname, "../models/**/*.{query,mutation,resolver}.{ts,js}")
-		]
+		],
+		authChecker: customAuthChecker
 	});
 
 	const app = express();

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Session, SessionData } from "express-session";
 import { AuthorizationContext } from "./authorization/authorization-context";
 import {
 	PermissionList,
@@ -10,8 +11,7 @@ import { UserRole } from "../models/user/model/User.model";
 
 export interface ContextType extends AuthorizationContext {
 	// dataloaders: ReturnType<typeof createDataLoaders>;
-	request: Request;
-	response: Response;
+	session: Session & Partial<SessionData>;
 }
 
 export async function createGQLContext(request: Request, response: Response) {
@@ -44,8 +44,7 @@ export async function createGQLContext(request: Request, response: Response) {
 
 	const context: ContextType = {
 		...authorizationContext,
-		request,
-		response
+		session: request.session
 	};
 
 	return context;

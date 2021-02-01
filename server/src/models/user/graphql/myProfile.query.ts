@@ -8,7 +8,7 @@ export class MyProfileQuery {
 	public async myProfile(
 		@Ctx() context: ContextType
 	): Promise<UserResponse | null> {
-		const user = context.request.session.user;
+		const user = context.session.user;
 		if (user) {
 			return { email: user.email };
 		}

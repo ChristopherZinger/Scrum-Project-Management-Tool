@@ -6,7 +6,7 @@ export class LogoutMutation {
 	@Mutation(() => Boolean)
 	async logout(@Ctx() ctx: ContextType): Promise<boolean> {
 		return new Promise((res, rej) =>
-			ctx.request.session.destroy(err => {
+			ctx.session.destroy(err => {
 				if (err) {
 					console.error(err);
 					rej(false);

@@ -1,14 +1,13 @@
 import { ContextType } from "@/core/create-gql-context";
 import { Arg, Ctx, Field, Mutation, ObjectType, Resolver } from "type-graphql";
-import { User } from "../model/User.model";
+import { User, UserRole } from "../model/User.model";
 import bcrypt from "bcryptjs";
 import { getRepository } from "typeorm";
-import { UserRepository } from "../model/User.repository";
 
 @ObjectType()
 export class UserResponse {
 	@Field()
-	email: string;
+	email!: string;
 }
 
 @Resolver()
@@ -29,6 +28,7 @@ export class RegisterMutation {
 		const user = new User();
 		user.email = email.toLocaleLowerCase();
 		user.password = bcrypt.hashSync(password, bcrypt.genSaltSync(15));
+		user.role = UserRole.BASE_USER;
 		const newUser = await userRepository.save(user);
 
 		return { email: newUser.email };

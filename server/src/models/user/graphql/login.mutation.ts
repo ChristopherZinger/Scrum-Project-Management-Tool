@@ -33,7 +33,8 @@ export class LoginMutation {
 
 		ctx.request.session.user = {
 			id: user.id,
-			email: user.email
+			email: user.email,
+			role: user.role
 		};
 
 		return { email: user.email };

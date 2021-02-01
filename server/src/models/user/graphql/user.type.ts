@@ -1,5 +1,6 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { UserProfile } from "../../userProfile/model/Student.model";
+import { UserProfileType } from "../../userProfile/graphql/userProfile.type";
+import { UserRole } from "../model/User.model";
 
 @ObjectType()
 export class UserType {
@@ -12,6 +13,9 @@ export class UserType {
 	@Field()
 	password!: string;
 
-	@Field(() => UserProfile, { nullable: true })
-	user?: UserProfile;
+	@Field(() => UserRole)
+	role!: UserRole;
+
+	@Field(() => UserProfileType, { nullable: true })
+	user?: UserProfileType;
 }

@@ -2,16 +2,18 @@ import { Express } from "express";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import Redis from "ioredis";
+import { UserRole } from "../models/user/model/User.model";
 
 type SessionUserType = {
 	id: number;
 	email: string;
+	role: UserRole;
 };
 
 // https://stackoverflow.com/questions/65108033/property-user-does-not-exist-on-type-session-partialsessiondata
 declare module "express-session" {
 	export interface SessionData {
-		user: SessionUserType;
+		user?: SessionUserType | undefined;
 	}
 }
 

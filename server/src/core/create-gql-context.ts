@@ -1,7 +1,12 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
-import jwt from "jsonwebtoken";
-import { User } from "../models/user/model/User.model";
+import { AuthorizationContext } from "./authorization/authorization-context";
+import {
+	PermissionList,
+	buildPermissionsForBaseUser,
+	buildPermissionsForAdmin
+} from "./authorization/permissions";
+import { AccessGroup } from "./authorization/access-groups";
+import { UserRole } from "../models/user/model/User.model";
 
 export interface ContextType extends AuthorizationContext {
 	// dataloaders: ReturnType<typeof createDataLoaders>;
@@ -9,20 +14,33 @@ export interface ContextType extends AuthorizationContext {
 	response: Response;
 }
 
-export interface AuthorizationContext {
-	userId: number | null;
-}
-
-export async function createGQLContext(request, response) {
-	let userId;
+export async function createGQLContext(request: Request, response: Response) {
+	let userId, accessGroup;
+	const permissionList = new PermissionList();
 
 	// find user by token and email
+	if (request.session.user) {
+		userId = request.session.user.id;
+
+		// build permissions and access groups
+		switch (request.session.user.role) {
+			case UserRole.BASE_USER:
+				permissionList.addPermissions(buildPermissionsForBaseUser());
+				accessGroup = AccessGroup.BASE_USER;
+				break;
+
+			case UserRole.ADMIN:
+				permissionList.addPermissions(buildPermissionsForAdmin());
+				accessGroup = AccessGroup.STAFF;
+				break;
+		}
+	}
 
 	const authorizationContext: AuthorizationContext = {
-		userId
+		userId: userId || null,
+		permissionList,
+		accessGroup: accessGroup || null
 	};
-
-	const x = request.session;
 
 	const context: ContextType = {
 		...authorizationContext,

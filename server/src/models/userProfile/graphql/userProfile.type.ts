@@ -4,14 +4,14 @@ import { UserType } from "../../user/graphql/user.type";
 @ObjectType()
 export class UserProfileType {
 	@Field(() => ID)
-	id: number;
+	id!: number;
 
 	@Field()
-	firstname: string;
+	firstname!: string;
 
 	@Field()
-	lastname: string;
+	lastname!: string;
 
 	@Field(() => UserType, { nullable: true })
-	user: UserType;
+	user!: UserType;
 }

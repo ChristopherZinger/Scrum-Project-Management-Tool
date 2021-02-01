@@ -1,7 +1,6 @@
 import { Resolver, Query, Ctx } from "type-graphql";
 import { UserType } from "./user.type";
 import { ContextType } from "../../../core/create-gql-context";
-import { User } from "../model/User.model";
 
 @Resolver()
 export class UserQuery {

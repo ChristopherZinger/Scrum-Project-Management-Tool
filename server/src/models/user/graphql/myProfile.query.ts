@@ -3,7 +3,7 @@ import { UserResponse } from "../graphql/register.mutation";
 import { ContextType } from "../../../core/create-gql-context";
 
 @Resolver()
-class MyProfileQuery {
+export class MyProfileQuery {
 	@Query(() => UserResponse, { nullable: true })
 	public async myProfile(
 		@Ctx() context: ContextType

@@ -47,7 +47,10 @@ export class LoginMutation {
 		ctx.session.user = {
 			id: user.id,
 			email: user.email,
-			role: user.role
+			role: user.role,
+			emailConfirmed: user.emailConfirmed,
+			isActive: user.isActive,
+			removedAt: user.removedAt
 		};
 
 		return { email: user.email };

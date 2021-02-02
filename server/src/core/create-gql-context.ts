@@ -13,6 +13,9 @@ type SessionUserType = {
 	id: number;
 	email: string;
 	role: UserRole;
+	emailConfirmed?: Date;
+	isActive: boolean;
+	removedAt?: Date;
 };
 
 // https://stackoverflow.com/questions/65108033/property-user-does-not-exist-on-type-session-partialsessiondata

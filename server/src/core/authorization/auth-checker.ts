@@ -1,5 +1,5 @@
 import { AuthChecker } from "type-graphql";
-import { ContextType } from "../create-gql-context";
+import { ContextType } from "../context/context-type";
 import { AccessGroup } from "./access-groups";
 import { Permission } from "./permissions";
 

@@ -2,9 +2,10 @@ import { Resolver, Mutation, Ctx, Arg, Field, InputType } from "type-graphql";
 import { IsEmail, Length } from "class-validator";
 import { getRepository } from "typeorm";
 import { UserResponse } from "./register.mutation";
-import { ContextType } from "../../../core/create-gql-context";
+import { ContextType } from "../../../core/context/context-type";
 import bcrypt from "bcryptjs";
 import { User } from "../model/User.model";
+import { updateContext } from "../../../core/context/update-context";
 
 @InputType()
 class LoginInputType {
@@ -24,7 +25,7 @@ export class LoginMutation {
 	@Mutation(() => UserResponse, { nullable: true })
 	async login(
 		@Arg("data") data: LoginInputType,
-		@Ctx() ctx: ContextType
+		@Ctx() context: ContextType
 	): Promise<UserResponse | null> {
 		const userRepository = getRepository(User);
 		const lowerCaseEmail = data.email.toLowerCase();
@@ -44,14 +45,14 @@ export class LoginMutation {
 			return null;
 		}
 
-		ctx.session.user = {
+		updateContext(context, {
 			id: user.id,
 			email: user.email,
 			role: user.role,
 			emailConfirmed: user.emailConfirmed,
 			isActive: user.isActive,
 			removedAt: user.removedAt
-		};
+		});
 
 		return { email: user.email };
 	}

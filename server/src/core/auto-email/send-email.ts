@@ -1,6 +1,14 @@
 const nodemailer = require("nodemailer");
 
-export async function sendEmail(userEmail: string, url: string) {
+type CreateEmail = {
+	from: string;
+	to: string;
+	subject: string;
+	text: string;
+	html: string;
+};
+
+export async function sendEmail(createEmail: CreateEmail) {
 	let testAccount = await nodemailer.createTestAccount();
 
 	const transporter = nodemailer.createTransport({
@@ -14,13 +22,7 @@ export async function sendEmail(userEmail: string, url: string) {
 	});
 
 	// send mail with defined transport object
-	const options = {
-		from: '"Fred Foo 👻" <foo@example.com>',
-		to: `${userEmail}`,
-		subject: "Confirmation Email",
-		text: "Clik on the link to activate your account",
-		html: `<a href="${url}">link</a>`
-	};
+	const options = createEmail;
 
 	const info = await transporter.sendMail(options);
 

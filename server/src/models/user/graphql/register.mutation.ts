@@ -1,4 +1,4 @@
-import { ContextType } from "@/core/create-gql-context";
+import { ContextType } from "../../../core/context/context-type";
 import { IsEmail, Length } from "class-validator";
 import {
 	Arg,
@@ -14,6 +14,7 @@ import bcrypt from "bcryptjs";
 import { getRepository } from "typeorm";
 import { sendEmail } from "../../../core/auto-email/send-email";
 import { createConfirmationUrl } from "../../../core/auto-email/create-confirmation-url";
+import { createConfirmationEmail } from "../../../core/auto-email/emails/create-confirmation-email";
 
 /*
 	Saves new user to db and sends confirmation email
@@ -61,7 +62,11 @@ export class RegisterMutation {
 		const newUser = await userRepository.save(user);
 
 		const confirmationUrl = await createConfirmationUrl(newUser.id);
-		sendEmail(newUser.email, confirmationUrl);
+		const confirmationEmail = createConfirmationEmail(
+			newUser.email,
+			confirmationUrl
+		);
+		sendEmail(confirmationEmail);
 
 		return { email: newUser.email };
 	}

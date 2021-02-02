@@ -1,6 +1,6 @@
 import { Resolver, Query, Ctx, Authorized } from "type-graphql";
 import { UserResponse } from "../graphql/register.mutation";
-import { ContextType } from "../../../core/create-gql-context";
+import { ContextType } from "../../../core/context/context-type";
 import { Permission } from "../../../core/authorization/permissions";
 import { AccessGroup } from "../../../core/authorization/access-groups";
 

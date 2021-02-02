@@ -26,6 +26,11 @@ export class RequestConfirmationMutation {
 			return false;
 		}
 
+		if (user.emailConfirmed) {
+			console.warn(`User with email ${user.email} already already confirmed.`);
+			return false;
+		}
+
 		const confirmationUrl = await createConfirmationUrl(user.id);
 		const confirmationEmail = createConfirmationEmail(
 			user.email,

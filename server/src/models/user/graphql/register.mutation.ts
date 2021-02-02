@@ -13,7 +13,7 @@ import { User, UserRole } from "../model/User.model";
 import bcrypt from "bcryptjs";
 import { getRepository } from "typeorm";
 import { sendEmail } from "../../../core/auto-email/send-email";
-import { createConfirmationUrl } from "../../../core/auto-email/create-confirmation-url";
+import { createConfirmationUrl } from "../../../core/auto-email/create-token-url";
 import { createConfirmationEmail } from "../../../core/auto-email/emails/create-confirmation-email";
 
 /*
@@ -57,7 +57,7 @@ export class RegisterMutation {
 
 		const user = new User();
 		user.email = data.email.toLocaleLowerCase();
-		user.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(15));
+		user.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(12));
 		user.role = UserRole.BASE_USER;
 		const newUser = await userRepository.save(user);
 

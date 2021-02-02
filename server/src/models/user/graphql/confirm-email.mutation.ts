@@ -6,6 +6,8 @@ import { UserResponse } from "./register.mutation";
 import { ContextType } from "../../../core/context/context-type";
 import { Permission } from "../../../core/authorization/permissions";
 import { updateUserContext } from "../../../core/context/update-user-context";
+import { emailConfirmationTokenPrefix } from "../../../core/auto-email/create-token-url";
+
 /*
  User confirm his email buy clicking on generated link
 */
@@ -21,7 +23,7 @@ export class ConfirmUserEmailResolver {
 		const userRepository = getRepository(User);
 
 		// token user
-		const userId = await redis.get(token);
+		const userId = await redis.get(emailConfirmationTokenPrefix + token);
 		if (!userId) {
 			console.error("Incorrect token. Could not get user id from redis");
 			return null;
@@ -55,7 +57,7 @@ export class ConfirmUserEmailResolver {
 		user.isActive = true;
 		const updatedUser = await userRepository.save(user);
 
-		await redis.del(token);
+		await redis.del(emailConfirmationTokenPrefix + token);
 
 		// update context
 		updateUserContext(context, {

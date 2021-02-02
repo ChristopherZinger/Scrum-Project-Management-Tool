@@ -1,13 +1,13 @@
 import { ContextType } from "../../../core/context/context-type";
 import { Resolver, Ctx, Mutation, Authorized } from "type-graphql";
 import { sendEmail } from "../../../core/auto-email/send-email";
-import { createConfirmationUrl } from "../../../core/auto-email/create-confirmation-url";
+import { createConfirmationUrl } from "../../../core/auto-email/create-token-url";
 import { createConfirmationEmail } from "../../../core/auto-email/emails/create-confirmation-email";
 import { getRepository } from "typeorm";
 import { User } from "../model/User.model";
 
 @Resolver()
-export class RequestConfirmationMutation {
+export class RequestConfirmationEmailMutation {
 	@Authorized()
 	@Mutation(() => Boolean)
 	public async requestConfirmationEmail(

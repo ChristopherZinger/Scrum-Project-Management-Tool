@@ -18,4 +18,13 @@ export class UserType {
 
 	@Field(() => UserProfileType, { nullable: true })
 	user?: UserProfileType;
+
+	@Field({ nullable: true })
+	emailConfirmed!: Date;
+
+	@Field()
+	isActive!: boolean;
+
+	@Field({ nullable: true })
+	removedAt?: Date;
 }

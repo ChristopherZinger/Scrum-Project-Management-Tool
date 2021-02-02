@@ -29,6 +29,15 @@ export class User {
 	@Column()
 	public password!: string;
 
+	@Column({ type: "date", nullable: true })
+	public emailConfirmed?: Date;
+
+	@Column({ type: "boolean", default: false })
+	public isActive!: boolean;
+
+	@Column({ type: "date", nullable: true })
+	public removedAt?: Date;
+
 	@Column({
 		type: "enum",
 		enum: UserRole,

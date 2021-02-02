@@ -28,6 +28,7 @@ export class ConfirmUserEmailResolver {
 			return null;
 		}
 		user.emailConfirmed = new Date();
+		user.isActive = true;
 		const updatedUser = await userRepository.save(user);
 
 		await redis.del(token);

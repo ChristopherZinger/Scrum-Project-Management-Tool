@@ -5,7 +5,7 @@ import { getRepository } from "typeorm";
 import { UserResponse } from "./register.mutation";
 import { ContextType } from "../../../core/context/context-type";
 import { Permission } from "../../../core/authorization/permissions";
-import { updateContext } from "../../../core/context/update-context";
+import { updateUserContext } from "../../../core/context/update-user-context";
 /*
  User confirm his email buy clicking on generated link
 */
@@ -45,8 +45,8 @@ export class ConfirmUserEmailResolver {
 			return null;
 		}
 
-		if (!user.isActive) {
-			console.log("User is already active");
+		if (user.emailConfirmed) {
+			console.log("User already confirmed the email", user.emailConfirmed);
 			return null;
 		}
 
@@ -58,7 +58,7 @@ export class ConfirmUserEmailResolver {
 		await redis.del(token);
 
 		// update context
-		updateContext(context, {
+		updateUserContext(context, {
 			isActive: true,
 			emailConfirmed: user.emailConfirmed
 		});

@@ -5,7 +5,7 @@ import { UserResponse } from "./register.mutation";
 import { ContextType } from "../../../core/context/context-type";
 import bcrypt from "bcryptjs";
 import { User } from "../model/User.model";
-import { updateContext } from "../../../core/context/update-context";
+import { createUserContext } from "../../../core/context/create-user-context";
 
 @InputType()
 class LoginInputType {
@@ -45,7 +45,7 @@ export class LoginMutation {
 			return null;
 		}
 
-		updateContext(context, {
+		createUserContext(context, {
 			id: user.id,
 			email: user.email,
 			role: user.role,
@@ -53,6 +53,8 @@ export class LoginMutation {
 			isActive: user.isActive,
 			removedAt: user.removedAt
 		});
+
+		console.log(context.session.user);
 
 		return { email: user.email };
 	}

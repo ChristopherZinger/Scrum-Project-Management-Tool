@@ -1,5 +1,5 @@
 import { Resolver, Query, Ctx } from "type-graphql";
-import { ContextType } from "../../../core/create-gql-context";
+import { ContextType } from "../../../core/context/context-type";
 
 @Resolver()
 export class TestQuery {

@@ -7,8 +7,6 @@ export const customAuthChecker: AuthChecker<
 	ContextType,
 	AccessGroup | Permission
 > = ({ root, args, context, info }, accessGroupsAndPermissions) => {
-	console.log("SESSION:", context.session);
-
 	// noone is logged in
 	if (!context.accessGroup || !context.session.user) {
 		return false;

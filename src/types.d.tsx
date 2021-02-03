@@ -11,6 +11,16 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: Date;
+};
+
+export type UserProfileType = {
+  __typename?: 'UserProfileType';
+  id: Scalars['ID'];
+  firstname: Scalars['String'];
+  lastname: Scalars['String'];
+  user?: Maybe<UserType>;
 };
 
 export type UserType = {
@@ -18,11 +28,21 @@ export type UserType = {
   id: Scalars['ID'];
   email: Scalars['String'];
   password: Scalars['String'];
-  user?: Maybe<Student>;
+  role: UserRole;
+  user?: Maybe<UserProfileType>;
+  emailConfirmed?: Maybe<Scalars['DateTime']>;
+  isActive: Scalars['Boolean'];
+  removedAt?: Maybe<Scalars['DateTime']>;
 };
 
-export type Student = {
-  __typename?: 'Student';
+export enum UserRole {
+  Admin = 'ADMIN',
+  BaseUser = 'BASE_USER'
+}
+
+
+export type UserProfile = {
+  __typename?: 'UserProfile';
   id: Scalars['ID'];
   firstname: Scalars['String'];
   lastname: Scalars['String'];
@@ -34,72 +54,105 @@ export type UserResponse = {
   email: Scalars['String'];
 };
 
+export type RegistrationInputType = {
+  password: Scalars['String'];
+  email: Scalars['String'];
+};
+
+export type ChangePassword = {
+  password: Scalars['String'];
+  token: Scalars['String'];
+};
+
+export type LoginInputType = {
+  password: Scalars['String'];
+  email: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
-  hello: Scalars['String'];
+  test: Scalars['String'];
+  myProfile?: Maybe<UserResponse>;
   user?: Maybe<Array<UserType>>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   register: UserResponse;
+  changePassword?: Maybe<UserResponse>;
+  confirmUserEmail?: Maybe<UserResponse>;
   login?: Maybe<UserResponse>;
   logout: Scalars['Boolean'];
+  requestConfirmationEmail: Scalars['Boolean'];
+  requestPasswordChangeEmail: Scalars['Boolean'];
 };
 
 
 export type MutationRegisterArgs = {
-  password: Scalars['String'];
-  email: Scalars['String'];
+  data: RegistrationInputType;
+};
+
+
+export type MutationChangePasswordArgs = {
+  data: ChangePassword;
+};
+
+
+export type MutationConfirmUserEmailArgs = {
+  token: Scalars['String'];
 };
 
 
 export type MutationLoginArgs = {
-  password: Scalars['String'];
+  data: LoginInputType;
+};
+
+
+export type MutationRequestPasswordChangeEmailArgs = {
   email: Scalars['String'];
 };
 
-export type UserQueryQueryVariables = Exact<{ [key: string]: never; }>;
+export type MyProfileQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserQueryQuery = (
+export type MyProfileQueryQuery = (
   { __typename?: 'Query' }
-  & { user?: Maybe<Array<(
-    { __typename?: 'UserType' }
-    & Pick<UserType, 'email'>
-  )>> }
+  & { myProfile?: Maybe<(
+    { __typename?: 'UserResponse' }
+    & Pick<UserResponse, 'email'>
+  )> }
 );
 
 
-export const UserQueryDocument = gql`
-    query UserQuery {
-  user {
+export const MyProfileQueryDocument = gql`
+    query myProfileQuery {
+  myProfile {
     email
   }
 }
     `;
 
 /**
- * __useUserQueryQuery__
+ * __useMyProfileQueryQuery__
  *
- * To run a query within a React component, call `useUserQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMyProfileQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyProfileQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserQueryQuery({
+ * const { data, loading, error } = useMyProfileQueryQuery({
  *   variables: {
  *   },
  * });
  */
-export function useUserQueryQuery(baseOptions?: Apollo.QueryHookOptions<UserQueryQuery, UserQueryQueryVariables>) {
-        return Apollo.useQuery<UserQueryQuery, UserQueryQueryVariables>(UserQueryDocument, baseOptions);
+export function useMyProfileQueryQuery(baseOptions?: Apollo.QueryHookOptions<MyProfileQueryQuery, MyProfileQueryQueryVariables>) {
+        return Apollo.useQuery<MyProfileQueryQuery, MyProfileQueryQueryVariables>(MyProfileQueryDocument, baseOptions);
       }
-export function useUserQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQueryQuery, UserQueryQueryVariables>) {
-          return Apollo.useLazyQuery<UserQueryQuery, UserQueryQueryVariables>(UserQueryDocument, baseOptions);
+export function useMyProfileQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyProfileQueryQuery, MyProfileQueryQueryVariables>) {
+          return Apollo.useLazyQuery<MyProfileQueryQuery, MyProfileQueryQueryVariables>(MyProfileQueryDocument, baseOptions);
         }
-export type UserQueryQueryHookResult = ReturnType<typeof useUserQueryQuery>;
-export type UserQueryLazyQueryHookResult = ReturnType<typeof useUserQueryLazyQuery>;
-export type UserQueryQueryResult = Apollo.QueryResult<UserQueryQuery, UserQueryQueryVariables>;
+export type MyProfileQueryQueryHookResult = ReturnType<typeof useMyProfileQueryQuery>;
+export type MyProfileQueryLazyQueryHookResult = ReturnType<typeof useMyProfileQueryLazyQuery>;
+export type MyProfileQueryQueryResult = Apollo.QueryResult<MyProfileQueryQuery, MyProfileQueryQueryVariables>;

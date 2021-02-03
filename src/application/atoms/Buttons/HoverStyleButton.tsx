@@ -2,7 +2,8 @@ import React from "react";
 import { Colors } from "../style";
 import styled, { css } from "styled-components";
 
-export const StyledHoverStyleButton = styled.div`
+export const StyledHoverStyleButton = styled.button`
+    padding: 0px;
     background: none;
     min-height: 60px;
     min-width: 200px;
@@ -13,6 +14,11 @@ export const StyledHoverStyleButton = styled.div`
     position: relative;
     transition-delay: .25s;
     transition-duration: .25s;
+
+    :focus{
+        border: none;
+        outline: none;
+    }
 
     div:nth-child(1) {
         position:absolute;
@@ -69,9 +75,14 @@ export const StyledHoverStyleButton = styled.div`
         `};
 `;
 
-export const HoverStyleButton = (props: { color?: Colors, text: string }) => {
+type HoverStyleButtonProps = {
+    type?: "button" | "submit" | "reset";
+    text: string
+}
+
+export const HoverStyleButton = (props: HoverStyleButtonProps) => {
     return (
-        <StyledHoverStyleButton>
+        <StyledHoverStyleButton type={props.type}>
             <div>
                 {props.text}
             </div>

@@ -6,38 +6,40 @@ export const mobileBreakPoint = "767px";
 export const tabletBreakPoint = "990px";
 export const computerBreakPoint = "1199px";
 
+export const decorativeFont = "Bungee";
+
 export enum Colors {
-    Palet01 = "#8ecae6",
-    Palet02 = "#219ebc",
-    Palet03 = "#023047",
-    Palet04 = "#ffb703",
-    Palet05 = "#fb8500",
+  Palet01 = "#8ecae6",
+  Palet02 = "#219ebc",
+  Palet03 = "#023047",
+  Palet04 = "#ffb703",
+  Palet05 = "#fb8500",
 
-    Text01 = "#232735",
-    Text02 = "#505565",
-    Text03 = "#8B90A0",
-    TextInverse = "#FFFFFF",
+  Text01 = "#232735",
+  Text02 = "#505565",
+  Text03 = "#8B90A0",
+  TextInverse = "#FFFFFF",
 
-    UI01 = "#FFFFFF",
-    UI02 = "#FAFAFC",
-    UI03 = "#F0F1F3",
-    UI04 = "#D3D4D8",
-    UI05 = "#A1A4B1",
-    UI06 = "#232735",
-    UI07 = "#000000",
+  UI01 = "#FFFFFF",
+  UI02 = "#FAFAFC",
+  UI03 = "#F0F1F3",
+  UI04 = "#D3D4D8",
+  UI05 = "#A1A4B1",
+  UI06 = "#232735",
+  UI07 = "#000000",
 
-    Info = "#1AA2DE",
-    Success = "#3FA83C",
-    Error = "#DC2544",
-    Warning = "#EB6123",
-    Attention = "#F7B02F",
-    Action = "#7E1E5E"
+  Info = "#1AA2DE",
+  Success = "#3FA83C",
+  Error = "#DC2544",
+  Warning = "#EB6123",
+  Attention = "#F7B02F",
+  Action = "#7E1E5E"
 }
 
 
 
 export const Heading = {
-    h1: styled.h1`
+  h1: styled.h1`
       font-weight: 600;
       font-size: 40px;
       line-height: 1.25;
@@ -47,7 +49,7 @@ export const Heading = {
         font-size: 24px;
       }
     `,
-    h2: styled.h2`
+  h2: styled.h2`
       font-weight: 600;
       font-size: 24px;
       line-height: 1.25;
@@ -57,28 +59,28 @@ export const Heading = {
         font-size: 18px;
       }
     `,
-    h3: styled.h3`
+  h3: styled.h3`
       font-size: 20px;
       font-weight: 600;
       line-height: 1.25;
       margin: 0;
     `,
 
-    h4: styled.h4`
+  h4: styled.h4`
       font-size: 16px;
       font-weight: 600;
       line-height: 1.5;
       margin: 0 0 12px 0;
     `,
 
-    h5: styled.h5`
+  h5: styled.h5`
       font-size: 14px;
       font-weight: 600;
       line-height: 1.5;
       margin: 0;
     `,
 
-    h6: styled.h6`
+  h6: styled.h6`
       font-size: 16px;
       font-weight: normal;
       line-height: 1.5;

@@ -5,7 +5,9 @@ import {
     Route,
 } from "react-router-dom";
 import { Login } from "./Login/Login";
+import { Signup } from "./Signup/Signup";
 import { LandingPage } from "./LandingPage/LandingPage";
+
 
 export function AppRoutes () {
     return (
@@ -13,6 +15,9 @@ export function AppRoutes () {
             <Switch>
                 <Route path="/login" >
                     <Login />
+                </Route>
+                <Route path="/signup" >
+                    <Signup />
                 </Route>
                 <Route path="/">
                     <LandingPage />

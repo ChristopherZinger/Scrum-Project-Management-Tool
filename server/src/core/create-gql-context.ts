@@ -38,8 +38,9 @@ export async function createGQLContext(request: Request, response: Response) {
 	};
 
 	const context: ContextType = {
-		...authorizationContext,
-		session: request.session
+		response,
+		session: request.session,
+		...authorizationContext
 	};
 
 	return context;

@@ -1,6 +1,7 @@
 import { Session, SessionData } from "express-session";
 import { UserRole } from "../../models/user/model/User.model";
 import { AuthorizationContext } from "../authorization/authorization-context";
+import { Response } from "express"
 
 export type SessionUserType = {
 	id: number;
@@ -20,5 +21,6 @@ declare module "express-session" {
 
 export interface ContextType extends AuthorizationContext {
 	// dataloaders: ReturnType<typeof createDataLoaders>;
+	response: Response,
 	session: Session & Partial<SessionData> & { user?: SessionUserType };
 }

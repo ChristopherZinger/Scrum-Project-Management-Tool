@@ -1,5 +1,5 @@
-import React from "react";
-import { Navbar } from "../../components/Navbar/Navbar";
+import React, { useContext } from "react";
+import { Navbar } from "../../components/Navbar/Navbar/Navbar";
 import { Grid, Checkbox, Image } from "semantic-ui-react";
 import { HoverStyleButton } from "../../atoms/Buttons/HoverStyleButton";
 import { MarginWrapper } from "../../atoms/MarginWrapper/MarginWrapper";
@@ -9,6 +9,8 @@ import { Input } from "../../atoms/Inputs/Input";
 import { decorativeFont, Heading } from "../../atoms/style";
 import { useLoginMutation } from "../../../types.d";
 import { Formik, Form } from "formik";
+import { UserAuthDispatchContext } from "../../../App";
+import { useHistory } from "react-router-dom";
 
 const CenteredDiv = styled.div`
 display:block;
@@ -23,7 +25,9 @@ const AuthFormWrapper = styled(CenteredDiv)`
 `
 
 export const Login = () => {
-    const [logintest] = useLoginMutation();
+    const history = useHistory();
+    const [login] = useLoginMutation();
+    const dispatch = useContext(UserAuthDispatchContext);
 
     return (
         <MarginWrapper>
@@ -49,7 +53,7 @@ export const Login = () => {
                                 initialValues={{ email: "", password: "" }}
                                 onSubmit={async (values) => {
                                     try {
-                                        await logintest({
+                                        const { data } = await login({
                                             variables: {
                                                 data: {
                                                     email: values.email,
@@ -57,6 +61,8 @@ export const Login = () => {
                                                 }
                                             }
                                         })
+                                        dispatch({ type: "login", user: data?.login })
+                                        history.push("/")
                                     } catch (err) {
                                         console.log(err)
                                     }

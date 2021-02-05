@@ -4,13 +4,14 @@ import { ContextType } from "../../../core/context/context-type";
 @Resolver()
 export class LogoutMutation {
 	@Mutation(() => Boolean)
-	async logout(@Ctx() ctx: ContextType): Promise<boolean> {
+	async logout(@Ctx() context: ContextType): Promise<boolean> {
 		return new Promise((res, rej) =>
-			ctx.session.destroy(err => {
+			context.session.destroy(err => {
 				if (err) {
 					console.error(err);
 					rej(false);
 				}
+				context.response.clearCookie("qid");
 				res(true);
 			})
 		);

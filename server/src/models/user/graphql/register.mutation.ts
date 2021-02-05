@@ -1,30 +1,16 @@
 import { ContextType } from "../../../core/context/context-type";
 import { IsEmail, Length } from "class-validator";
-import {
-	Arg,
-	Ctx,
-	Field,
-	InputType,
-	Mutation,
-	ObjectType,
-	Resolver
-} from "type-graphql";
+import { Arg, Ctx, Field, InputType, Mutation, Resolver } from "type-graphql";
 import { User, UserRole } from "../model/User.model";
 import bcrypt from "bcryptjs";
 import { getRepository } from "typeorm";
 import { sendEmail } from "../../../core/auto-email/send-email";
 import { createConfirmationUrl } from "../../../core/auto-email/create-token-url";
 import { createConfirmationEmail } from "../../../core/auto-email/emails/create-confirmation-email";
-
+import { UserResponse } from "./user-response.type";
 /*
 	Saves new user to db and sends confirmation email
 */
-
-@ObjectType()
-export class UserResponse {
-	@Field()
-	email!: string;
-}
 
 @InputType()
 class RegistrationInputType {
@@ -68,6 +54,10 @@ export class RegisterMutation {
 		);
 		sendEmail(confirmationEmail);
 
-		return { email: newUser.email };
+		return {
+			email: newUser.email,
+			isActive: newUser.isActive,
+			emailConfirmed: newUser.emailConfirmed
+		};
 	}
 }

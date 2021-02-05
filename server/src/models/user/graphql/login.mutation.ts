@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Ctx, Arg, Field, InputType } from "type-graphql";
 import { IsEmail, Length } from "class-validator";
 import { getRepository } from "typeorm";
-import { UserResponse } from "./register.mutation";
+import { UserResponse } from "./user-response.type";
 import { ContextType } from "../../../core/context/context-type";
 import bcrypt from "bcryptjs";
 import { User } from "../model/User.model";
@@ -54,8 +54,12 @@ export class LoginMutation {
 			removedAt: user.removedAt
 		});
 
-		console.log(context.session.user);
+		console.log(`User: ${user.email} has logged in.`);
 
-		return { email: user.email };
+		return {
+			email: user.email,
+			isActive: user.isActive,
+			emailConfirmed: user.emailConfirmed
+		};
 	}
 }

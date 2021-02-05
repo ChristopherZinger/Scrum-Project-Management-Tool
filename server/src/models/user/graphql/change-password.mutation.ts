@@ -3,7 +3,7 @@ import { Length } from "class-validator";
 import { redis } from "../../../core/setup-redis-and-express-session";
 import { User } from "../model/User.model";
 import { getRepository } from "typeorm";
-import { UserResponse } from "./register.mutation";
+import { UserResponse } from "./user-response.type";
 import { ContextType } from "../../../core/context/context-type";
 import { createUserContext } from "../../../core/context/create-user-context";
 import { passwordChangeTokenPrefix } from "../../../core/auto-email/create-token-url";
@@ -63,7 +63,9 @@ export class ChangePasswordMutation {
 		});
 
 		const returnUser: UserResponse = {
-			email: updatedUser.email
+			email: updatedUser.email,
+			isActive: updatedUser.isActive,
+			emailConfirmed: updatedUser.emailConfirmed
 		};
 
 		return returnUser;

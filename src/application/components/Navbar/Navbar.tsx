@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Grid } from "semantic-ui-react";
-import { UnderlineLink } from "../../../atoms/Links/UnderlineLink";
+import { UnderlineLink } from "../../atoms/Links/UnderlineLink";
 import { LogoutModal } from "../LogoutModal/LogoutModal";
-import { UserAuthDispatchContext, UserAuthStateContext } from "../../../../App";
+import { UserAuthDispatchContext, UserAuthStateContext } from "../../../App";
 
 export const Navbar = () => {
     const [logoutModalIsOpen, setLogoutModalIsOpen] = useState(false);

@@ -1,0 +1,36 @@
+.Toastify__toast {
+	background-color: white;
+	color: black;
+}
+/* .Toastify__toast--rtl {
+}
+.Toastify__toast--dark {
+}
+.Toastify__toast--default {
+}
+.Toastify__toast--info {
+} */
+.Toastify__toast--success {
+	background-color: white;
+	border: 1px solid green;
+	color: green;
+	font-weight: bold;
+}
+.Toastify__toast--warning {
+	background-color: white;
+	border: 1px solid orange;
+	color: orange;
+	font-weight: bold;
+}
+.Toastify__toast--error {
+	background-color: white;
+	border: 1px solid red;
+	color: red;
+	font-weight: bold;
+}
+/* .Toastify__toast-body {
+} */
+
+.Toastify__progress-bar {
+	background-color: lightgray;
+}

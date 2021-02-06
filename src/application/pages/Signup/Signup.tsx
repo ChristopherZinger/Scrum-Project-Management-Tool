@@ -29,10 +29,8 @@ const AuthFormWrapper = styled(CenteredDiv)`
 export const Signup = () => {
     const [isOfficeAdmin, setIsOfficeAdmin] = useState(false);
     const dispatch = useContext(UserAuthDispatchContext);
-    const [register, { data, loading, error }] = useRegisterMutation();
+    const [register] = useRegisterMutation();
     const history = useHistory();
-
-    console.log(data, loading, error)
 
     return (
         <MarginWrapper>
@@ -62,6 +60,7 @@ export const Signup = () => {
                             <Formik
                                 initialValues={{ email: "", password: "", passwordRepeat: "", signupAsOfficeOwner: false }}
                                 onSubmit={async (values) => {
+                                    // TODO: compare passowrd with repeat password
                                     try {
                                         const userData = await register({
                                             variables: {
@@ -77,9 +76,8 @@ export const Signup = () => {
                                         } else {
                                             throw new Error("No data received")
                                         }
-
-
                                     } catch (err) {
+                                        // TODO : check errors
                                         console.log(err)
                                     }
                                 }}

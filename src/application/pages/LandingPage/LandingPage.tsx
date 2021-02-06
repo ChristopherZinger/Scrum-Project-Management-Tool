@@ -1,5 +1,5 @@
 import React from "react";
-import { Navbar } from "../../components/Navbar/Navbar/Navbar";
+import { Navbar } from "../../components/Navbar/Navbar";
 import { Grid, Divider } from "semantic-ui-react";
 import { BGImage, CustomDescription, Jumbotron } from "./LandingPageCustomStyledTags"
 import { HoverStyleButton } from "../../atoms/Buttons/HoverStyleButton";

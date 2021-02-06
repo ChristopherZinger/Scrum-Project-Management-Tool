@@ -1,6 +1,6 @@
 import React from "react";
-import { useLogoutMutation } from "../../../../types.d";
-import { Modal } from "semantic-ui-react";
+import { useLogoutMutation } from "../../../types.d";
+import { Modal } from "../../atoms/Modal/Modal";
 
 type Props = {
     close: () => void;

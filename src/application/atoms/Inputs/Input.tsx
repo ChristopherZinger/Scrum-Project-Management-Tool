@@ -1,5 +1,10 @@
 import styled from "styled-components";
 import { Field } from "formik";
+import { Colors } from "../style";
+
+export const InputError = styled.div`
+    color: ${Colors.Error};
+`
 
 export const Input = styled(Field)`
     display: block;

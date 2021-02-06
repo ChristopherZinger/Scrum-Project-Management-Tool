@@ -2,7 +2,10 @@ import React, { createContext, useReducer, useEffect } from 'react'
 import { AppRoutes } from "./application/pages/AppRoutes"
 import 'semantic-ui-css/semantic.min.css'
 import { useMyProfileQuery, UserResponse } from "./types.d"
-import "./App.css";
+import "./global-styles/fonts.css";
+import 'react-toastify/dist/ReactToastify.css';
+import "./global-styles/override-toastr-styles.css";
+import { ToastContainer } from "react-toastify";
 
 function App () {
   return (
@@ -10,6 +13,7 @@ function App () {
       <UserAuthQueryWrapper>
         <AppRoutes />
       </UserAuthQueryWrapper>
+      <ToastContainer />
     </div>
   );
 }

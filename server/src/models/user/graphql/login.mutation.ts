@@ -6,6 +6,7 @@ import { ContextType } from "../../../core/context/context-type";
 import bcrypt from "bcryptjs";
 import { User } from "../model/User.model";
 import { createUserContext } from "../../../core/context/create-user-context";
+import { ApolloError } from "apollo-server-express";
 
 @InputType()
 class LoginInputType {
@@ -34,15 +35,15 @@ export class LoginMutation {
 		});
 
 		if (!user) {
-			console.warn("Wrong credentials: email.");
-			return null;
+			console.warn(`Wrong credentials: email. for '${data.email}'`);
+			throw new ApolloError("incorrect email", "WRONG_CREDENTIALS");
 		}
 
 		const valid = bcrypt.compareSync(data.password, user.password);
 
 		if (!valid) {
 			console.warn("Wrong credentials: password.");
-			return null;
+			throw new ApolloError("incorrect email", "WRONG_CREDENTIALS");
 		}
 
 		createUserContext(context, {

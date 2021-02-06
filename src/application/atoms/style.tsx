@@ -39,7 +39,7 @@ export enum Colors {
 
 
 export const Heading = {
-  h1: styled.h1`
+  H1: styled.h1`
       font-weight: 600;
       font-size: 40px;
       line-height: 1.25;
@@ -49,7 +49,7 @@ export const Heading = {
         font-size: 24px;
       }
     `,
-  h2: styled.h2`
+  H2: styled.h2`
       font-weight: 600;
       font-size: 24px;
       line-height: 1.25;
@@ -59,28 +59,28 @@ export const Heading = {
         font-size: 18px;
       }
     `,
-  h3: styled.h3`
+  H3: styled.h3`
       font-size: 20px;
       font-weight: 600;
       line-height: 1.25;
       margin: 0;
     `,
 
-  h4: styled.h4`
+  H4: styled.h4`
       font-size: 16px;
       font-weight: 600;
       line-height: 1.5;
       margin: 0 0 12px 0;
     `,
 
-  h5: styled.h5`
+  H5: styled.h5`
       font-size: 14px;
       font-weight: 600;
       line-height: 1.5;
       margin: 0;
     `,
 
-  h6: styled.h6`
+  H6: styled.h6`
       font-size: 16px;
       font-weight: normal;
       line-height: 1.5;

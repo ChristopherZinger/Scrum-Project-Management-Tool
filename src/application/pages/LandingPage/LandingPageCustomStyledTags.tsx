@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import landingPageImage from "../../images/landing-page-scrum.svg"
 import { mobileBreakPoint, tabletBreakPoint, computerBreakPoint } from "../../atoms/style";

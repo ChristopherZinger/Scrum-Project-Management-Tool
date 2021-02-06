@@ -1,6 +1,7 @@
 import React from "react";
 import { Colors } from "../style";
 import styled, { css } from "styled-components";
+import { Spinner } from "../Spinner/Spinner";
 
 export const StyledHoverStyleButton = styled.button`
     padding: 0px;
@@ -14,6 +15,10 @@ export const StyledHoverStyleButton = styled.button`
     position: relative;
     transition-delay: .25s;
     transition-duration: .25s;
+
+    span {
+        background: black;
+    }
 
     :focus{
         border: none;
@@ -53,11 +58,15 @@ export const StyledHoverStyleButton = styled.button`
         }
     }
 
-    &:hover div:nth-child(2) {
+    :hover div:nth-child(2), :focus div:nth-child(2){
         width: 100%;
     }
 
-    &:hover{
+    :focus span, :hover span{
+        background: white;
+    } 
+
+    :hover, :focus{
         font-weight: bold;
         color: white;
         border-color: white;
@@ -75,16 +84,16 @@ export const StyledHoverStyleButton = styled.button`
         `};
 `;
 
-type HoverStyleButtonProps = {
-    type?: "button" | "submit" | "reset";
-    text: string
+interface HoverStyleButtonProps extends React.ComponentProps<"button"> {
+    text: string,
+    isLoading?: boolean;
 }
 
 export const HoverStyleButton = (props: HoverStyleButtonProps) => {
     return (
-        <StyledHoverStyleButton type={props.type}>
+        <StyledHoverStyleButton type={props.type} >
             <div>
-                {props.text}
+                {!props.isLoading ? props.text : <Spinner />}
             </div>
             <div>
             </div>

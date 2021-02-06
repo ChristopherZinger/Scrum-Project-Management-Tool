@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Navbar } from "../../components/Navbar/Navbar/Navbar";
 import { Grid, Image } from "semantic-ui-react";
 import { HoverStyleButton } from "../../atoms/Buttons/HoverStyleButton";
@@ -10,6 +10,9 @@ import { Input, Checkbox } from "../../atoms/Inputs/Input";
 import { decorativeFont, Heading } from "../../atoms/style";
 import { Formik, Form } from "formik";
 import { ToggleSignupType } from "./ToggleSignupType/ToggleSignupType";
+import { useRegisterMutation } from "../../../types.d";
+import { UserAuthDispatchContext } from "../../../App";
+import { useHistory } from "react-router-dom";
 
 const CenteredDiv = styled.div`
 display:block;
@@ -25,10 +28,9 @@ const AuthFormWrapper = styled(CenteredDiv)`
 
 export const Signup = () => {
     const [isOfficeAdmin, setIsOfficeAdmin] = useState(false);
-
-    useEffect(() => {
-        console.log(isOfficeAdmin)
-    })
+    const dispatch = useContext(UserAuthDispatchContext);
+    const [register] = useRegisterMutation();
+    const history = useHistory();
 
     return (
         <MarginWrapper>
@@ -57,7 +59,28 @@ export const Signup = () => {
                         <AuthFormWrapper>
                             <Formik
                                 initialValues={{ email: "", password: "", passwordRepeat: "", signupAsOfficeOwner: false }}
-                                onSubmit={(values) => console.log(values)}
+                                onSubmit={async (values) => {
+                                    // TODO: compare passowrd with repeat password
+                                    try {
+                                        const userData = await register({
+                                            variables: {
+                                                data: {
+                                                    password: values.password,
+                                                    email: values.email
+                                                }
+                                            }
+                                        })
+                                        if (userData.data) {
+                                            dispatch({ type: "login", user: userData.data.register })
+                                            history.push("/")
+                                        } else {
+                                            throw new Error("No data received")
+                                        }
+                                    } catch (err) {
+                                        // TODO : check errors
+                                        console.log(err)
+                                    }
+                                }}
                             >
                                 {({ handleChange }) => (
                                     <Form>
@@ -82,7 +105,6 @@ export const Signup = () => {
 
                                         <HoverStyleButton type="submit" text="Sign Up" />
                                     </Form>
-
                                 )}
                             </Formik>
                         </AuthFormWrapper>

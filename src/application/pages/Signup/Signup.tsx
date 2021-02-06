@@ -38,10 +38,10 @@ export const Signup = () => {
             <Grid>
                 <Grid.Row>
                     <Grid.Column width={16}>
-                        <Heading.h1 style={{
+                        <Heading.H1 style={{
                             textAlign: "center",
                             fontFamily: decorativeFont,
-                        }}>Create Account.</Heading.h1>
+                        }}>Create Account.</Heading.H1>
                     </Grid.Column>
                 </Grid.Row>
 
@@ -103,7 +103,7 @@ export const Signup = () => {
                                             <Checkbox name="signupAsOfficeOwner" labelText="Terms and conditions" />
                                         </div>
 
-                                        <HoverStyleButton type="submit" text="Sign Up" />
+                                        <HoverStyleButton type="submit" text="Get Started" />
                                     </Form>
                                 )}
                             </Formik>

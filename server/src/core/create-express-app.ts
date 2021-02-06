@@ -23,9 +23,6 @@ export async function createExpressApp() {
 	});
 
 	const app = express();
-
-	setupRedisAndExpressSession(app);
-
 	app.use(
 		cors({
 			credentials: true,
@@ -33,11 +30,13 @@ export async function createExpressApp() {
 		})
 	);
 
+	setupRedisAndExpressSession(app);
+
 	const apolloServer = new ApolloServer({
 		schema,
 		context: ({ req, res }) => createGQLContext(req, res)
 	});
 
-	apolloServer.applyMiddleware({ app });
+	apolloServer.applyMiddleware({ app, cors: false });
 	return app;
 }

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Navbar } from "../../components/Navbar/Navbar";
+import { Navbar } from "../../components/Navbar/Navbar/Navbar";
 import { Grid, Image } from "semantic-ui-react";
 import { HoverStyleButton } from "../../atoms/Buttons/HoverStyleButton";
 import { MarginWrapper } from "../../atoms/MarginWrapper/MarginWrapper";

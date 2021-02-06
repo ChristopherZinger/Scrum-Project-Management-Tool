@@ -1,5 +1,0 @@
-query myProfileQuery {
-	myProfile {
-		email
-	}
-}

@@ -2,7 +2,7 @@ import { Resolver, Mutation, Arg, Authorized, Ctx } from "type-graphql";
 import { redis } from "../../../core/setup-redis-and-express-session";
 import { User } from "../model/User.model";
 import { getRepository } from "typeorm";
-import { UserResponse } from "./register.mutation";
+import { UserResponse } from "./user-response.type";
 import { ContextType } from "../../../core/context/context-type";
 import { Permission } from "../../../core/authorization/permissions";
 import { updateUserContext } from "../../../core/context/update-user-context";
@@ -66,7 +66,9 @@ export class ConfirmUserEmailResolver {
 		});
 
 		const returnUser: UserResponse = {
-			email: updatedUser.email
+			email: updatedUser.email,
+			isActive: updatedUser.isActive,
+			emailConfirmed: updatedUser.emailConfirmed
 		};
 
 		return returnUser;

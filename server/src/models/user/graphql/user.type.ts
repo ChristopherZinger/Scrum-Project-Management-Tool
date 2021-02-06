@@ -20,7 +20,7 @@ export class UserType {
 	user?: UserProfileType;
 
 	@Field({ nullable: true })
-	emailConfirmed!: Date;
+	emailConfirmed?: Date;
 
 	@Field()
 	isActive!: boolean;

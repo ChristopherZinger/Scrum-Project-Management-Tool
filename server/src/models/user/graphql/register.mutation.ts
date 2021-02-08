@@ -8,6 +8,8 @@ import { sendEmail } from "../../../core/auto-email/send-email";
 import { createConfirmationUrl } from "../../../core/auto-email/create-token-url";
 import { createConfirmationEmail } from "../../../core/auto-email/emails/create-confirmation-email";
 import { UserResponse } from "./user-response.type";
+import { ApolloError } from "apollo-server-express";
+
 /*
 	Saves new user to db and sends confirmation email
 */
@@ -16,7 +18,7 @@ import { UserResponse } from "./user-response.type";
 class RegistrationInputType {
 	@Field(() => String)
 	@Length(8, 255, {
-		message: "Incorrect password length. Has to be between 8 and 255 charactes."
+		message: "Password has to be longer then 8 charactes."
 	})
 	password!: string;
 
@@ -38,7 +40,10 @@ export class RegisterMutation {
 		});
 
 		if (userExist) {
-			throw new Error("user with this email already exists");
+			throw new ApolloError(
+				"user with this email already exists",
+				"EMAIL_IS_TAKEN"
+			);
 		}
 
 		const user = new User();

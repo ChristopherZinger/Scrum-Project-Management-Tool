@@ -7,6 +7,7 @@ import path from "path";
 import { createDBConnection } from "./create-db-connection";
 import { setupRedisAndExpressSession } from "./setup-redis-and-express-session";
 import { customAuthChecker } from "./authorization/auth-checker";
+import { formatErrors } from "./formatErrors/format-errors";
 import cors from "cors";
 
 export async function createExpressApp() {
@@ -34,7 +35,8 @@ export async function createExpressApp() {
 
 	const apolloServer = new ApolloServer({
 		schema,
-		context: ({ req, res }) => createGQLContext(req, res)
+		context: ({ req, res }) => createGQLContext(req, res),
+		formatError: formatErrors
 	});
 
 	apolloServer.applyMiddleware({ app, cors: false });

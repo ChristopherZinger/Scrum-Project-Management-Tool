@@ -61,6 +61,8 @@ export class LoginMutation {
 			maxAge: 1000 * 60 * 60,
 			secure: true
 		});
+			
+		console.log(context.response);
 
 		return {
 			email: user.email,

@@ -57,6 +57,11 @@ export class LoginMutation {
 
 		console.log(`User: ${user.email} has logged in.`);
 
+		context.response.cookie("testCookie", "this is test cookie", {
+			maxAge: 1000 * 60 * 60,
+			secure: true
+		});
+
 		return {
 			email: user.email,
 			isActive: user.isActive,

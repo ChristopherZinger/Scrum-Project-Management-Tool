@@ -8,7 +8,7 @@ import { createDBConnection } from "./create-db-connection";
 import { setupRedisAndExpressSession } from "./setup-redis-and-express-session";
 import { customAuthChecker } from "./authorization/auth-checker";
 import { formatErrors } from "./formatErrors/format-errors";
-import cors from "cors";
+// import cors from "cors";
 
 export async function createExpressApp() {
 	const connectionDB = await createDBConnection();

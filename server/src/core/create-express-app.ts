@@ -29,7 +29,7 @@ export async function createExpressApp() {
 
 	app.use(
 		cors({
-			credentials: "include",
+			credentials: true,
 			origin: "scrum-arch-service.com"
 		})
 	);
@@ -46,7 +46,7 @@ export async function createExpressApp() {
 		app,
 		path: "/graphql",
 		cors : {
-			credentials: "include",
+			credentials: true,
 			origin: "scrum-arch-service.com"
 		}
 	});

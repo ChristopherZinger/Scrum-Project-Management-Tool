@@ -44,7 +44,8 @@ export async function createExpressApp() {
 
 	apolloServer.applyMiddleware({
 		app,
-		path: "/graphql"
+		path: "/graphql",
+		cors: false
 	});
 
 	// serve React app

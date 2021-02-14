@@ -7,8 +7,7 @@
 		"dbstart": "docker-compose up",
 		"devstart": "ts-node-dev --watch src --respawn src/index.ts",
 		"build": "tsc",
-		"start": "node ../dist/src/index.js";
-		
+		"start": "node ../dist/src/index.js"
 	},
 	"author": "",
 	"license": "ISC",

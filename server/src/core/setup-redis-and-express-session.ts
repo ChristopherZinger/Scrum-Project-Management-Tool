@@ -20,7 +20,7 @@ export function setupRedisAndExpressSession(app: Express) {
 			cookie: {
 				domain: "https://scrum-arch-service.com",
 				httpOnly: true,
-				secure: process.env.NODE_ENV === "production",
+				secure: false , // process.env.NODE_ENV === "production",
 				maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year
 			}
 		} as any)

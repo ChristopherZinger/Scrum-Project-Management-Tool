@@ -27,12 +27,12 @@ export async function createExpressApp() {
 
 	app.set("trust proxy", 1);
 
-	app.use(
-		cors({
-			credentials: true,
-			origin: "scrum-arch-service.com"
-		})
-	);
+// 	app.use(
+// 		cors({
+// 			credentials: true,
+// 			origin: "scrum-arch-service.com"
+// 		})
+// 	);
 
 	setupRedisAndExpressSession(app);
 
@@ -45,10 +45,11 @@ export async function createExpressApp() {
 	apolloServer.applyMiddleware({
 		app,
 		path: "/graphql",
-		cors : {
-			credentials: true,
-			origin: "scrum-arch-service.com"
-		}
+		cors : true,
+// 		{
+// 			credentials: true,
+// 			origin: "scrum-arch-service.com"
+// 		}
 	});
 
 	// serve React app

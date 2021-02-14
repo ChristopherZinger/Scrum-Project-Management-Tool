@@ -18,7 +18,7 @@ export function setupRedisAndExpressSession(app: Express) {
 			saveUninitialized: false,
 			proxy: true,
 			cookie: {
-				domain: "https://scrum-arch-service.com",
+				// domain: "https://scrum-arch-service.com",
 				httpOnly: true,
 				secure: false , // process.env.NODE_ENV === "production",
 				maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year

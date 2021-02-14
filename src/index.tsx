@@ -8,7 +8,7 @@ const client = new ApolloClient({
   uri: '/graphql',
   credentials: "include",
   headers: {
-    'Access-Control-Allow-Origin': "https://scrum-arch-service.com"
+    'Access-Control-Allow-Origin': "https://scrum-arch-service.com/graphql"
   },
   cache: new InMemoryCache()
 });

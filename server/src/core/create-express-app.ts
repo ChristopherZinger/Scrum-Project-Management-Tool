@@ -39,6 +39,20 @@ export async function createExpressApp() {
 		formatError: formatErrors
 	});
 
-	apolloServer.applyMiddleware({ app, cors: false });
+	apolloServer.applyMiddleware({
+		app,
+		path: "/graphql",
+		cors: {
+			credentials: true,
+			origin: process.env.FRONTEND_URL
+		}
+	});
+
+	// serve React app
+	app.use(express.static(path.join(__dirname, "../../../build")));
+	app.get("*", (_, res) => {
+		res.sendFile(path.resolve(__dirname, "../../../build", "index.html"));
+	});
+
 	return app;
 }

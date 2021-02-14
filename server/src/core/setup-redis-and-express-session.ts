@@ -1,6 +1,6 @@
 import { Express } from "express";
 import session from "express-session";
-import connectRedis from "connect-redis";
+//import connectRedis from "connect-redis";
 import Redis from "ioredis";
 
 export const redis = new Redis();

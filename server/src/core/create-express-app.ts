@@ -45,11 +45,10 @@ export async function createExpressApp() {
 	apolloServer.applyMiddleware({
 		app,
 		path: "/graphql",
-		cors : true,
-// 		{
-// 			credentials: true,
-// 			origin: "scrum-arch-service.com"
-// 		}
+		cors : {
+			credentials: true,
+			origin: "scrum-arch-service.com"
+		}
 	});
 
 	// serve React app

@@ -1,3 +1,4 @@
+import dotenv from "dotenv";
 import "reflect-metadata";
 import {createExpressApp} from "./core/create-express-app";
 import http from "http";

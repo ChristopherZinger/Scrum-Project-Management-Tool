@@ -7,6 +7,7 @@ import path from "path";
 import { createDBConnection } from "./create-db-connection";
 import { setupRedisAndExpressSession } from "./setup-redis-and-express-session";
 import { customAuthChecker } from "./authorization/auth-checker";
+import { formatErrors } from "./formatErrors/format-errors";
 import cors from "cors";
 
 export async function createExpressApp() {
@@ -34,9 +35,24 @@ export async function createExpressApp() {
 
 	const apolloServer = new ApolloServer({
 		schema,
-		context: ({ req, res }) => createGQLContext(req, res)
+		context: ({ req, res }) => createGQLContext(req, res),
+		formatError: formatErrors
 	});
 
-	apolloServer.applyMiddleware({ app, cors: false });
+	apolloServer.applyMiddleware({
+		app,
+		path: "/graphql",
+		cors: {
+			credentials: true,
+			origin: process.env.FRONTEND_URL
+		}
+	});
+
+	// serve React app
+	app.use(express.static(path.join(__dirname, "../../../build")));
+	app.get("*", (_, res) => {
+		res.sendFile(path.resolve(__dirname, "../../../build", "index.html"));
+	});
+
 	return app;
 }

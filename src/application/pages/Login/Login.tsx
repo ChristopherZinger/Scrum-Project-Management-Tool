@@ -75,7 +75,6 @@ export const Login = () => {
                                             dispatch({ type: "login", user: data.login })
                                             history.push("/")
                                             toast.success("Hello! You are logged in.")
-
                                         }
                                     } catch (err) {
                                         if (error?.graphQLErrors) {
@@ -84,6 +83,9 @@ export const Login = () => {
                                                 switch (gqlError.extensions.code) {
                                                     case "WRONG_CREDENTIALS":
                                                         toast.error("Incorrect email or password.")
+                                                        break;
+                                                    default:
+                                                        break;
                                                 }
                                             }
                                         } else {
@@ -96,17 +98,13 @@ export const Login = () => {
                                         <div style={{ marginBottom: "50px" }}>
                                             <label>Email</label>
                                             <Input name="email" placeholder="eg: kate@email.com" type="text" />
-                                            {errors.email && touched.email ? (
-                                                <InputError>* {errors.email}</InputError>
-                                            ) : null}
+                                            <InputError name="email" />
                                         </div>
 
                                         <div style={{ marginBottom: "50px" }}>
                                             <label>Password</label>
                                             <Input name="password" type="password" />
-                                            {errors.password && touched.password ? (
-                                                <InputError>*{errors.password}</InputError>
-                                            ) : null}
+                                            <InputError name="password" />
                                         </div>
 
                                         <HoverStyleButton

@@ -1,9 +1,11 @@
 import styled from "styled-components";
-import { Field } from "formik";
+import { Field, ErrorMessage } from "formik";
 import { Colors } from "../style";
 
-export const InputError = styled.div`
-    color: ${Colors.Error};
+export const InputError = styled(ErrorMessage)`
+    &&&{
+        color: ${Colors.Error};
+    } 
 `
 
 export const Input = styled(Field)`
@@ -17,7 +19,6 @@ export const Input = styled(Field)`
     background-color: transparent ;
     font-size: 20px ;
 `
-
 
 const StyledCheckbox = styled(Field)`
     height: 18px;

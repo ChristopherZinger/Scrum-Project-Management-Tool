@@ -24,9 +24,9 @@ export async function createExpressApp() {
 	});
 
 	const app = express();
-	
-	app.set('trust proxy', 1)
-	
+
+	app.set("trust proxy", 1);
+
 	app.use(
 		cors({
 			credentials: true,
@@ -44,11 +44,7 @@ export async function createExpressApp() {
 
 	apolloServer.applyMiddleware({
 		app,
-		path: "/graphql",
-		cors: {
-			credentials: true,
-			origin: process.env.FRONTEND_URL
-		}
+		path: "/graphql"
 	});
 
 	// serve React app

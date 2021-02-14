@@ -24,6 +24,9 @@ export async function createExpressApp() {
 	});
 
 	const app = express();
+	
+	app.set('trust proxy', 1)
+	
 	app.use(
 		cors({
 			credentials: true,

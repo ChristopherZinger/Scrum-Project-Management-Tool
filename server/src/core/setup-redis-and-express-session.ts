@@ -12,12 +12,13 @@ export function setupRedisAndExpressSession(app: Express) {
 			store: new RedisStore({
 				client: redis as any
 			}),
-			name: "qid",
+			name: "sessionID",
 			secret: process.env.SESSION_SECRET,
 			resave: false,
 			saveUninitialized: false,
 			proxy: true,
 			cookie: {
+				domain: "https://scrum-arch-service.com",
 				httpOnly: true,
 				secure: process.env.NODE_ENV === "production",
 				maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year

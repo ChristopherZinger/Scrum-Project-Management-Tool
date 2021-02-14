@@ -57,7 +57,7 @@ export class LoginMutation {
 
 		console.log(`User: ${user.email} has logged in.`);
 			
-		console.log(context.response);
+		console.log(context.session.cookie);
 
 		return {
 			email: user.email,

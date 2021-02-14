@@ -1,17 +1,17 @@
 import { Express } from "express";
 import session from "express-session";
-//import connectRedis from "connect-redis";
+import connectRedis from "connect-redis";
 import Redis from "ioredis";
 
 export const redis = new Redis();
 
 export function setupRedisAndExpressSession(app: Express) {
-	//const RedisStore = connectRedis(session);
+	const RedisStore = connectRedis(session);
 	app.use(
 		session({
-			//store: new RedisStore({
-			//	client: redis as any
-			//}),
+			store: new RedisStore({
+				client: redis as any
+			}),
 			name: "qid",
 			secret: process.env.SESSION_SECRET,
 			resave: false,

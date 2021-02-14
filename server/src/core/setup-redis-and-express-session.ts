@@ -16,6 +16,7 @@ export function setupRedisAndExpressSession(app: Express) {
 			secret: process.env.SESSION_SECRET,
 			resave: false,
 			saveUninitialized: false,
+			proxy: true,
 			cookie: {
 				domain: "scrum-arch-service.com",
 				httpOnly: true,

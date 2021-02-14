@@ -7,9 +7,6 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 const client = new ApolloClient({
   uri: '/graphql',
   credentials: "include",
-  headers: {
-    'Access-Control-Allow-Origin': "https://scrum-arch-service.com/graphql"
-  },
   cache: new InMemoryCache()
 });
 

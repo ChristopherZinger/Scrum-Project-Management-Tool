@@ -8,9 +8,11 @@ import {
 import { registerEnumType } from "type-graphql";
 import { UserProfile } from "../../userProfile/model/UserProfile.model";
 
+// if you add new roles here remember to create migration that reflects it in db.
 export enum UserRole {
 	ADMIN = "ADMIN",
-	BASE_USER = "BASE_USER"
+	BASE_USER = "BASE_USER",
+	STAFF = "STAFF"
 }
 
 // register to graphql

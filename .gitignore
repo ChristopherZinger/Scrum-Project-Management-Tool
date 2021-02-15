@@ -19,3 +19,10 @@ yarn-error.log*
 .eslintcache
 server/.env
 /server/.env
+server/ormconfig.json
+/server/ormconfig.json
+
+# build
+server/dist
+build
+/build

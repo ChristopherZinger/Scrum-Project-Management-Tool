@@ -27,13 +27,6 @@ export async function createExpressApp() {
 
 	app.set("trust proxy", true);
 
-// 	app.use(
-// 		cors({
-// 			credentials: true,
-// 			origin: "scrum-arch-service.com"
-// 		})
-// 	);
-
 	setupRedisAndExpressSession(app);
 
 	const apolloServer = new ApolloServer({
@@ -45,17 +38,19 @@ export async function createExpressApp() {
 	apolloServer.applyMiddleware({
 		app,
 		path: "/graphql",
-		cors : {
+		cors: {
 			credentials: true,
 			origin: "https://scrum-arch-service.com"
 		}
 	});
 
-	// serve React app
-	app.use(express.static(path.join(__dirname, "../../../build")));
-	app.get("*", (_, res) => {
-		res.sendFile(path.resolve(__dirname, "../../../build", "index.html"));
-	});
+	if (process.env.NODE_ENV === "production") {
+		// serve React app
+		app.use(express.static(path.join(__dirname, "../../../build")));
+		app.get("*", (_, res) => {
+			res.sendFile(path.resolve(__dirname, "../../../build", "index.html"));
+		});
+	}
 
 	return app;
 }

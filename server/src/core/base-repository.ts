@@ -1,4 +1,4 @@
-import { Model, ModelCtor, SaveOptions } from "sequelize";
+import { Model, ModelCtor, SaveOptions, FindOptions } from "sequelize";
 import { injectable } from "inversify";
 
 @injectable()
@@ -10,8 +10,14 @@ export abstract class BaseRepository<TModel extends Model<unknown, unknown>> {
 		return exists ? true : false;
 	}
 
-	public async findById(id: number): Promise<TModel | null> {
-		const result = await this.model.findOne<TModel>({ where: { id } });
+	public async findById(
+		id: number,
+		options?: FindOptions
+	): Promise<TModel | null> {
+		const result = await this.model.findOne<TModel>({
+			where: { id },
+			...options
+		});
 		return result || null;
 	}
 

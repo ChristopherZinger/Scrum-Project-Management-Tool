@@ -4,24 +4,20 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { createGQLContext } from "./create-gql-context";
 import path from "path";
-import { createDBConnection } from "./create-db-connection";
+import { bootAppCore } from "./app-core";
 import { setupRedisAndExpressSession } from "./setup-redis-and-express-session";
 import { customAuthChecker } from "./authorization/auth-checker";
 import { formatErrors } from "./formatErrors/format-errors";
-import { container } from "./create-inversify-container";
 
 export async function createExpressApp() {
-	const connectionDB = await createDBConnection();
-	if (!connectionDB) {
-		throw new Error("Could NOT connect with database.");
-	}
+	const appCore = await bootAppCore();
 
 	const schema = await buildSchema({
 		resolvers: [
 			path.join(__dirname, "../models/**/*.{query,mutation,resolver}.{ts,js}")
 		],
 		authChecker: customAuthChecker,
-		container: container
+		container: appCore.container
 	});
 
 	const app = express();

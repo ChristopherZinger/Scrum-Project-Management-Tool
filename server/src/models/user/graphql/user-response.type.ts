@@ -8,6 +8,6 @@ export class UserResponse {
 	@Field()
 	isActive!: boolean;
 
-	@Field({ nullable: true })
-	emailConfirmed?: Date;
+	@Field(() => Date, { nullable: true })
+	emailConfirmed!: Date;
 }

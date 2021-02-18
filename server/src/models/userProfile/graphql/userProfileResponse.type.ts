@@ -18,6 +18,6 @@ export class UserProfileResponse implements IUserProfileResponse {
 	@Field()
 	isActive!: boolean;
 
-	@Field()
-	emailConfirmed?: Date;
+	@Field(() => Date, { nullable: true })
+	emailConfirmed!: Date;
 }

@@ -1,6 +1,5 @@
 import { Container } from "inversify";
 import * as glob from "glob";
-import path from "path";
 
 class AutoBinder {
 	private ignorePatterns: RegExp[] = [];
@@ -52,7 +51,5 @@ new AutoBinder(container).autobind([
 	`${__dirname}/../models/*/services/*.service.{ts,js}`, // Services
 	`${__dirname}/../models/*/graphql/**/*.{query,mutation,resolver}.{ts,js}` // GraphQL queries / mutations
 ]);
-
-console.log(path.resolve(__dirname, "/../models/*/model/*.repository.{ts,js}"));
 
 export { container };

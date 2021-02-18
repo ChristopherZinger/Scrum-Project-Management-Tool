@@ -22,8 +22,8 @@ export class User extends Model<User> {
 	@Column
 	public password!: string;
 
-	@Column
-	public emailConfirmed?: Date;
+	@Column(DataType.DATE)
+	public emailConfirmed!: Date | null;
 
 	@Column({ defaultValue: false })
 	public isActive!: boolean;
@@ -32,7 +32,7 @@ export class User extends Model<User> {
 	public removedAt?: Date;
 
 	@Column({
-		type: DataType.ENUM(...Object.values(UserRole)),
+		type: DataType.ENUM(...Object.values(UserRole)), // TODO !!!
 		defaultValue: UserRole.BASE_USER
 	})
 	public role!: UserRole;

@@ -22,18 +22,17 @@ export class UserProfileService {
 	public async register(
 		data: RegisterUserProfileInputType,
 		context: ContextType
-	): Promise<void> {
-		const lowerCaseEmail = data.email.toLowerCase();
+	): Promise<User | null> {
+		const emailIsTaken = await this.userRepository.emailIsTaken(data.email);
 
-		const emailIsTaken = await this.userRepository.emailIsTaken(lowerCaseEmail);
 		if (emailIsTaken) {
 			console.warn(`User with email '${data.email}' already exists.`);
 			throw new ApolloError("This email is taken", "EMAIL_TAKEN");
 		}
 
-		this.sequelize.transaction(async () => {
+		await this.sequelize.transaction(async () => {
 			const user = new User();
-			user.email = lowerCaseEmail;
+			user.email = data.email;
 			user.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(12));
 			user.role = UserRole.BASE_USER;
 			await this.userRepository.save(user);
@@ -44,6 +43,10 @@ export class UserProfileService {
 			userProfile.userId = user.id;
 
 			await this.userProfileRepository.save(userProfile);
+		});
+
+		return await this.userRepository.findByEmail(data.email, {
+			include: [{ model: UserProfile }]
 		});
 	}
 }

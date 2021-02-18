@@ -13,3 +13,9 @@ export interface IUserProfileResponse {
 	isActive: boolean;
 	emailConfirmed?: Date;
 }
+
+export function userProfileHasUser(
+	userProfile: UserProfile
+): userProfile is UserProfile {
+	return userProfile.user !== undefined;
+}

@@ -1,14 +1,10 @@
 import { Container } from "inversify";
 import * as glob from "glob";
-import { Sequelize } from "sequelize-typescript";
 
 class AutoBinder {
 	private ignorePatterns: RegExp[] = [];
 
-	public constructor(
-		private container: Container,
-		private sequelize: Sequelize
-	) {}
+	public constructor(private container: Container) {}
 
 	public autobind(globs: string[]) {
 		for (const pattern of globs) {
@@ -45,18 +41,12 @@ class AutoBinder {
 				this.container.bind(exports[clas]).toSelf();
 			}
 		}
-
-		// bind sequelize
-		container
-			.bind<Sequelize>(Symbol("Sequelize"))
-			.toConstantValue(this.sequelize);
 	}
 }
 
 const container = new Container();
-const sequelize = new Sequelize();
 
-new AutoBinder(container, sequelize).autobind([
+new AutoBinder(container).autobind([
 	`${__dirname}/../models/*/model/*.repository.{ts,js}`, // Repositories
 	`${__dirname}/../models/*/services/*.service.{ts,js}`, // Services
 	`${__dirname}/../models/*/graphql/**/*.{query,mutation,resolver}.{ts,js}` // GraphQL queries / mutations

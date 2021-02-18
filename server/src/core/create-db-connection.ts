@@ -16,5 +16,9 @@ export async function createDBConnection() {
 
 	connection.addModels([User, UserProfile]);
 
+	if (!connection) {
+		throw new Error("Could NOT connect with database.");
+	}
+
 	return connection;
 }

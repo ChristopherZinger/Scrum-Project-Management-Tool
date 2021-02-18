@@ -1,24 +1,37 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
+import {
+	Column,
+	Model,
+	BelongsTo,
+	ForeignKey,
+	Table
+} from "sequelize-typescript";
 import { UserType } from "../../user/graphql/user.type";
 import { User } from "../../user/model/User.model";
 
 @ObjectType()
-@Entity()
-export class UserProfile {
+@Table({
+	timestamps: true,
+	freezeTableName: true
+})
+export class UserProfile extends Model<UserProfile> {
 	@Field(() => ID)
-	@PrimaryGeneratedColumn()
+	@Column({ primaryKey: true, autoIncrement: true })
 	public id!: number;
 
 	@Field()
-	@Column()
+	@Column
 	public firstname!: string;
 
 	@Field()
-	@Column()
+	@Column
 	public lastname!: string;
 
 	@Field(() => UserType)
-	@OneToOne(() => User, user => user.profile)
-	public user!: User;
+	@BelongsTo(() => User)
+	public readonly user?: User;
+
+	@ForeignKey(() => User)
+	@Column
+	public userId?: number;
 }

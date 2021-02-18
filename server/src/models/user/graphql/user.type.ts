@@ -1,6 +1,6 @@
 import { ObjectType, Field, ID } from "type-graphql";
 import { UserProfileType } from "../../userProfile/graphql/userProfile.type";
-import { UserRole } from "../model/User.model";
+import { UserRole } from "../type-guards";
 
 @ObjectType()
 export class UserType {

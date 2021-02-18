@@ -1,0 +1,23 @@
+{
+	"development": {
+		"username": "postgress",
+		"password": "secret",
+		"database": "scrumdb",
+		"host": "127.0.0.1",
+		"dialect": "postgres"
+	},
+	"test": {
+		"username": "postgress",
+		"password": "secret",
+		"database": "scrumdb",
+		"host": "127.0.0.1",
+		"dialect": "postgres"
+	},
+	"production": {
+		"username": "postgress",
+		"password": "secret",
+		"database": "scrumdb",
+		"host": "127.0.0.1",
+		"dialect": "postgres"
+	}
+}

@@ -8,7 +8,7 @@ import { createDBConnection } from "./create-db-connection";
 import { setupRedisAndExpressSession } from "./setup-redis-and-express-session";
 import { customAuthChecker } from "./authorization/auth-checker";
 import { formatErrors } from "./formatErrors/format-errors";
-// import cors from "cors";
+import { container } from "./create-inversify-container";
 
 export async function createExpressApp() {
 	const connectionDB = await createDBConnection();
@@ -20,19 +20,13 @@ export async function createExpressApp() {
 		resolvers: [
 			path.join(__dirname, "../models/**/*.{query,mutation,resolver}.{ts,js}")
 		],
-		authChecker: customAuthChecker
+		authChecker: customAuthChecker,
+		container: container
 	});
 
 	const app = express();
 
 	app.set("trust proxy", true);
-
-// 	app.use(
-// 		cors({
-// 			credentials: true,
-// 			origin: "scrum-arch-service.com"
-// 		})
-// 	);
 
 	setupRedisAndExpressSession(app);
 
@@ -45,17 +39,19 @@ export async function createExpressApp() {
 	apolloServer.applyMiddleware({
 		app,
 		path: "/graphql",
-		cors : {
+		cors: {
 			credentials: true,
 			origin: "https://scrum-arch-service.com"
 		}
 	});
 
-	// serve React app
-	app.use(express.static(path.join(__dirname, "../../../build")));
-	app.get("*", (_, res) => {
-		res.sendFile(path.resolve(__dirname, "../../../build", "index.html"));
-	});
+	if (process.env.NODE_ENV === "production") {
+		// serve React app
+		app.use(express.static(path.join(__dirname, "../../../build")));
+		app.get("*", (_, res) => {
+			res.sendFile(path.resolve(__dirname, "../../../build", "index.html"));
+		});
+	}
 
 	return app;
 }

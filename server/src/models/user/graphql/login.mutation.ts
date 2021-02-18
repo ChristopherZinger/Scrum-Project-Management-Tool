@@ -1,6 +1,5 @@
 import { Resolver, Mutation, Ctx, Arg, Field, InputType } from "type-graphql";
 import { IsEmail, Length } from "class-validator";
-import { getRepository } from "typeorm";
 import { UserResponse } from "./user-response.type";
 import { ContextType } from "../../../core/context/context-type";
 import bcrypt from "bcryptjs";
@@ -28,9 +27,8 @@ export class LoginMutation {
 		@Arg("data") data: LoginInputType,
 		@Ctx() context: ContextType
 	): Promise<UserResponse | null> {
-		const userRepository = getRepository(User);
 		const lowerCaseEmail = data.email.toLowerCase();
-		const user = await userRepository.findOne({
+		const user = await User.findOne({
 			where: { email: lowerCaseEmail }
 		});
 
@@ -56,7 +54,7 @@ export class LoginMutation {
 		});
 
 		console.log(`User: ${user.email} has logged in.`);
-			
+
 		console.log(context.session.cookie);
 
 		return {

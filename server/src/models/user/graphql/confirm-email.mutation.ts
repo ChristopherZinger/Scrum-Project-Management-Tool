@@ -1,7 +1,6 @@
 import { Resolver, Mutation, Arg, Authorized, Ctx } from "type-graphql";
 import { redis } from "../../../core/setup-redis-and-express-session";
 import { User } from "../model/User.model";
-import { getRepository } from "typeorm";
 import { UserResponse } from "./user-response.type";
 import { ContextType } from "../../../core/context/context-type";
 import { Permission } from "../../../core/authorization/permissions";
@@ -20,8 +19,6 @@ export class ConfirmUserEmailResolver {
 		@Arg("token") token: string,
 		@Ctx() context: ContextType
 	): Promise<UserResponse | null> {
-		const userRepository = getRepository(User);
-
 		// token user
 		const userId = await redis.get(emailConfirmationTokenPrefix + token);
 		if (!userId) {
@@ -38,7 +35,7 @@ export class ConfirmUserEmailResolver {
 		}
 
 		// db user
-		const user = await userRepository.findOne({
+		const user = await User.findOne({
 			where: { id: parseInt(userId, 10) }
 		});
 
@@ -55,7 +52,7 @@ export class ConfirmUserEmailResolver {
 		// update model
 		user.emailConfirmed = new Date();
 		user.isActive = true;
-		const updatedUser = await userRepository.save(user);
+		const updatedUser = await user.save();
 
 		await redis.del(emailConfirmationTokenPrefix + token);
 

@@ -1,53 +1,42 @@
-import {
-	Entity,
-	Column,
-	PrimaryGeneratedColumn,
-	OneToOne,
-	JoinColumn
-} from "typeorm";
+import { Column, Model, DataType, HasOne, Table } from "sequelize-typescript";
 import { registerEnumType } from "type-graphql";
 import { UserProfile } from "../../userProfile/model/UserProfile.model";
-
-// if you add new roles here remember to create migration that reflects it in db.
-export enum UserRole {
-	ADMIN = "ADMIN",
-	BASE_USER = "BASE_USER",
-	STAFF = "STAFF"
-}
+import { UserRole } from "../type-guards";
 
 // register to graphql
 registerEnumType(UserRole, {
 	name: "UserRole"
 });
 
-@Entity()
-export class User {
-	@PrimaryGeneratedColumn()
+@Table({
+	timestamps: true,
+	freezeTableName: true
+})
+export class User extends Model<User> {
+	@Column({ primaryKey: true, autoIncrement: true })
 	public id!: number;
 
 	@Column({ unique: true })
 	public email!: string;
 
-	@Column()
+	@Column
 	public password!: string;
 
-	@Column({ type: "date", nullable: true })
+	@Column
 	public emailConfirmed?: Date;
 
-	@Column({ type: "boolean", default: false })
+	@Column({ defaultValue: false })
 	public isActive!: boolean;
 
-	@Column({ type: "date", nullable: true })
+	@Column
 	public removedAt?: Date;
 
 	@Column({
-		type: "enum",
-		enum: UserRole,
-		default: UserRole.BASE_USER
+		type: DataType.ENUM(...Object.values(UserRole)),
+		defaultValue: UserRole.BASE_USER
 	})
 	public role!: UserRole;
 
-	@OneToOne(() => UserProfile, profile => profile.user)
-	@JoinColumn()
-	public profile!: UserProfile;
+	@HasOne(() => UserProfile)
+	public readonly profile?: UserProfile;
 }

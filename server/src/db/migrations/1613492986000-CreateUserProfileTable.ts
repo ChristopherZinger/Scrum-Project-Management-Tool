@@ -4,39 +4,31 @@ const migration = {
 	up: (queryInterface: QueryInterface) =>
 		queryInterface.sequelize.transaction(async transaction => {
 			await queryInterface.createTable(
-				"User",
+				"UserProfile",
 				{
 					id: {
 						type: DataTypes.INTEGER,
 						primaryKey: true,
 						autoIncrement: true
 					},
-					email: {
-						type: DataTypes.STRING,
-						allowNull: false,
-						unique: true
-					},
-					password: {
+					firstname: {
 						type: DataTypes.STRING,
 						allowNull: false
 					},
-					emailConfirmed: {
-						type: DataTypes.DATE,
-						allowNull: true
+					lastname: {
+						type: DataTypes.STRING,
+						allowNull: false
 					},
-					isActive: {
-						type: DataTypes.BOOLEAN
-					},
-					removedAt: {
-						type: DataTypes.DATE,
-						allowNull: true
+					userId: {
+						type: DataTypes.INTEGER,
+						allowNull: false,
+						references: {
+							model: "User",
+							key: "id"
+						}
 					},
 					createdAt: {
 						type: DataTypes.DATE,
-						allowNull: false
-					},
-					role: {
-						type: DataTypes.ENUM("BASE_USER", "ADMIN", "STAFF"),
 						allowNull: false
 					},
 					updatedAt: {

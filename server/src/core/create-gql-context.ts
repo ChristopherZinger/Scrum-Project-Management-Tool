@@ -6,7 +6,7 @@ import {
 	buildPermissionsForAdmin
 } from "./authorization/permissions";
 import { AccessGroup } from "./authorization/access-groups";
-import { UserRole } from "../models/user/model/User.model";
+import { UserRole } from "../models/user/type-guards";
 import { ContextType } from "./context/context-type";
 
 export async function createGQLContext(request: Request, response: Response) {

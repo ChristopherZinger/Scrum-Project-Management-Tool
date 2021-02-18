@@ -1,5 +1,5 @@
 import { Session, SessionData } from "express-session";
-import { UserRole } from "../../models/user/model/User.model";
+import { UserRole } from "../../models/user/type-guards";
 import { AuthorizationContext } from "../authorization/authorization-context";
 import { Response } from "express";
 

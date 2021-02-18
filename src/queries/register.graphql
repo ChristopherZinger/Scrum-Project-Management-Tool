@@ -1,4 +1,4 @@
-mutation Register($data: RegistrationInputType!) {
+mutation Register($data: RegisterUserProfileInputType!) {
 	register(data: $data) {
 		email
 		isActive

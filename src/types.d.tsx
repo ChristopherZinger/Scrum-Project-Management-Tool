@@ -37,7 +37,8 @@ export type UserType = {
 
 export enum UserRole {
   Admin = 'ADMIN',
-  BaseUser = 'BASE_USER'
+  BaseUser = 'BASE_USER',
+  Staff = 'STAFF'
 }
 
 
@@ -56,6 +57,16 @@ export type UserResponse = {
   emailConfirmed?: Maybe<Scalars['DateTime']>;
 };
 
+export type UserProfileResponse = {
+  __typename?: 'UserProfileResponse';
+  profileId: Scalars['Float'];
+  firstname: Scalars['String'];
+  lastname: Scalars['String'];
+  email: Scalars['String'];
+  isActive: Scalars['Boolean'];
+  emailConfirmed: Scalars['DateTime'];
+};
+
 export type ChangePassword = {
   password: Scalars['String'];
   token: Scalars['String'];
@@ -66,9 +77,11 @@ export type LoginInputType = {
   email: Scalars['String'];
 };
 
-export type RegistrationInputType = {
+export type RegisterUserProfileInputType = {
   password: Scalars['String'];
   email: Scalars['String'];
+  firstname: Scalars['String'];
+  lastname: Scalars['String'];
 };
 
 export type Query = {
@@ -83,9 +96,9 @@ export type Mutation = {
   confirmUserEmail?: Maybe<UserResponse>;
   login?: Maybe<UserResponse>;
   logout: Scalars['Boolean'];
-  register: UserResponse;
   requestConfirmationEmail: Scalars['Boolean'];
   requestPasswordChangeEmail: Scalars['Boolean'];
+  register?: Maybe<UserProfileResponse>;
 };
 
 
@@ -104,13 +117,13 @@ export type MutationLoginArgs = {
 };
 
 
-export type MutationRegisterArgs = {
-  data: RegistrationInputType;
+export type MutationRequestPasswordChangeEmailArgs = {
+  email: Scalars['String'];
 };
 
 
-export type MutationRequestPasswordChangeEmailArgs = {
-  email: Scalars['String'];
+export type MutationRegisterArgs = {
+  data: RegisterUserProfileInputType;
 };
 
 export type LoginMutationVariables = Exact<{
@@ -146,16 +159,16 @@ export type MyProfileQuery = (
 );
 
 export type RegisterMutationVariables = Exact<{
-  data: RegistrationInputType;
+  data: RegisterUserProfileInputType;
 }>;
 
 
 export type RegisterMutation = (
   { __typename?: 'Mutation' }
-  & { register: (
-    { __typename?: 'UserResponse' }
-    & Pick<UserResponse, 'email' | 'isActive' | 'emailConfirmed'>
-  ) }
+  & { register?: Maybe<(
+    { __typename?: 'UserProfileResponse' }
+    & Pick<UserProfileResponse, 'email' | 'isActive' | 'emailConfirmed'>
+  )> }
 );
 
 
@@ -257,7 +270,7 @@ export type MyProfileQueryHookResult = ReturnType<typeof useMyProfileQuery>;
 export type MyProfileLazyQueryHookResult = ReturnType<typeof useMyProfileLazyQuery>;
 export type MyProfileQueryResult = Apollo.QueryResult<MyProfileQuery, MyProfileQueryVariables>;
 export const RegisterDocument = gql`
-    mutation Register($data: RegistrationInputType!) {
+    mutation Register($data: RegisterUserProfileInputType!) {
   register(data: $data) {
     email
     isActive

@@ -2,7 +2,6 @@ import { Resolver, Mutation, Arg, Field, InputType, Ctx } from "type-graphql";
 import { Length } from "class-validator";
 import { redis } from "../../../core/setup-redis-and-express-session";
 import { User } from "../model/User.model";
-import { getRepository } from "typeorm";
 import { UserResponse } from "./user-response.type";
 import { ContextType } from "../../../core/context/context-type";
 import { createUserContext } from "../../../core/context/create-user-context";
@@ -28,8 +27,6 @@ export class ChangePasswordMutation {
 		@Arg("data") data: ChangePassword,
 		@Ctx() context: ContextType
 	): Promise<UserResponse | null> {
-		const userRepository = getRepository(User);
-
 		// token user
 		const userId = await redis.get(passwordChangeTokenPrefix + data.token);
 		if (!userId) {
@@ -38,7 +35,7 @@ export class ChangePasswordMutation {
 		}
 
 		// db user
-		const user = await userRepository.findOne({
+		const user = await User.findOne({
 			where: { id: parseInt(userId, 10) }
 		});
 
@@ -49,7 +46,7 @@ export class ChangePasswordMutation {
 
 		// update model
 		user.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(12));
-		const updatedUser = await userRepository.save(user);
+		const updatedUser = await user.save();
 
 		await redis.del(passwordChangeTokenPrefix + data.token);
 

@@ -2,7 +2,6 @@ import { Resolver, Mutation, Arg } from "type-graphql";
 import { sendEmail } from "../../../core/auto-email/send-email";
 import { createPasswordChangeUrl } from "../../../core/auto-email/create-token-url";
 import { createConfirmationEmail } from "../../../core/auto-email/emails/create-confirmation-email";
-import { getRepository } from "typeorm";
 import { User } from "../model/User.model";
 
 @Resolver()
@@ -11,8 +10,7 @@ export class RequestPasswordChangeEmailMutation {
 	public async requestPasswordChangeEmail(
 		@Arg("email") email: string
 	): Promise<boolean> {
-		const userRepository = await getRepository(User);
-		const user = await userRepository.findOne({ where: { email } });
+		const user = await User.findOne({ where: { email } });
 		if (!user) {
 			console.warn("Could not find user with email: ", email);
 			return false;

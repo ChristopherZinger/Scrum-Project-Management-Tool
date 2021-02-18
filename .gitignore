@@ -19,10 +19,6 @@ yarn-error.log*
 .eslintcache
 server/.env
 /server/.env
-<<<<<<< HEAD
-server/dist
-/server/dist
-=======
 server/ormconfig.json
 /server/ormconfig.json
 
@@ -30,4 +26,3 @@ server/ormconfig.json
 server/dist
 build
 /build
->>>>>>> 611995a1045b676fea761736079a00a2a1c19e1d

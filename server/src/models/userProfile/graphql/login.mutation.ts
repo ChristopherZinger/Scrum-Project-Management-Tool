@@ -40,12 +40,12 @@ export class LoginMutation {
 		});
 
 		if (!user) {
-			console.warn(`Wrong credentials: email. for '${data.email}'`);
+			console.error(`Wrong credentials: email. for '${data.email}'`);
 			throw new ApolloError("incorrect email", "WRONG_CREDENTIALS");
 		}
 
 		if (!user.profile) {
-			console.warn(
+			console.error(
 				`Could not load a userProfile for user witch email : ${data.email}`
 			);
 			throw new ApolloError(

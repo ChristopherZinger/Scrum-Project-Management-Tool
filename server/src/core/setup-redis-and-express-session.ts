@@ -2,6 +2,7 @@ import { Express } from "express";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import Redis from "ioredis";
+import { CONST } from "./CONST";
 
 export const redis = new Redis();
 
@@ -12,7 +13,7 @@ export function setupRedisAndExpressSession(app: Express) {
 			store: new RedisStore({
 				client: redis as any
 			}),
-			name: "sessionID",
+			name: CONST.sessionCookieName,
 			secret: process.env.SESSION_SECRET,
 			resave: false,
 			saveUninitialized: false,
@@ -20,7 +21,7 @@ export function setupRedisAndExpressSession(app: Express) {
 			cookie: {
 				// domain: "https://scrum-arch-service.com",
 				httpOnly: true,
-				secure: false , // process.env.NODE_ENV === "production",
+				secure: false, // process.env.NODE_ENV === "production",
 				maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year
 			}
 		} as any)

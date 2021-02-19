@@ -1,7 +1,9 @@
+import { injectable } from "inversify";
 import { IUserProfileResponse } from "../type-guards";
 import { UserProfile } from "../model/UserProfile.model";
 import { User } from "../../user/model/User.model";
 
+@injectable()
 export class UserProfileDM {
 	public createUserProfileResponse(
 		user: User,

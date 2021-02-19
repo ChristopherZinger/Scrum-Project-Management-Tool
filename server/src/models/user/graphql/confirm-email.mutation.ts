@@ -9,7 +9,7 @@ import { ContextType } from "../../../core/context/context-type";
 import { Permission } from "../../../core/authorization/permissions";
 import { updateUserContext } from "../../../core/context/update-user-context";
 import { emailConfirmationTokenPrefix } from "../../../core/auto-email/create-token-url";
-import { UserProfile } from "@/models/userProfile/model/UserProfile.model";
+import { UserProfile } from "../../userProfile/model/UserProfile.model";
 
 @injectable()
 @Resolver()

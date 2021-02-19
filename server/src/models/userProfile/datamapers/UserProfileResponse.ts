@@ -1,16 +1,20 @@
-import { TUserProfileWithUser, IUserProfileResponse } from "../type-guards";
+import { IUserProfileResponse } from "../type-guards";
+import { UserProfile } from "../model/UserProfile.model";
+import { User } from "../../user/model/User.model";
 
 export class UserProfileDM {
-	public toUserProfileResponse(
-		userProfileWithUser: TUserProfileWithUser
+	public createUserProfileResponse(
+		user: User,
+		profile: UserProfile
+		//company: Company, // TODO : probably company will be in the response too
 	): IUserProfileResponse {
 		return {
-			profileId: userProfileWithUser.id,
-			firstname: userProfileWithUser.firstname,
-			lastname: userProfileWithUser.lastname,
-			email: userProfileWithUser.user.email,
-			isActive: userProfileWithUser.user.isActive,
-			emailConfirmed: userProfileWithUser.user.emailConfirmed
+			profileId: profile.id,
+			firstname: profile.firstname,
+			lastname: profile.lastname,
+			email: user.email,
+			isActive: user.isActive,
+			emailConfirmed: user.emailConfirmed
 		};
 	}
 }

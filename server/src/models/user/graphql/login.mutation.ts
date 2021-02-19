@@ -1,66 +1,61 @@
-import { Resolver, Mutation, Ctx, Arg, Field, InputType } from "type-graphql";
-import { IsEmail, Length } from "class-validator";
-import { UserResponse } from "./user-response.type";
-import { ContextType } from "../../../core/context/context-type";
-import bcrypt from "bcryptjs";
-import { User } from "../model/User.model";
-import { createUserContext } from "../../../core/context/create-user-context";
-import { ApolloError } from "apollo-server-express";
+import {
+	Resolver /* Mutation, Ctx, Arg, Field, InputType */
+} from "type-graphql";
+// import { IsEmail, Length } from "class-validator";
+// import { UserResponse } from "./user-response.type";
+// import { ContextType } from "../../../core/context/context-type";
+// import bcrypt from "bcryptjs";
+// import { User } from "../model/User.model";
+// import { createUserContext } from "../../../core/context/create-user-context";
+// import { ApolloError } from "apollo-server-express";
 
-@InputType()
-class LoginInputType {
-	@Field(() => String)
-	@Length(8, 255, {
-		message: "Incorrect password length. Has to be between 8 and 255 charactes."
-	})
-	password!: string;
+// @InputType()
+// class LoginInputType {
+// 	@Field(() => String)
+// 	@Length(8, 255, {
+// 		message: "Incorrect password length. Has to be between 8 and 255 charactes."
+// 	})
+// 	password!: string;
 
-	@Field(() => String)
-	@IsEmail()
-	email!: string;
-}
+// 	@Field(() => String)
+// 	@IsEmail()
+// 	email!: string;
+// }
 
 @Resolver()
 export class LoginMutation {
-	@Mutation(() => UserResponse, { nullable: true })
-	async login(
-		@Arg("data") data: LoginInputType,
-		@Ctx() context: ContextType
-	): Promise<UserResponse | null> {
-		const lowerCaseEmail = data.email.toLowerCase();
-		const user = await User.findOne({
-			where: { email: lowerCaseEmail }
-		});
-
-		if (!user) {
-			console.warn(`Wrong credentials: email. for '${data.email}'`);
-			throw new ApolloError("incorrect email", "WRONG_CREDENTIALS");
-		}
-
-		const valid = bcrypt.compareSync(data.password, user.password);
-
-		if (!valid) {
-			console.warn("Wrong credentials: password.");
-			throw new ApolloError("incorrect email", "WRONG_CREDENTIALS");
-		}
-
-		createUserContext(context, {
-			id: user.id,
-			email: user.email,
-			role: user.role,
-			emailConfirmed: user.emailConfirmed,
-			isActive: user.isActive,
-			removedAt: user.removedAt
-		});
-
-		console.log(`User: ${user.email} has logged in.`);
-
-		console.log(context.session.cookie);
-
-		return {
-			email: user.email,
-			isActive: user.isActive,
-			emailConfirmed: user.emailConfirmed
-		};
-	}
+	// @Mutation(() => UserResponse, { nullable: true })
+	// async login(
+	// 	@Arg("data") data: LoginInputType,
+	// 	@Ctx() context: ContextType
+	// ): Promise<UserResponse | null> {
+	// 	const lowerCaseEmail = data.email.toLowerCase();
+	// 	const user = await User.findOne({
+	// 		where: { email: lowerCaseEmail }
+	// 	});
+	// 	if (!user) {
+	// 		console.warn(`Wrong credentials: email. for '${data.email}'`);
+	// 		throw new ApolloError("incorrect email", "WRONG_CREDENTIALS");
+	// 	}
+	// 	const valid = bcrypt.compareSync(data.password, user.password);
+	// 	if (!valid) {
+	// 		console.warn("Wrong credentials: password.");
+	// 		throw new ApolloError("incorrect email", "WRONG_CREDENTIALS");
+	// 	}
+	// 	createUserContext(context, {
+	// 		id: user.id,
+	// 		email: user.email,
+	// 		role: user.role,
+	// 		emailConfirmed: user.emailConfirmed,
+	// 		isActive: user.isActive,
+	// 		removedAt: user.removedAt
+	// 	});
+	// 	console.log(`User: ${user.email} has logged in.`);
+	// 	console.log(context.session.cookie);
+	// 	return {
+	// 		email: user.email,
+	// 		isActive: user.isActive,
+	// 		emailConfirmed: user.emailConfirmed
+	// 	};
+	// }
 }

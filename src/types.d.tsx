@@ -60,6 +60,11 @@ export type UserProfileResponse = {
   emailConfirmed?: Maybe<Scalars['DateTime']>;
 };
 
+export type ChangePassword = {
+  password: Scalars['String'];
+  token: Scalars['String'];
+};
+
 export type LoginInputType = {
   password: Scalars['String'];
   email: Scalars['String'];
@@ -80,9 +85,28 @@ export type Query = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  changePassword?: Maybe<UserProfileResponse>;
+  confirmUserEmail?: Maybe<UserProfileResponse>;
+  requestConfirmationEmail: Scalars['Boolean'];
+  requestPasswordChangeEmail: Scalars['Boolean'];
   login?: Maybe<UserProfileResponse>;
   logout: Scalars['Boolean'];
   register?: Maybe<UserProfileResponse>;
+};
+
+
+export type MutationChangePasswordArgs = {
+  data: ChangePassword;
+};
+
+
+export type MutationConfirmUserEmailArgs = {
+  token: Scalars['String'];
+};
+
+
+export type MutationRequestPasswordChangeEmailArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -114,6 +138,17 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 export type LogoutMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'logout'>
+);
+
+export type MyProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyProfileQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'UserProfileResponse' }
+    & Pick<UserProfileResponse, 'email' | 'isActive' | 'emailConfirmed'>
+  )> }
 );
 
 export type RegisterMutationVariables = Exact<{
@@ -193,6 +228,40 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const MyProfileDocument = gql`
+    query myProfile {
+  user {
+    email
+    isActive
+    emailConfirmed
+  }
+}
+    `;
+
+/**
+ * __useMyProfileQuery__
+ *
+ * To run a query within a React component, call `useMyProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyProfileQuery(baseOptions?: Apollo.QueryHookOptions<MyProfileQuery, MyProfileQueryVariables>) {
+        return Apollo.useQuery<MyProfileQuery, MyProfileQueryVariables>(MyProfileDocument, baseOptions);
+      }
+export function useMyProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyProfileQuery, MyProfileQueryVariables>) {
+          return Apollo.useLazyQuery<MyProfileQuery, MyProfileQueryVariables>(MyProfileDocument, baseOptions);
+        }
+export type MyProfileQueryHookResult = ReturnType<typeof useMyProfileQuery>;
+export type MyProfileLazyQueryHookResult = ReturnType<typeof useMyProfileLazyQuery>;
+export type MyProfileQueryResult = Apollo.QueryResult<MyProfileQuery, MyProfileQueryVariables>;
 export const RegisterDocument = gql`
     mutation Register($data: RegisterUserProfileInputType!) {
   register(data: $data) {

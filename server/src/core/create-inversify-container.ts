@@ -38,7 +38,6 @@ class AutoBinder {
 				Reflect.hasMetadata("inversify:paramtypes", exports[clas]) &&
 				!this.container.isBound(exports[clas])
 			) {
-				console.log(exports[clas]);
 				this.container.bind(exports[clas]).toSelf();
 			}
 		}

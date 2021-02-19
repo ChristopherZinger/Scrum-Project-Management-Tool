@@ -11,7 +11,7 @@ export interface IUserProfileResponse {
 	lastname: string;
 	email: string;
 	isActive: boolean;
-	emailConfirmed?: Date;
+	emailConfirmed: Date | null;
 }
 
 export function userProfileHasUser(

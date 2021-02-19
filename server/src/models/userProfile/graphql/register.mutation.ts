@@ -82,7 +82,7 @@ export class RegisterMutation {
 				lastname: newUser.profile.lastname,
 				email: newUser.email,
 				isActive: newUser.isActive,
-				emailConfirmed: newUser.emailConfirmed || undefined
+				emailConfirmed: newUser.emailConfirmed
 			};
 		} catch (err) {
 			console.error(err);

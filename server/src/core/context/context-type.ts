@@ -7,7 +7,7 @@ export type SessionUserType = {
 	id: number;
 	email: string;
 	role: UserRole;
-	emailConfirmed?: Date;
+	emailConfirmed: Date | null;
 	isActive: boolean;
 	removedAt?: Date;
 };

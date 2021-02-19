@@ -8,6 +8,7 @@ import { UserProfileService } from "../services/user-profile-register.service";
 import { injectable } from "inversify";
 import { sendEmail } from "./../../../core/auto-email/send-email";
 import { createUserContext } from "./../../../core/context/create-user-context";
+import { UserProfileDM } from "../datamappers/UserProfileResponse.dm";
 
 @InputType()
 export class RegisterUserProfileInputType {
@@ -32,7 +33,8 @@ export class RegisterUserProfileInputType {
 @Resolver()
 export class RegisterMutation {
 	public constructor(
-		private userProfileRegisterService: UserProfileService //private userRepository: UserRepository
+		private userProfileRegisterService: UserProfileService, //private userRepository: UserRepository
+		private userProfileDM: UserProfileDM
 	) {}
 
 	@Mutation(() => UserProfileResponse, { nullable: true })
@@ -76,14 +78,10 @@ export class RegisterMutation {
 				removedAt: newUser.removedAt
 			});
 
-			return {
-				profileId: newUser.profile.id,
-				firstname: newUser.profile.firstname,
-				lastname: newUser.profile.lastname,
-				email: newUser.email,
-				isActive: newUser.isActive,
-				emailConfirmed: newUser.emailConfirmed
-			};
+			return this.userProfileDM.createUserProfileResponse(
+				newUser,
+				newUser.profile
+			);
 		} catch (err) {
 			console.error(err);
 		}

@@ -38,6 +38,7 @@ class AutoBinder {
 				Reflect.hasMetadata("inversify:paramtypes", exports[clas]) &&
 				!this.container.isBound(exports[clas])
 			) {
+				console.log(exports[clas]);
 				this.container.bind(exports[clas]).toSelf();
 			}
 		}
@@ -49,7 +50,8 @@ const container = new Container();
 new AutoBinder(container).autobind([
 	`${__dirname}/../models/*/model/*.repository.{ts,js}`, // Repositories
 	`${__dirname}/../models/*/services/*.service.{ts,js}`, // Services
-	`${__dirname}/../models/*/graphql/**/*.{query,mutation,resolver}.{ts,js}` // GraphQL queries / mutations
+	`${__dirname}/../models/*/graphql/**/*.{query,mutation,resolver}.{ts,js}`, // GraphQL queries / mutations
+	`${__dirname}/../models/*/datamappers/*.dm.{ts,js}` // datamappers
 ]);
 
 export { container };

@@ -1,3 +1,4 @@
+import { ApolloError } from "apollo-server-express";
 import { createConfirmationUrl } from "./../../../core/auto-email/create-token-url";
 import { createConfirmationEmail } from "./../../../core/auto-email/emails/create-confirmation-email";
 import { ContextType } from "./../../../core/context/context-type";
@@ -51,12 +52,17 @@ export class RegisterMutation {
 			);
 
 			if (!newUser) {
-				throw new Error(`Could not find a user with email: ${data.email}`);
+				console.error(`Wrong credentials: email. for '${data.email}'`);
+				throw new ApolloError("incorrect email", "WRONG_CREDENTIALS");
 			}
 
 			if (!newUser.profile) {
-				throw new Error(
+				console.error(
 					`Could not load a userProfile for user witch email : ${data.email}`
+				);
+				throw new ApolloError(
+					"Part of the data is missing",
+					"USER_PROFILE_IS_MISSING"
 				);
 			}
 

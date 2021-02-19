@@ -1,7 +1,7 @@
-# query myProfile {
-# 	user {
-# 		email
-# 		isActive
-# 		emailConfirmed
-# 	}
-# }
+query myProfile {
+	user {
+		email
+		isActive
+		emailConfirmed
+	}
+}

@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, useEffect } from 'react'
 import { AppRoutes } from "./application/pages/AppRoutes"
 import 'semantic-ui-css/semantic.min.css'
-import { useMyProfileQuery, UserResponse } from "./types.d"
+import { useMyProfileQuery, UserProfileResponse } from "./types.d"
 import "./global-styles/fonts.css";
 import 'react-toastify/dist/ReactToastify.css';
 import "./global-styles/override-toastr-styles.css";
@@ -20,19 +20,13 @@ function App () {
 
 export default App;
 
-
-
 type UserContextType = {
-  user: null | UserResponse
+  user: null | UserProfileResponse
 }
-
-
 
 type UserContextActionType =
   { type: "logout" } |
   { type: "login", user: any }
-
-
 
 const userReducer = (state: UserContextType, action: UserContextActionType): UserContextType => {
   switch (action.type) {

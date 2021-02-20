@@ -25,7 +25,7 @@ export class Company extends Model<Company> {
 	public buildingNumber?: string;
 
 	@Column
-	public zipCod?: string;
+	public zipCode?: string;
 
 	@HasMany(() => UserProfile)
 	public readonly userProfiles?: UserProfile[];

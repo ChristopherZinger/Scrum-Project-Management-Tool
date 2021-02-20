@@ -5,21 +5,32 @@ import {
     Route,
 } from "react-router-dom";
 import { Login } from "./Login/Login";
-import { Register } from "./Register/Register";
+import { RegisterUser } from "./Register/RegisterUser";
 import { LandingPage } from "./LandingPage/LandingPage";
+import { RegisterCompany } from "./Register/RegisterCompany";
 
+export enum Routes {
+    HOME = '/',
+    LOGIN = '/login',
+    REGISTER_PROFILE = '/register-profile',
+    REGISTER_COMPANY = '/register-company',
+    DASHBOARD = '/dashboard'
+}
 
 export function AppRoutes () {
     return (
         <Router>
             <Switch>
-                <Route path="/login" >
+                <Route path={Routes.LOGIN} >
                     <Login />
                 </Route>
-                <Route path="/signup" >
-                    <Register />
+                <Route path={Routes.REGISTER_PROFILE} >
+                    <RegisterUser />
                 </Route>
-                <Route path="/">
+                <Route path={Routes.REGISTER_COMPANY} >
+                    <RegisterCompany />
+                </Route>
+                <Route path={Routes.HOME}>
                     <LandingPage />
                 </Route>
             </Switch>

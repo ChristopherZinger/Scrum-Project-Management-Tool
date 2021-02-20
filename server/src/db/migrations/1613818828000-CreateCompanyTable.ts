@@ -47,14 +47,19 @@ const migration = {
 				{ transaction }
 			);
 
-			await queryInterface.addColumn("UserProfile", "companyId", {
-				type: DataTypes.INTEGER,
-				allowNull: true,
-				references: {
-					model: "Company",
-					key: "id"
-				}
-			});
+			await queryInterface.addColumn(
+				"UserProfile",
+				"companyId",
+				{
+					type: DataTypes.INTEGER,
+					allowNull: true,
+					references: {
+						model: "Company",
+						key: "id"
+					}
+				},
+				{ transaction }
+			);
 		}),
 
 	down: (queryInterface: QueryInterface) => {

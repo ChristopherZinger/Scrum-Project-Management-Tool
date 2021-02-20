@@ -1,4 +1,4 @@
-import { Column, Model, Table, HasMany, AllowNull } from "sequelize-typescript";
+import { Column, Model, Table, HasMany } from "sequelize-typescript";
 import { UserProfile } from "../../userProfile/model/UserProfile.model";
 
 @Table({
@@ -16,20 +16,16 @@ export class Company extends Model<Company> {
 	public name!: string;
 
 	@Column
-	@AllowNull(true)
-	public city!: string | null;
+	public city?: string;
 
 	@Column
-	@AllowNull(true)
-	public street!: string | null;
+	public street?: string;
 
 	@Column
-	@AllowNull(true)
-	public buildingNumber!: string | null;
+	public buildingNumber?: string;
 
 	@Column
-	@AllowNull(true)
-	public zipCod!: string | null;
+	public zipCod?: string;
 
 	@HasMany(() => UserProfile)
 	public readonly userProfiles?: UserProfile[];

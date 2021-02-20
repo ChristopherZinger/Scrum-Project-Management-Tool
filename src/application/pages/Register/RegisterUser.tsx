@@ -5,7 +5,6 @@ import { Grid, Image } from "semantic-ui-react";
 import { HoverStyleButton } from "../../atoms/Buttons/HoverStyleButton";
 import { MarginWrapper } from "../../atoms/MarginWrapper/MarginWrapper";
 import signupImg from "../../images/mobile_life.svg";
-import styled from "styled-components";
 import { Input, InputError } from "../../atoms/Inputs/Input";
 import { decorativeFont, Heading } from "../../atoms/style";
 import { Formik, Form } from "formik";
@@ -15,20 +14,10 @@ import { UserAuthDispatchContext } from "../../../App";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
+import { AuthFormWrapper } from "./styledElements/AuthFormWrapper";
+import { Routes } from "../AppRoutes";
 
-const CenteredDiv = styled.div`
-display:block;
-position:relative;
-left: 50%;
-top: 50%;
-transform: translate(-50%, -50%);
-`
-
-const AuthFormWrapper = styled(CenteredDiv)`
-    max-width: 400px;
-`
-
-export const Register = () => {
+export const RegisterUser = () => {
   const [isOfficeAdmin, setIsOfficeAdmin] = useState(false);
   const dispatch = useContext(UserAuthDispatchContext);
   const [register, { loading, error }] = useRegisterMutation();
@@ -96,7 +85,7 @@ export const Register = () => {
                     })
                     if (userData.data) {
                       dispatch({ type: "login", user: userData.data.register })
-                      history.push("/")
+                      history.push(isOfficeAdmin ? Routes.REGISTER_COMPANY : Routes.DASHBOARD)
                     } else {
                       throw new Error("No data received")
                     }
@@ -168,7 +157,12 @@ export const Register = () => {
                         <InputError name="passwordRepeat" />
                       </div>
 
-                      <HoverStyleButton disabled={!loading} isLoading={loading} type="submit" text="Signup" />
+                      <HoverStyleButton
+                        disabled={!loading}
+                        isLoading={loading}
+                        type="submit"
+                        text={isOfficeAdmin ? "Next" : "Signup"}
+                      />
                     </Form>
                   )
                 }}

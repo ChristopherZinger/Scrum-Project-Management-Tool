@@ -5,7 +5,7 @@ import {
     Route,
 } from "react-router-dom";
 import { Login } from "./Login/Login";
-import { Signup } from "./Signup/Signup";
+import { Register } from "./Register/Register";
 import { LandingPage } from "./LandingPage/LandingPage";
 
 
@@ -17,7 +17,7 @@ export function AppRoutes () {
                     <Login />
                 </Route>
                 <Route path="/signup" >
-                    <Signup />
+                    <Register />
                 </Route>
                 <Route path="/">
                     <LandingPage />

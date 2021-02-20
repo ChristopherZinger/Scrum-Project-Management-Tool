@@ -9,7 +9,7 @@ import styled from "styled-components";
 import { Input, InputError } from "../../atoms/Inputs/Input";
 import { decorativeFont, Heading } from "../../atoms/style";
 import { Formik, Form } from "formik";
-import { ToggleSignupType } from "./ToggleSignupType/ToggleSignupType";
+import { ToggleRegisterType } from "./ToggleRegisterType/ToggleRegisterType";
 import { useRegisterMutation } from "../../../types.d";
 import { UserAuthDispatchContext } from "../../../App";
 import { useHistory } from "react-router-dom";
@@ -28,7 +28,7 @@ const AuthFormWrapper = styled(CenteredDiv)`
     max-width: 400px;
 `
 
-export const Signup = () => {
+export const Register = () => {
   const [isOfficeAdmin, setIsOfficeAdmin] = useState(false);
   const dispatch = useContext(UserAuthDispatchContext);
   const [register, { loading, error }] = useRegisterMutation();
@@ -56,7 +56,7 @@ export const Signup = () => {
 
         <Grid.Row>
           <Grid.Column width={16}>
-            <ToggleSignupType isAdmin={isOfficeAdmin} click={() => setIsOfficeAdmin(!isOfficeAdmin)} />
+            <ToggleRegisterType isAdmin={isOfficeAdmin} click={() => setIsOfficeAdmin(!isOfficeAdmin)} />
           </Grid.Column>
         </Grid.Row>
 

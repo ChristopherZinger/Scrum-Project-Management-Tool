@@ -17,7 +17,7 @@ type Props = {
     click: () => void;
 }
 
-export const ToggleSignupType = (props: Props) => {
+export const ToggleRegisterType = (props: Props) => {
     return (
         <Wrapper>
             <p>I am a &nbsp;</p>

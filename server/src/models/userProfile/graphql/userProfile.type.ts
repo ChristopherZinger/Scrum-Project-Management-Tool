@@ -1,3 +1,4 @@
+import { CompanyType } from "@/models/company/graphql/company.type";
 import { ObjectType, Field, ID } from "type-graphql";
 import { UserType } from "../../user/graphql/user.type";
 
@@ -14,4 +15,10 @@ export class UserProfileType {
 
 	@Field(() => UserType, { nullable: true })
 	user!: UserType;
+
+	@Field()
+	userId?: number;
+
+	@Field(() => CompanyType, { nullable: true })
+	company?: CompanyType;
 }

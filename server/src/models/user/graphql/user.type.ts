@@ -17,7 +17,7 @@ export class UserType {
 	role!: UserRole;
 
 	@Field(() => UserProfileType, { nullable: true })
-	user?: UserProfileType;
+	userProfile?: UserProfileType;
 
 	@Field(() => Date, { nullable: true })
 	emailConfirmed!: Date | null;

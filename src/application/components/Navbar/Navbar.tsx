@@ -4,6 +4,7 @@ import { Grid } from "semantic-ui-react";
 import { UnderlineLink } from "../../atoms/Links/UnderlineLink";
 import { LogoutModal } from "../LogoutModal/LogoutModal";
 import { UserAuthDispatchContext, UserAuthStateContext } from "../../../App";
+import { Routes } from "../../pages/AppRoutes";
 
 export const Navbar = () => {
     const [logoutModalIsOpen, setLogoutModalIsOpen] = useState(false);
@@ -15,7 +16,7 @@ export const Navbar = () => {
             <Grid.Row only="tablet computer" style={{ marginBottom: "80px" }}>
                 <Grid.Column tablet={user ? 14 : 12} >
                     <UnderlineLink>
-                        <Link to="/">Home</Link>
+                        <Link to={Routes.HOME}>Home</Link>
                     </UnderlineLink>
                 </Grid.Column>
 
@@ -23,7 +24,7 @@ export const Navbar = () => {
                     (
                         <Grid.Column width={2}>
                             <UnderlineLink>
-                                <a href="/#" onClick={() => setLogoutModalIsOpen(true)} >Logout</a>
+                                <a href={Routes.HOME} onClick={() => setLogoutModalIsOpen(true)} >Logout</a>
                             </UnderlineLink>
                         </Grid.Column>
                     )
@@ -32,13 +33,13 @@ export const Navbar = () => {
                         <>
                             <Grid.Column tablet={2} >
                                 <UnderlineLink>
-                                    <Link to="/login">Login</Link>
+                                    <Link to={Routes.LOGIN}>Login</Link>
                                 </UnderlineLink>
                             </Grid.Column>
 
                             <Grid.Column tablet={2}>
                                 <UnderlineLink>
-                                    <Link to="/signup">Signup</Link>
+                                    <Link to={Routes.REGISTER_PROFILE}>Signup</Link>
                                 </UnderlineLink>
                             </Grid.Column>
                         </>

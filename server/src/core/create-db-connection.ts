@@ -1,6 +1,7 @@
 import { UserProfile } from "../models/userProfile/model/UserProfile.model";
 import { Sequelize, SequelizeOptions } from "sequelize-typescript";
 import { User } from "../models/user/model/User.model";
+import { Company } from "../models/company/model/Company.model";
 
 export async function createDBConnection() {
 	const options: SequelizeOptions = {
@@ -14,7 +15,7 @@ export async function createDBConnection() {
 
 	const connection = new Sequelize(options);
 
-	connection.addModels([User, UserProfile]);
+	connection.addModels([User, UserProfile, Company]);
 
 	if (!connection) {
 		throw new Error("Could NOT connect with database.");

@@ -1,7 +1,6 @@
 import { CompanyRegisterService } from "../services/company-register.service";
 import { UserProfileRepository } from "../../userProfile/model/UserProfile.repository";
 import { UserProfile } from "../../userProfile/model/UserProfile.model";
-import { ApolloError } from "apollo-server-express";
 import { ContextType } from "./../../../core/context/context-type";
 import {
 	Resolver,

@@ -1,21 +1,5 @@
 import { ApolloError } from "apollo-server-express";
-
-export enum customErrorCodes {
-	// AUTH
-	INVALID_TOKEN = "INVALID_TOKEN",
-	SESSION_ERROR = "SESSION_ERROR",
-
-	// MISSING
-	USER_MISSING_FOR_ID = "USER_MISSING_FOR_ID",
-	USER_MISSING_FOR_EMAIL = "USER_MISSING_FOR_EMAIL",
-
-	// LOADING ERRORS
-	COULD_NOT_LOAD_USER_DATA = "COULD_NOT_LOAD_USER_DATA",
-
-	// VALIDATION
-	ARGUMENT_VALIDATION_ERROR = "ARGUMENT_VALIDATION_ERROR",
-	OPERATION_FOBRIDDEN = "OPERATION_FOBRIDDEN"
-}
+import { customErrorCodes } from "./custom-error-codes";
 
 const message = (
 	message: string,
@@ -23,7 +7,7 @@ const message = (
 	appendMessage?: string
 ) => replaceMessage || message + appendMessage || "";
 
-function customApolloError() {
+function customApolloErrors() {
 	return {
 		// AUTH
 		invalidToken: (replaceMessage?: string, appendMessage?: string) => {
@@ -36,6 +20,12 @@ function customApolloError() {
 			return new ApolloError(
 				message("Session Error.", replaceMessage, appendMessage),
 				customErrorCodes.SESSION_ERROR
+			);
+		},
+		wrongCredentials: (replaceMessage?: string, appendMessage?: string) => {
+			return new ApolloError(
+				message("Incorrect credentials.", replaceMessage, appendMessage),
+				customErrorCodes.WRONG_CREDENTIALS
 			);
 		},
 
@@ -79,8 +69,16 @@ function customApolloError() {
 				message("Operation fobridden. ", replaceMessage, appendMessage),
 				customErrorCodes.OPERATION_FOBRIDDEN
 			);
+		},
+
+		// VALIDATION
+		somethingWentWrong: (replaceMessage?: string, appendMessage?: string) => {
+			return new ApolloError(
+				message("Something went wrong. ", replaceMessage, appendMessage),
+				customErrorCodes.SOMETHING_WENT_WRONG
+			);
 		}
 	};
 }
 
-export default customApolloError();
+export default customApolloErrors();

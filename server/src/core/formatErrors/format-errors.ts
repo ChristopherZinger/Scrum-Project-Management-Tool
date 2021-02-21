@@ -1,7 +1,7 @@
-import { customErrorCodes } from "./custom-apollo-errors";
 import { GraphQLError, GraphQLFormattedError } from "graphql";
 import { ArgumentValidationError } from "type-graphql";
 import { ApolloError } from "apollo-server-express";
+import { customErrorCodes } from "./custom-error-codes";
 
 export const formatErrors = (error: GraphQLError): GraphQLFormattedError => {
 	if (error instanceof ApolloError) {

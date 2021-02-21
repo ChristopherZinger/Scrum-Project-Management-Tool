@@ -1,0 +1,3 @@
+mutation RegisterCompany($data: RegisterCompanyInputType!) {
+	RegisterCompany(data: $data)
+}

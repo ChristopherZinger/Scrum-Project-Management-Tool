@@ -8,8 +8,13 @@ import { AuthFormWrapper } from "./styledElements/AuthFormWrapper";
 import { Formik, Form } from "formik";
 import { Input, InputError } from "../../atoms/Inputs/Input";
 import { HoverStyleButton } from "../../atoms/Buttons/HoverStyleButton";
+import { useRegisterCompanyMutation } from "../../../types.d";
+import { useHistory } from "react-router-dom";
+import { Routes } from "../AppRoutes";
 
 export const RegisterCompany = () => {
+  const history = useHistory();
+  const [registerCompany, { loading }] = useRegisterCompanyMutation();
   return (
     <MarginWrapper>
       <Navbar />
@@ -32,10 +37,34 @@ export const RegisterCompany = () => {
             <AuthFormWrapper>
               <Formik
                 initialValues={{
-
+                  name: "",
+                  email: "",
+                  city: "",
+                  street: "",
+                  buildingNumber: "",
+                  zipCode: "",
                 }}
                 // validationSchema={}
-                onSubmit={async (values) => { }}
+                onSubmit={async (values) => {
+                  try {
+                    registerCompany({
+                      variables: {
+                        data: {
+                          name: values.name,
+                          email: values.email,
+                          city: values.city,
+                          street: values.street,
+                          buildingNumber: values.buildingNumber,
+                          zipCode: values.zipCode,
+                        }
+                      }
+                    })
+
+                    history.push(Routes.DASHBOARD)
+                  } catch (err) {
+                    console.log(err)
+                  }
+                }}
               >
 
                 {({ errors, touched }) => {
@@ -43,8 +72,8 @@ export const RegisterCompany = () => {
                     <Form>
                       <div style={{ marginBottom: "50px" }}>
                         <label>Company Name</label>
-                        <Input name="companyName" placeholder="" type="text" />
-                        <InputError name="companyName" />
+                        <Input name="name" placeholder="" type="text" />
+                        <InputError name="name" />
                       </div>
 
                       <div style={{ marginBottom: "50px" }}>
@@ -77,8 +106,7 @@ export const RegisterCompany = () => {
                         <InputError name="zipCode" />
                       </div>
 
-                      {/* disabled={!loading} isLoading={loading} */}
-                      <HoverStyleButton type="submit" text="Save" />
+                      <HoverStyleButton disabled={!loading} isLoading={loading} type="submit" text="Submit" />
                     </Form>
                   )
                 }}

@@ -15,41 +15,6 @@ export type Scalars = {
   DateTime: Date;
 };
 
-export type UserProfileType = {
-  __typename?: 'UserProfileType';
-  id: Scalars['ID'];
-  firstname: Scalars['String'];
-  lastname: Scalars['String'];
-  user?: Maybe<UserType>;
-};
-
-export type UserType = {
-  __typename?: 'UserType';
-  id: Scalars['ID'];
-  email: Scalars['String'];
-  password: Scalars['String'];
-  role: UserRole;
-  user?: Maybe<UserProfileType>;
-  emailConfirmed?: Maybe<Scalars['DateTime']>;
-  isActive: Scalars['Boolean'];
-  removedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export enum UserRole {
-  Admin = 'ADMIN',
-  BaseUser = 'BASE_USER',
-  Staff = 'STAFF'
-}
-
-
-export type UserProfile = {
-  __typename?: 'UserProfile';
-  id: Scalars['ID'];
-  firstname: Scalars['String'];
-  lastname: Scalars['String'];
-  user: UserType;
-};
-
 export type UserProfileResponse = {
   __typename?: 'UserProfileResponse';
   profileId: Scalars['Float'];
@@ -58,6 +23,16 @@ export type UserProfileResponse = {
   email: Scalars['String'];
   isActive: Scalars['Boolean'];
   emailConfirmed?: Maybe<Scalars['DateTime']>;
+};
+
+
+export type RegisterCompanyInputType = {
+  email: Scalars['String'];
+  name: Scalars['String'];
+  city?: Maybe<Scalars['String']>;
+  street?: Maybe<Scalars['String']>;
+  buildingNumber?: Maybe<Scalars['String']>;
+  zipCode?: Maybe<Scalars['String']>;
 };
 
 export type ChangePassword = {
@@ -85,6 +60,7 @@ export type Query = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  RegisterCompany: Scalars['Boolean'];
   changePassword?: Maybe<UserProfileResponse>;
   confirmUserEmail?: Maybe<UserProfileResponse>;
   requestConfirmationEmail: Scalars['Boolean'];
@@ -92,6 +68,11 @@ export type Mutation = {
   login?: Maybe<UserProfileResponse>;
   logout: Scalars['Boolean'];
   register?: Maybe<UserProfileResponse>;
+};
+
+
+export type MutationRegisterCompanyArgs = {
+  data: RegisterCompanyInputType;
 };
 
 
@@ -149,6 +130,16 @@ export type MyProfileQuery = (
     { __typename?: 'UserProfileResponse' }
     & Pick<UserProfileResponse, 'email' | 'isActive' | 'emailConfirmed'>
   )> }
+);
+
+export type RegisterCompanyMutationVariables = Exact<{
+  data: RegisterCompanyInputType;
+}>;
+
+
+export type RegisterCompanyMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'RegisterCompany'>
 );
 
 export type RegisterMutationVariables = Exact<{
@@ -262,6 +253,36 @@ export function useMyProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type MyProfileQueryHookResult = ReturnType<typeof useMyProfileQuery>;
 export type MyProfileLazyQueryHookResult = ReturnType<typeof useMyProfileLazyQuery>;
 export type MyProfileQueryResult = Apollo.QueryResult<MyProfileQuery, MyProfileQueryVariables>;
+export const RegisterCompanyDocument = gql`
+    mutation RegisterCompany($data: RegisterCompanyInputType!) {
+  RegisterCompany(data: $data)
+}
+    `;
+export type RegisterCompanyMutationFn = Apollo.MutationFunction<RegisterCompanyMutation, RegisterCompanyMutationVariables>;
+
+/**
+ * __useRegisterCompanyMutation__
+ *
+ * To run a mutation, you first call `useRegisterCompanyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterCompanyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerCompanyMutation, { data, loading, error }] = useRegisterCompanyMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useRegisterCompanyMutation(baseOptions?: Apollo.MutationHookOptions<RegisterCompanyMutation, RegisterCompanyMutationVariables>) {
+        return Apollo.useMutation<RegisterCompanyMutation, RegisterCompanyMutationVariables>(RegisterCompanyDocument, baseOptions);
+      }
+export type RegisterCompanyMutationHookResult = ReturnType<typeof useRegisterCompanyMutation>;
+export type RegisterCompanyMutationResult = Apollo.MutationResult<RegisterCompanyMutation>;
+export type RegisterCompanyMutationOptions = Apollo.BaseMutationOptions<RegisterCompanyMutation, RegisterCompanyMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($data: RegisterUserProfileInputType!) {
   register(data: $data) {

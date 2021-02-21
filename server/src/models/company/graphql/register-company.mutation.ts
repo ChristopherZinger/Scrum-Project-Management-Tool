@@ -1,3 +1,4 @@
+import { CompanyRegisterService } from "../services/company-register.service";
 import { UserProfileRepository } from "../../userProfile/model/UserProfile.repository";
 import { UserProfile } from "../../userProfile/model/UserProfile.model";
 import { ApolloError } from "apollo-server-express";
@@ -12,7 +13,6 @@ import {
 	Authorized
 } from "type-graphql";
 import { injectable } from "inversify";
-import { CompanyRepository } from "../model/Company.repository";
 import { UserRepository } from "../../user/model/User.repository";
 
 @InputType()
@@ -40,7 +40,7 @@ export class RegisterCompanyInputType {
 @Resolver()
 export class RegisterCompanyMutation {
 	public constructor(
-		private companyRepository: CompanyRepository,
+		private companyRegisterService: CompanyRegisterService,
 		private userProfileRepository: UserProfileRepository,
 		private userRepository: UserRepository
 	) {}
@@ -89,10 +89,8 @@ export class RegisterCompanyMutation {
 			);
 		}
 
-		// TODO: validate company email
-
 		// create company and save
-		const company = await this.companyRepository.register(data);
+		const company = await this.companyRegisterService.register(data);
 
 		// update users company
 		user.profile.companyId = company.id;

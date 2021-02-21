@@ -14,6 +14,7 @@ import {
 } from "type-graphql";
 import { injectable } from "inversify";
 import { UserRepository } from "../../user/model/User.repository";
+import customApolloError from "../../../core/formatErrors/custom-apollo-errors";
 
 @InputType()
 export class RegisterCompanyInputType {
@@ -53,13 +54,7 @@ export class RegisterCompanyMutation {
 	): Promise<boolean> {
 		// take the user from session
 		if (!context.session.user) {
-			console.log(
-				"Session is missing user. You can't create Company while not logged in."
-			);
-			throw new ApolloError(
-				"You need to be logged in to create new campany",
-				"SESSION_IS_MISSING_USER"
-			);
+			throw customApolloError.sessionError();
 		}
 
 		// check is exist in db
@@ -68,24 +63,18 @@ export class RegisterCompanyMutation {
 		});
 
 		if (!user) {
-			throw new ApolloError(
-				`Cant find user with id ${context.session.user.id} in database`,
-				"USER_MISSING"
-			);
+			throw customApolloError.userMissingForId();
 		}
 
 		if (!user.profile) {
-			throw new ApolloError(
-				`Cant find profile for user with id ${context.session.user.id} in database`,
-				"USER_PROFILE_MISSING"
-			);
+			throw customApolloError.couldNotLoadUserData();
 		}
 
 		// check if is assigned to other company
 		if (user.profile.company) {
-			throw new ApolloError(
-				`User with id ${context.session.user.id} is already asigned to company.`,
-				"USER_HAS_COMPANY"
+			throw customApolloError.operationFobridden(
+				"",
+				`User is already asigned to company.`
 			);
 		}
 

@@ -13,7 +13,8 @@ export enum customErrorCodes {
 	COULD_NOT_LOAD_USER_DATA = "COULD_NOT_LOAD_USER_DATA",
 
 	// VALIDATION
-	ARGUMENT_VALIDATION_ERROR = "ARGUMENT_VALIDATION_ERROR"
+	ARGUMENT_VALIDATION_ERROR = "ARGUMENT_VALIDATION_ERROR",
+	OPERATION_FOBRIDDEN = "OPERATION_FOBRIDDEN"
 }
 
 const message = (
@@ -22,17 +23,17 @@ const message = (
 	appendMessage?: string
 ) => replaceMessage || message + appendMessage || "";
 
-export function CustomApolloError() {
+function customApolloError() {
 	return {
 		// AUTH
 		invalidToken: (replaceMessage?: string, appendMessage?: string) => {
-			throw new ApolloError(
+			return new ApolloError(
 				message("Given token is invalid", replaceMessage, appendMessage),
 				customErrorCodes.INVALID_TOKEN
 			);
 		},
 		sessionError: (replaceMessage?: string, appendMessage?: string) => {
-			throw new ApolloError(
+			return new ApolloError(
 				message("Session Error.", replaceMessage, appendMessage),
 				customErrorCodes.SESSION_ERROR
 			);
@@ -40,7 +41,7 @@ export function CustomApolloError() {
 
 		//MISSING
 		userMissingForId: (replaceMessage?: string, appendMessage?: string) => {
-			throw new ApolloError(
+			return new ApolloError(
 				message(
 					"User with this id does not exist. ",
 					replaceMessage,
@@ -50,7 +51,7 @@ export function CustomApolloError() {
 			);
 		},
 		userMissingForEmail: (replaceMessage?: string, appendMessage?: string) => {
-			throw new ApolloError(
+			return new ApolloError(
 				message(
 					"User with this email does not exist. ",
 					replaceMessage,
@@ -62,7 +63,7 @@ export function CustomApolloError() {
 
 		// LOADING
 		couldNotLoadUserData: (replaceMessage?: string, appendMessage?: string) => {
-			throw new ApolloError(
+			return new ApolloError(
 				message(
 					"Could not load user's full data. ",
 					replaceMessage,
@@ -70,6 +71,16 @@ export function CustomApolloError() {
 				),
 				customErrorCodes.COULD_NOT_LOAD_USER_DATA
 			);
+		},
+
+		// VALIDATION
+		operationFobridden: (replaceMessage?: string, appendMessage?: string) => {
+			return new ApolloError(
+				message("Operation fobridden. ", replaceMessage, appendMessage),
+				customErrorCodes.OPERATION_FOBRIDDEN
+			);
 		}
 	};
 }
+
+export default customApolloError();

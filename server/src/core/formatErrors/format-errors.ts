@@ -1,3 +1,4 @@
+import { customErrorCodes } from "./custom-apollo-errors";
 import { GraphQLError, GraphQLFormattedError } from "graphql";
 import { ArgumentValidationError } from "type-graphql";
 import { ApolloError } from "apollo-server-express";
@@ -19,7 +20,7 @@ function addMetaDataForErrors(error: GraphQLError): GraphQLError {
 		return {
 			...error,
 			extensions: {
-				code: "ARGUMENT_VALIDATION_ERROR",
+				code: customErrorCodes.ARGUMENT_VALIDATION_ERROR,
 				type: "ArgumentValidationError",
 				inputErrors: error.originalError.validationErrors
 			}

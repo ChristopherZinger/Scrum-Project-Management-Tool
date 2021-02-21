@@ -7,8 +7,8 @@ import { IsEmail } from "class-validator";
 import { ContextType } from "../../../core/context/context-type";
 import bcrypt from "bcryptjs";
 import { createUserContext } from "../../../core/context/create-user-context";
-import { ApolloError } from "apollo-server-express";
 import { UserProfile } from "../model/UserProfile.model";
+import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
 
 @InputType()
 class LoginInputType {
@@ -41,23 +41,17 @@ export class LoginMutation {
 
 		if (!user) {
 			console.error(`Wrong credentials: email. for '${data.email}'`);
-			throw new ApolloError("incorrect email", "WRONG_CREDENTIALS");
+			throw customApolloErrors.wrongCredentials();
 		}
 
 		if (!user.profile) {
-			console.error(
-				`Could not load a userProfile for user witch email : ${data.email}`
-			);
-			throw new ApolloError(
-				"Part of the data is missing",
-				"USER_PROFILE_IS_MISSING"
-			);
+			throw customApolloErrors.couldNotLoadUserData();
 		}
 
 		const valid = bcrypt.compareSync(data.password, user.password);
 		if (!valid) {
 			console.warn("Wrong credentials: password.");
-			throw new ApolloError("incorrect email", "WRONG_CREDENTIALS");
+			throw customApolloErrors.wrongCredentials();
 		}
 
 		createUserContext(context, {

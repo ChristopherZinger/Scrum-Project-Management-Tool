@@ -1,5 +1,4 @@
 import { UserProfileDM } from "../../userProfile/datamappers/UserProfileResponse.dm";
-import { ApolloError } from "apollo-server-express";
 import { UserRepository } from "./../model/User.repository";
 import { injectable } from "inversify";
 import { UserProfileResponse } from "../../userProfile/graphql/userProfileResponse.type";
@@ -11,6 +10,7 @@ import { createUserContext } from "../../../core/context/create-user-context";
 import { passwordChangeTokenPrefix } from "../../../core/auto-email/create-token-url";
 import bcrypt from "bcryptjs";
 import { UserProfile } from "../../userProfile/model/UserProfile.model";
+import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
 
 @InputType()
 class ChangePassword {
@@ -40,7 +40,7 @@ export class ChangePasswordMutation {
 		const userId = await redis.get(passwordChangeTokenPrefix + data.token);
 		if (!userId) {
 			console.error("Incorrect token. Could not get user id from redis");
-			throw new ApolloError("Incorrect token.", "INCORRECT_TOKEN");
+			throw customApolloErrors.invalidToken();
 		}
 
 		// db user
@@ -49,19 +49,11 @@ export class ChangePasswordMutation {
 		});
 
 		if (!user) {
-			console.error(`Can't find user with id: '${userId}'`);
-			throw new ApolloError(
-				"Can't find user with this ID.",
-				"USER_DOES_NOT_EXIST"
-			);
+			throw customApolloErrors.userMissingForId();
 		}
 
 		if (!user.profile) {
-			console.error(`Can't find profile for user with id: '${userId}'`);
-			throw new ApolloError(
-				"Can't find profile for user with this ID.",
-				"COULD_NOT_LOAD_USER_DATA"
-			);
+			throw customApolloErrors.couldNotLoadUserData();
 		}
 
 		// update model

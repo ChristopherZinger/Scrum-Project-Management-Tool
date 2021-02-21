@@ -1,7 +1,6 @@
 import { UserProfileDM } from "../../userProfile/datamappers/UserProfileResponse.dm";
 import { UserRepository } from "./../model/User.repository";
 import { injectable } from "inversify";
-import { ApolloError } from "apollo-server-express";
 import { UserProfileResponse } from "../../userProfile/graphql/userProfileResponse.type";
 import { Resolver, Mutation, Arg, Authorized, Ctx } from "type-graphql";
 import { redis } from "../../../core/setup-redis-and-express-session";
@@ -10,6 +9,7 @@ import { Permission } from "../../../core/authorization/permissions";
 import { updateUserContext } from "../../../core/context/update-user-context";
 import { emailConfirmationTokenPrefix } from "../../../core/auto-email/create-token-url";
 import { UserProfile } from "../../userProfile/model/UserProfile.model";
+import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
 
 @injectable()
 @Resolver()
@@ -28,16 +28,12 @@ export class ConfirmUserEmailResolver {
 		// token user
 		const userId = await redis.get(emailConfirmationTokenPrefix + token);
 		if (!userId) {
-			console.error("Incorrect token. Could not get user id from redis");
-			throw new ApolloError("Incorrect token.", "INCORRECT_TOKEN");
+			throw customApolloErrors.invalidToken();
 		}
 
 		// check session user and token user
 		if (context.session.user?.id !== parseInt(userId, 10)) {
-			console.error(
-				`session user with id ${context.session.user?.id} can not confirm email for user with redis token id ${userId} `
-			);
-			throw new ApolloError("Session is missing the user.", "SESSION_ERROR");
+			throw customApolloErrors.sessionError("", "Session is missing the user.");
 		}
 
 		// db user
@@ -46,24 +42,18 @@ export class ConfirmUserEmailResolver {
 		});
 
 		if (!user) {
-			console.error("Can't find user with id: ", userId);
-			throw new ApolloError(
-				"Can't find user with requested id",
-				"USER_MISSING"
-			);
+			throw customApolloErrors.userMissingForId();
 		}
 
 		if (user.emailConfirmed) {
-			console.log("User already confirmed the email", user.emailConfirmed);
-			throw new ApolloError("Email is already confirmed", "EMAIL_CONFIRMED");
+			throw customApolloErrors.operationFobridden(
+				"",
+				"User already confirmed the email"
+			);
 		}
 
 		if (!user.profile) {
-			console.error("Can't find profile for user with id: ", userId);
-			throw new ApolloError(
-				"Can't find profile for this user",
-				"USER_PROFILE_MISSING"
-			);
+			throw customApolloErrors.couldNotLoadUserData();
 		}
 
 		// update model

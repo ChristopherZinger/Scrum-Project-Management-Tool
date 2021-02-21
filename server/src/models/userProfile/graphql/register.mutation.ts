@@ -1,4 +1,3 @@
-import { ApolloError } from "apollo-server-express";
 import { createConfirmationUrl } from "./../../../core/auto-email/create-token-url";
 import { createConfirmationEmail } from "./../../../core/auto-email/emails/create-confirmation-email";
 import { ContextType } from "./../../../core/context/context-type";
@@ -10,6 +9,7 @@ import { injectable } from "inversify";
 import { sendEmail } from "./../../../core/auto-email/send-email";
 import { createUserContext } from "./../../../core/context/create-user-context";
 import { UserProfileDM } from "../datamappers/UserProfileResponse.dm";
+import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
 
 @InputType()
 export class RegisterUserProfileInputType {
@@ -52,18 +52,14 @@ export class RegisterMutation {
 			);
 
 			if (!newUser) {
-				console.error(`Wrong credentials: email. for '${data.email}'`);
-				throw new ApolloError("incorrect email", "WRONG_CREDENTIALS");
+				throw customApolloErrors.somethingWentWrong(
+					"",
+					"New user wasn't created."
+				);
 			}
 
 			if (!newUser.profile) {
-				console.error(
-					`Could not load a userProfile for user witch email : ${data.email}`
-				);
-				throw new ApolloError(
-					"Part of the data is missing",
-					"USER_PROFILE_IS_MISSING"
-				);
+				throw customApolloErrors.couldNotLoadUserData();
 			}
 
 			// send emails

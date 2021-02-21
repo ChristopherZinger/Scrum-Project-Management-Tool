@@ -1,11 +1,11 @@
 import { UserRepository } from "./../model/User.repository";
 import { injectable } from "inversify";
-import { ApolloError } from "apollo-server-express";
 import { ContextType } from "../../../core/context/context-type";
 import { Resolver, Ctx, Mutation, Authorized } from "type-graphql";
 import { sendEmail } from "../../../core/auto-email/send-email";
 import { createConfirmationUrl } from "../../../core/auto-email/create-token-url";
 import { createConfirmationEmail } from "../../../core/auto-email/emails/create-confirmation-email";
+import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
 
 @injectable()
 @Resolver()
@@ -18,30 +18,30 @@ export class RequestConfirmationEmailMutation {
 	): Promise<boolean> {
 		const email = context.session.user?.email;
 		if (!email) {
-			console.error("Could not find email or user for this session");
-			throw new ApolloError(
-				"Could not find user email in this session.",
-				"EMAIL_IS_MISSING"
+			throw customApolloErrors.sessionError(
+				"This session does not have a user."
 			);
 		}
+
 		const user = await this.userRepository.findByEmail(email);
 		if (!user) {
-			console.error("Could not find user with email: ", email);
-			return false;
+			throw customApolloErrors.userMissingForEmail();
 		}
+
 		if (user.emailConfirmed !== null) {
-			console.error(`User with email ${user.email} already already confirmed.`);
-			throw new ApolloError(
-				"User alreay confirmed the email.",
-				"EMAIL_IS_CONFIRMED"
+			throw customApolloErrors.operationFobridden(
+				"",
+				"User alreay confirmed the email."
 			);
 		}
+
 		const confirmationUrl = await createConfirmationUrl(user.id);
 		const confirmationEmail = createConfirmationEmail(
 			user.email,
 			confirmationUrl
 		);
 		sendEmail(confirmationEmail);
+
 		return true;
 	}
 }

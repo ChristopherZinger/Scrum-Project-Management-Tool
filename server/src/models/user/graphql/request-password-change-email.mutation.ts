@@ -1,4 +1,4 @@
-import { ApolloError } from "apollo-server-express";
+import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
 import { UserRepository } from "./../model/User.repository";
 import { injectable } from "inversify";
 import { Resolver, Mutation, Arg } from "type-graphql";
@@ -17,12 +17,9 @@ export class RequestPasswordChangeEmailMutation {
 		const user = await this.userRepository.findByEmail(email);
 
 		if (!user) {
-			console.error(`Can't find user with email: '${email}'`);
-			throw new ApolloError(
-				"Can't find user with this email.",
-				"USER_DOES_NOT_EXIST"
-			);
+			throw customApolloErrors.userMissingForEmail();
 		}
+
 		const passwordChangeUrl = await createPasswordChangeUrl(user.id);
 		const confirmationEmail = createConfirmationEmail(
 			user.email,

@@ -9,7 +9,7 @@ import { RegisterUser } from "./Register/RegisterUser";
 import { LandingPage } from "./LandingPage/LandingPage";
 import { RegisterCompany } from "./Register/RegisterCompany";
 import { UserAuthStateContext } from "../../App";
-import { Dashboard } from "./Dashboard/Dashboard";
+import { DashboardLayout } from "./Dashboard/DashboardLayout";
 
 export enum Routes {
     HOME = '/',
@@ -35,7 +35,7 @@ export function AppRoutes () {
                     <RegisterCompany />
                 </Route>
                 <Route path={Routes.HOME}>
-                    {!user ? <LandingPage /> : <Dashboard user={user} />}
+                    {!user ? <LandingPage /> : <DashboardLayout user={user} />}
                 </Route>
             </Switch>
         </Router>

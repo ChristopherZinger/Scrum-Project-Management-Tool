@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
     BrowserRouter as Router,
     Switch,
@@ -8,6 +8,8 @@ import { Login } from "./Login/Login";
 import { RegisterUser } from "./Register/RegisterUser";
 import { LandingPage } from "./LandingPage/LandingPage";
 import { RegisterCompany } from "./Register/RegisterCompany";
+import { UserAuthStateContext } from "../../App";
+import { DashboardLayout } from "./Dashboard/DashboardLayout";
 
 export enum Routes {
     HOME = '/',
@@ -18,6 +20,8 @@ export enum Routes {
 }
 
 export function AppRoutes () {
+    const { user } = useContext(UserAuthStateContext);
+
     return (
         <Router>
             <Switch>
@@ -31,7 +35,7 @@ export function AppRoutes () {
                     <RegisterCompany />
                 </Route>
                 <Route path={Routes.HOME}>
-                    <LandingPage />
+                    {!user ? <LandingPage /> : <DashboardLayout user={user} />}
                 </Route>
             </Switch>
         </Router>

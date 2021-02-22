@@ -3,5 +3,7 @@ query myProfile {
 		email
 		isActive
 		emailConfirmed
+		firstname
+		lastname
 	}
 }

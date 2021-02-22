@@ -128,7 +128,7 @@ export type MyProfileQuery = (
   { __typename?: 'Query' }
   & { user?: Maybe<(
     { __typename?: 'UserProfileResponse' }
-    & Pick<UserProfileResponse, 'email' | 'isActive' | 'emailConfirmed'>
+    & Pick<UserProfileResponse, 'email' | 'isActive' | 'emailConfirmed' | 'firstname' | 'lastname'>
   )> }
 );
 
@@ -225,6 +225,8 @@ export const MyProfileDocument = gql`
     email
     isActive
     emailConfirmed
+    firstname
+    lastname
   }
 }
     `;

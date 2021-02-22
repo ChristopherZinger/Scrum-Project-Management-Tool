@@ -9,6 +9,7 @@ import { Admin } from "./Admin/Admin";
 const sideNavWidth = "70px";
 
 const StyledDashboardContainer = styled.div`
+  padding: 30px;
   transform: translate(${sideNavWidth}); 
   width: calc(100% - ${sideNavWidth});
   background-color: ${Colors.UI02};
@@ -51,6 +52,7 @@ export const DashboardLayout = (props: Props) => {
           </div>
         </Link>
       </StyledSideNav>
+
       <StyledDashboardContainer >
         <Switch>
           <Route path="/profile" >

@@ -2,9 +2,9 @@ import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors"
 import { UserRepository } from "./../model/User.repository";
 import { injectable } from "inversify";
 import { Resolver, Mutation, Arg } from "type-graphql";
-import { sendEmail } from "../../../core/auto-email/send-email";
+import { sendEmail } from "../../../core/auto-email/email-service";
 import { createPasswordChangeUrl } from "../../../core/auto-email/create-token-url";
-import { createConfirmationEmail } from "../../../core/auto-email/emails/create-confirmation-email";
+import { createConfirmationEmail } from "../../../core/auto-email/email-templates/confirmation-email";
 
 @injectable()
 @Resolver()

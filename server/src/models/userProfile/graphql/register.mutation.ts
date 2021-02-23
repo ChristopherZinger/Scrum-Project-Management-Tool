@@ -1,12 +1,12 @@
 import { createConfirmationUrl } from "./../../../core/auto-email/create-token-url";
-import { createConfirmationEmail } from "./../../../core/auto-email/emails/create-confirmation-email";
+import { createConfirmationEmail } from "../../../core/auto-email/email-templates/confirmation-email";
 import { ContextType } from "./../../../core/context/context-type";
 import { UserProfileResponse } from "./userProfileResponse.type";
 import { Resolver, Mutation, Ctx, Arg, Field, InputType } from "type-graphql";
 import { IsEmail, Length } from "class-validator";
 import { UserProfileService } from "../services/user-profile-register.service";
 import { injectable } from "inversify";
-import { sendEmail } from "./../../../core/auto-email/send-email";
+import { sendEmail } from "../../../core/auto-email/email-service";
 import { createUserContext } from "./../../../core/context/create-user-context";
 import { UserProfileDM } from "../datamappers/UserProfileResponse.dm";
 import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";

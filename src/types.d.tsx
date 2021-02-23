@@ -65,6 +65,7 @@ export type Mutation = {
   confirmUserEmail?: Maybe<UserProfileResponse>;
   requestConfirmationEmail: Scalars['Boolean'];
   requestPasswordChangeEmail: Scalars['Boolean'];
+  inviteTeammate: Scalars['Boolean'];
   login?: Maybe<UserProfileResponse>;
   logout: Scalars['Boolean'];
   register?: Maybe<UserProfileResponse>;
@@ -91,6 +92,11 @@ export type MutationRequestPasswordChangeEmailArgs = {
 };
 
 
+export type MutationInviteTeammateArgs = {
+  email: Scalars['String'];
+};
+
+
 export type MutationLoginArgs = {
   data: LoginInputType;
 };
@@ -99,6 +105,16 @@ export type MutationLoginArgs = {
 export type MutationRegisterArgs = {
   data: RegisterUserProfileInputType;
 };
+
+export type InviteTeammateMutationMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type InviteTeammateMutationMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'inviteTeammate'>
+);
 
 export type LoginMutationVariables = Exact<{
   data: LoginInputType;
@@ -156,6 +172,36 @@ export type RegisterMutation = (
 );
 
 
+export const InviteTeammateMutationDocument = gql`
+    mutation InviteTeammateMutation($email: String!) {
+  inviteTeammate(email: $email)
+}
+    `;
+export type InviteTeammateMutationMutationFn = Apollo.MutationFunction<InviteTeammateMutationMutation, InviteTeammateMutationMutationVariables>;
+
+/**
+ * __useInviteTeammateMutationMutation__
+ *
+ * To run a mutation, you first call `useInviteTeammateMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInviteTeammateMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [inviteTeammateMutationMutation, { data, loading, error }] = useInviteTeammateMutationMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useInviteTeammateMutationMutation(baseOptions?: Apollo.MutationHookOptions<InviteTeammateMutationMutation, InviteTeammateMutationMutationVariables>) {
+        return Apollo.useMutation<InviteTeammateMutationMutation, InviteTeammateMutationMutationVariables>(InviteTeammateMutationDocument, baseOptions);
+      }
+export type InviteTeammateMutationMutationHookResult = ReturnType<typeof useInviteTeammateMutationMutation>;
+export type InviteTeammateMutationMutationResult = Apollo.MutationResult<InviteTeammateMutationMutation>;
+export type InviteTeammateMutationMutationOptions = Apollo.BaseMutationOptions<InviteTeammateMutationMutation, InviteTeammateMutationMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($data: LoginInputType!) {
   login(data: $data) {

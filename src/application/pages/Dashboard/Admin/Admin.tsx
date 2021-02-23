@@ -1,8 +1,8 @@
 import React from "react";
-import { Container, Grid } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import { DashboardCard } from "../../../atoms/DashboardCard/DashboardCard";
 import { Heading } from "../../../atoms/style";
-
+import { TeamTile } from "./TeamTile";
 
 export const Admin = () => {
   return (
@@ -19,9 +19,7 @@ export const Admin = () => {
         </Grid.Column>
 
         <Grid.Column>
-          <DashboardCard title="Team">
-            <p>List of your team members</p>
-          </DashboardCard>
+          <TeamTile />
         </Grid.Column>
 
       </Grid.Row>

@@ -13,13 +13,13 @@ export function setupRedisAndExpressSession(app: Express) {
 			store: new RedisStore({
 				client: redis as any
 			}),
-			name: CONST.sessionCookieName,
+			name: CONST.cookies.sessionCookieName,
 			secret: process.env.SESSION_SECRET,
 			resave: false,
 			saveUninitialized: false,
 			proxy: process.env.NODE_ENV === "production",
 			cookie: {
-				...CONST.sessionCookieOptions,
+				...CONST.cookies.sessionCookieOptions,
 				// domain: "https://scrum-arch-service.com",
 				httpOnly: true,
 				secure: process.env.NODE_ENV === "production",

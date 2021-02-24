@@ -3,5 +3,7 @@ mutation Login($data: LoginInputType!) {
 		email
 		isActive
 		emailConfirmed
+		firstname
+		lastname
 	}
 }

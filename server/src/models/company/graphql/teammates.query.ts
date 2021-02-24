@@ -92,8 +92,6 @@ export class TeammatesQuery {
 				this.userProfileDM.createTeammateResponse(profile.user!, profile)
 			);
 
-		console.log(registeredUsers);
-
 		return {
 			invitedUsers: pendingInvitationEmails,
 			registeredUsers: registeredUsers

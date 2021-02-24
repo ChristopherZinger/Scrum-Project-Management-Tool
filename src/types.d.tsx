@@ -66,6 +66,7 @@ export type RegisterUserProfileInputType = {
 };
 
 export type RegisterWithInvitationInputType = {
+  companyId: Scalars['Int'];
   firstname: Scalars['String'];
   lastname: Scalars['String'];
   password: Scalars['String'];

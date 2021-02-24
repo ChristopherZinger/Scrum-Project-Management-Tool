@@ -4,7 +4,15 @@ import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors"
 import { UserProfileService } from "./../services/user-profile-register.service";
 import { ContextType } from "./../../../core/context/context-type";
 import { UserProfileResponse } from "./userProfileResponse.type";
-import { Resolver, Mutation, Arg, Ctx, InputType, Field } from "type-graphql";
+import {
+	Resolver,
+	Mutation,
+	Arg,
+	Ctx,
+	InputType,
+	Field,
+	Int
+} from "type-graphql";
 import { redis } from "../../../core/setup-redis-and-express-session";
 import { teammateInvitationPrefix } from "../../../core/auto-email/email-templates/teammate-invitation-email";
 import { injectable } from "inversify";
@@ -12,9 +20,13 @@ import { Length } from "class-validator";
 import { createUserContext } from "./../../../core/context/create-user-context";
 import { createConfirmationEmail } from "../../../core/auto-email/email-templates/confirmation-email";
 import { sendEmail } from "../../../core/auto-email/email-service";
+import { CONST } from "../../../core/CONST";
 
 @InputType()
 class RegisterWithInvitationInputType {
+	@Field(() => Int)
+	public companyId!: number;
+
 	@Field(() => String)
 	public firstname!: string;
 
@@ -52,10 +64,14 @@ export class RegisterWithInvitationMutation {
 			throw customApolloErrors.invalidToken();
 		}
 
-		const newUser = await this.userProfileService.register({
-			...data,
-			email
-		});
+		const newUser = await this.userProfileService.register(
+			{
+				...data,
+				email
+			},
+			undefined,
+			data.companyId
+		);
 
 		if (!newUser) {
 			throw customApolloErrors.somethingWentWrong(
@@ -68,13 +84,19 @@ export class RegisterWithInvitationMutation {
 			throw customApolloErrors.couldNotLoadUserData();
 		}
 
+		// remove from redis pending invitations
+		const pendingInvitationPrefix = CONST.redisPrefix.pendingInvitationList(
+			newUser.profile.company.id
+		);
+		await redis.lrem(pendingInvitationPrefix, 1, email);
+
 		// context
 		createUserContext(
 			context,
 			this.userSessionDM.createUserSessionType(
 				newUser,
 				newUser.profile,
-				newUser.profile.company.id
+				newUser.profile.company?.id || null
 			)
 		);
 

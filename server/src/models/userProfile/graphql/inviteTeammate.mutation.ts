@@ -59,8 +59,6 @@ export class InviteTeammateMutation {
 			user.profile.company.id
 		);
 
-		console.log(pendingInvitationPrefix);
-
 		if (await redis.exists(pendingInvitationPrefix)) {
 			const listLength = await redis.llen(pendingInvitationPrefix);
 			const emailExistOnTheList = false;

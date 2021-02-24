@@ -1,3 +1,10 @@
 query Teammates {
-	teammates
+	teammates {
+		invitedUsers
+		registeredUsers {
+			firstname
+			lastname
+			email
+		}
+	}
 }

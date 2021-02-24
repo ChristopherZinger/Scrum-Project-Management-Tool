@@ -15,6 +15,19 @@ export type Scalars = {
   DateTime: Date;
 };
 
+export type TeammatesResponse = {
+  __typename?: 'TeammatesResponse';
+  invitedUsers: Array<Scalars['String']>;
+  registeredUsers: Array<TeammateResponse>;
+};
+
+export type TeammateResponse = {
+  __typename?: 'TeammateResponse';
+  firstname: Scalars['String'];
+  lastname: Scalars['String'];
+  email: Scalars['String'];
+};
+
 export type UserProfileResponse = {
   __typename?: 'UserProfileResponse';
   profileId: Scalars['Float'];
@@ -62,7 +75,7 @@ export type RegisterWithInvitationInputType = {
 export type Query = {
   __typename?: 'Query';
   teammateInvitationData: Scalars['String'];
-  teammates: Array<Scalars['String']>;
+  teammates: TeammatesResponse;
   test: Scalars['String'];
   user?: Maybe<UserProfileResponse>;
 };
@@ -219,7 +232,14 @@ export type TeammatesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type TeammatesQuery = (
   { __typename?: 'Query' }
-  & Pick<Query, 'teammates'>
+  & { teammates: (
+    { __typename?: 'TeammatesResponse' }
+    & Pick<TeammatesResponse, 'invitedUsers'>
+    & { registeredUsers: Array<(
+      { __typename?: 'TeammateResponse' }
+      & Pick<TeammateResponse, 'firstname' | 'lastname' | 'email'>
+    )> }
+  ) }
 );
 
 
@@ -489,7 +509,14 @@ export type TeammateInvitationDataLazyQueryHookResult = ReturnType<typeof useTea
 export type TeammateInvitationDataQueryResult = Apollo.QueryResult<TeammateInvitationDataQuery, TeammateInvitationDataQueryVariables>;
 export const TeammatesDocument = gql`
     query Teammates {
-  teammates
+  teammates {
+    invitedUsers
+    registeredUsers {
+      firstname
+      lastname
+      email
+    }
+  }
 }
     `;
 

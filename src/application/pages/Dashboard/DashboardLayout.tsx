@@ -1,10 +1,11 @@
-import React, { } from "react";
+import React, { useState } from "react";
 import { UserProfileResponse } from "../../../types.d";
 import styled from "styled-components";
 import { Colors } from "../../atoms/style";
 import { Link, Switch, Route } from "react-router-dom";
 import { Profile } from "./Profile/Profile";
 import { Admin } from "./Admin/Admin";
+import { LogoutModal } from "../../components/LogoutModal/LogoutModal";
 
 const sideNavWidth = "70px";
 
@@ -38,6 +39,8 @@ type Props = {
 }
 
 export const DashboardLayout = (props: Props) => {
+  const [logoutModalIsOpen, setLogoutModalIsOpen] = useState(false);
+
   return (
     <>
       <StyledSideNav>
@@ -49,6 +52,11 @@ export const DashboardLayout = (props: Props) => {
         <Link to="/admin" className="btn">
           <div className="btn">
             adm
+          </div>
+        </Link>
+        <Link to="/#" className="btn" onClick={() => setLogoutModalIsOpen(true)}>
+          <div className="btn">
+            out
           </div>
         </Link>
       </StyledSideNav>
@@ -63,6 +71,13 @@ export const DashboardLayout = (props: Props) => {
           </Route>
         </Switch>
       </StyledDashboardContainer>
+
+
+      { logoutModalIsOpen && (
+        <LogoutModal
+          close={() => setLogoutModalIsOpen(false)}
+        />
+      )}
     </>
   )
 }

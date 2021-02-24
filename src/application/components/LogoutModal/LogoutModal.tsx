@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useLogoutMutation } from "../../../types.d";
 import { Modal } from "../../atoms/Modal/Modal";
+import { UserAuthDispatchContext } from "../../../App";
 
 type Props = {
     close: () => void;
-    logout: () => void;
 }
 
 export const LogoutModal = (props: Props) => {
     const [logout] = useLogoutMutation();
+    const dispatch = useContext(UserAuthDispatchContext);
 
     return (
         <Modal open>
@@ -25,7 +26,7 @@ export const LogoutModal = (props: Props) => {
                     } catch (error) {
                         console.log(error)
                     }
-                    props.logout();
+                    dispatch({ type: "logout" })
                     props.close()
                 }}>
                     Yes

@@ -5,7 +5,7 @@ import { ContextType } from "../../../core/context/context-type";
 export class TestQuery {
 	@Query(() => String)
 	public test(@Ctx() context: ContextType) {
-		console.log(context.session);
+		console.log("test query");
 		return "hello";
 	}
 }

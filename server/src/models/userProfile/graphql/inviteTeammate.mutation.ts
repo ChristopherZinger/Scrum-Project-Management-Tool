@@ -8,6 +8,7 @@ import { Company } from "../../company/model/Company.model";
 import { ApolloError } from "apollo-server-errors";
 import { sendEmail } from "../../../core/auto-email/email-service";
 import { createTeammageInvitationEmail } from "../../../core/auto-email/email-templates/teammate-invitation-email";
+import { redis } from "../../../core/setup-redis-and-express-session";
 
 @injectable()
 @Resolver()
@@ -50,6 +51,26 @@ export class InviteTeammateMutation {
 		}
 
 		// TODO: check if user with this email is assigned to other company
+
+		// push user to companys pending invitation in redis
+		const pendingInvitationPrefix =
+			"pending_invitations_" + user.profile.company.id;
+
+		if (await redis.exists(pendingInvitationPrefix)) {
+			const listLength = await redis.llen(pendingInvitationPrefix);
+			const emailExistOnTheList = false;
+			for (let i = 0; i < listLength; i++) {
+				const item = await redis.lindex(pendingInvitationPrefix, i);
+				if (item === emailLowerCase) {
+					break;
+				}
+			}
+			if (!emailExistOnTheList) {
+				redis.lpush(pendingInvitationPrefix, emailLowerCase);
+			}
+		} else {
+			redis.lpush(pendingInvitationPrefix, emailLowerCase);
+		}
 
 		// send email to invited user
 		const invitationEmail = await createTeammageInvitationEmail(

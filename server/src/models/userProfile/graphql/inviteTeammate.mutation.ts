@@ -6,12 +6,12 @@ import { injectable } from "inversify";
 import { UserProfile } from "../model/UserProfile.model";
 import { Company } from "../../company/model/Company.model";
 import { ApolloError } from "apollo-server-errors";
-import { EmailService } from "../../../core/auto-email/email-service";
+import { sendEmail } from "../../../core/auto-email/email-service";
 import { createTeammageInvitationEmail } from "../../../core/auto-email/email-templates/teammate-invitation-email";
 
 @injectable()
 @Resolver()
-export class InviteResolver {
+export class InviteTeammateMutation {
 	public constructor(private userRepository: UserRepository) {}
 
 	@Authorized()
@@ -52,12 +52,12 @@ export class InviteResolver {
 		// TODO: check if user with this email is assigned to other company
 
 		// send email to invited user
-		const emailService = new EmailService();
 		const invitationEmail = await createTeammageInvitationEmail(
 			emailLowerCase,
-			user.profile.company.name
+			user.profile.company.name,
+			user.profile.company.id
 		);
-		emailService.send(invitationEmail);
+		sendEmail(invitationEmail);
 
 		return true;
 	}

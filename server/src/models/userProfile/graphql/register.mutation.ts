@@ -1,4 +1,3 @@
-import { createConfirmationUrl } from "./../../../core/auto-email/create-token-url";
 import { createConfirmationEmail } from "../../../core/auto-email/email-templates/confirmation-email";
 import { ContextType } from "./../../../core/context/context-type";
 import { UserProfileResponse } from "./userProfileResponse.type";
@@ -34,7 +33,7 @@ export class RegisterUserProfileInputType {
 @Resolver()
 export class RegisterMutation {
 	public constructor(
-		private userProfileRegisterService: UserProfileService, //private userRepository: UserRepository
+		private userProfileRegisterService: UserProfileService,
 		private userProfileDM: UserProfileDM
 	) {}
 
@@ -46,10 +45,7 @@ export class RegisterMutation {
 		data.email = data.email.toLowerCase();
 
 		try {
-			const newUser = await this.userProfileRegisterService.register(
-				data,
-				context
-			);
+			const newUser = await this.userProfileRegisterService.register(data);
 
 			if (!newUser) {
 				throw customApolloErrors.somethingWentWrong(
@@ -63,12 +59,11 @@ export class RegisterMutation {
 			}
 
 			// send emails
-			const confirmationUrl = await createConfirmationUrl(newUser.id);
-			const confirmationEmail = createConfirmationEmail(
+			const confirmationEmail = await createConfirmationEmail(
 				newUser.email,
-				confirmationUrl
+				newUser.id
 			);
-			sendEmail(confirmationEmail);
+			await sendEmail(confirmationEmail);
 
 			// context
 			createUserContext(context, {

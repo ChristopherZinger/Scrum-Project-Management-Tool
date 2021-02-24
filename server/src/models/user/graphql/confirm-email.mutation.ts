@@ -7,7 +7,7 @@ import { redis } from "../../../core/setup-redis-and-express-session";
 import { ContextType } from "../../../core/context/context-type";
 import { Permission } from "../../../core/authorization/permissions";
 import { updateUserContext } from "../../../core/context/update-user-context";
-import { emailConfirmationTokenPrefix } from "../../../core/auto-email/create-token-url";
+import { emailConfirmationTokenPrefix } from "../../../core/auto-email/email-templates/confirmation-email";
 import { UserProfile } from "../../userProfile/model/UserProfile.model";
 import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
 

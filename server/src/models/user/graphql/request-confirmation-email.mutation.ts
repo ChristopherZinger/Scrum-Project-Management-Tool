@@ -3,7 +3,6 @@ import { injectable } from "inversify";
 import { ContextType } from "../../../core/context/context-type";
 import { Resolver, Ctx, Mutation, Authorized } from "type-graphql";
 import { sendEmail } from "../../../core/auto-email/email-service";
-import { createConfirmationUrl } from "../../../core/auto-email/create-token-url";
 import { createConfirmationEmail } from "../../../core/auto-email/email-templates/confirmation-email";
 import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
 
@@ -35,10 +34,9 @@ export class RequestConfirmationEmailMutation {
 			);
 		}
 
-		const confirmationUrl = await createConfirmationUrl(user.id);
-		const confirmationEmail = createConfirmationEmail(
+		const confirmationEmail = await createConfirmationEmail(
 			user.email,
-			confirmationUrl
+			user.id
 		);
 		sendEmail(confirmationEmail);
 

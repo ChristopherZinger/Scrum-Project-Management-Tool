@@ -3,7 +3,6 @@ import { UserRepository } from "./../model/User.repository";
 import { injectable } from "inversify";
 import { Resolver, Mutation, Arg } from "type-graphql";
 import { sendEmail } from "../../../core/auto-email/email-service";
-import { createPasswordChangeUrl } from "../../../core/auto-email/create-token-url";
 import { createConfirmationEmail } from "../../../core/auto-email/email-templates/confirmation-email";
 
 @injectable()
@@ -20,10 +19,9 @@ export class RequestPasswordChangeEmailMutation {
 			throw customApolloErrors.userMissingForEmail();
 		}
 
-		const passwordChangeUrl = await createPasswordChangeUrl(user.id);
-		const confirmationEmail = createConfirmationEmail(
+		const confirmationEmail = await createConfirmationEmail(
 			user.email,
-			passwordChangeUrl
+			user.id
 		);
 		sendEmail(confirmationEmail);
 		return true;

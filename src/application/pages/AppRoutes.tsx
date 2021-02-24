@@ -8,6 +8,7 @@ import { Login } from "./Login/Login";
 import { RegisterUser } from "./Register/RegisterUser";
 import { LandingPage } from "./LandingPage/LandingPage";
 import { RegisterCompany } from "./Register/RegisterCompany";
+import { RegisterWithInvitation } from "./Register/RegisterWithInvitation";
 import { UserAuthStateContext } from "../../App";
 import { DashboardLayout } from "./Dashboard/DashboardLayout";
 
@@ -34,6 +35,7 @@ export function AppRoutes () {
                 <Route path={Routes.REGISTER_COMPANY} >
                     <RegisterCompany />
                 </Route>
+                <Route path="/register-with-invitation/:companyId/:token" component={RegisterWithInvitation} />
                 <Route path={Routes.HOME}>
                     {!user ? <LandingPage /> : <DashboardLayout user={user} />}
                 </Route>

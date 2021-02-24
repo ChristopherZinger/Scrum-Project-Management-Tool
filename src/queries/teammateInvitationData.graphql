@@ -1,0 +1,3 @@
+query TeammateInvitationData($companyId: Int!) {
+	teammateInvitationData(companyId: $companyId)
+}

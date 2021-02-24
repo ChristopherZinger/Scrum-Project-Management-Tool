@@ -1,0 +1,3 @@
+mutation InviteTeammate($email: String!) {
+	inviteTeammate(email: $email)
+}

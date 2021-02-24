@@ -1,3 +1,6 @@
 export const CONST = {
-	sessionCookieName: "sessionId"
+	sessionCookieName: "sessionId",
+	sessionCookieOptions: {
+		path: "/"
+	}
 };

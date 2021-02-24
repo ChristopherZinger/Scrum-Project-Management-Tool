@@ -1,0 +1,9 @@
+mutation RegisterWithInvitation($data: RegisterWithInvitationInputType!) {
+	registerWithInvitation(data: $data) {
+		email
+		firstname
+		lastname
+		isActive
+		emailConfirmed
+	}
+}

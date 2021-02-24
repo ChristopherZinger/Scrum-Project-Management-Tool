@@ -17,11 +17,12 @@ export function setupRedisAndExpressSession(app: Express) {
 			secret: process.env.SESSION_SECRET,
 			resave: false,
 			saveUninitialized: false,
-			proxy: true,
+			proxy: process.env.NODE_ENV === "production",
 			cookie: {
+				...CONST.sessionCookieOptions,
 				// domain: "https://scrum-arch-service.com",
 				httpOnly: true,
-				secure: false, // process.env.NODE_ENV === "production",
+				secure: process.env.NODE_ENV === "production",
 				maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year
 			}
 		} as any)

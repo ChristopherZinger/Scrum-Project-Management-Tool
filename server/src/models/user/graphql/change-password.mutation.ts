@@ -7,7 +7,7 @@ import { Length } from "class-validator";
 import { redis } from "../../../core/setup-redis-and-express-session";
 import { ContextType } from "../../../core/context/context-type";
 import { createUserContext } from "../../../core/context/create-user-context";
-import { passwordChangeTokenPrefix } from "../../../core/auto-email/create-token-url";
+import { passwordChangeTokenPrefix } from "../../../core/auto-email/email-templates/change-passoword-email";
 import bcrypt from "bcryptjs";
 import { UserProfile } from "../../userProfile/model/UserProfile.model";
 import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";

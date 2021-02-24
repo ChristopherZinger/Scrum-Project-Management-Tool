@@ -1,12 +1,11 @@
-import { createConfirmationUrl } from "./../../../core/auto-email/create-token-url";
-import { createConfirmationEmail } from "./../../../core/auto-email/emails/create-confirmation-email";
+import { createConfirmationEmail } from "../../../core/auto-email/email-templates/confirmation-email";
 import { ContextType } from "./../../../core/context/context-type";
 import { UserProfileResponse } from "./userProfileResponse.type";
 import { Resolver, Mutation, Ctx, Arg, Field, InputType } from "type-graphql";
 import { IsEmail, Length } from "class-validator";
 import { UserProfileService } from "../services/user-profile-register.service";
 import { injectable } from "inversify";
-import { sendEmail } from "./../../../core/auto-email/send-email";
+import { sendEmail } from "../../../core/auto-email/email-service";
 import { createUserContext } from "./../../../core/context/create-user-context";
 import { UserProfileDM } from "../datamappers/UserProfileResponse.dm";
 import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
@@ -34,7 +33,7 @@ export class RegisterUserProfileInputType {
 @Resolver()
 export class RegisterMutation {
 	public constructor(
-		private userProfileRegisterService: UserProfileService, //private userRepository: UserRepository
+		private userProfileRegisterService: UserProfileService,
 		private userProfileDM: UserProfileDM
 	) {}
 
@@ -46,10 +45,7 @@ export class RegisterMutation {
 		data.email = data.email.toLowerCase();
 
 		try {
-			const newUser = await this.userProfileRegisterService.register(
-				data,
-				context
-			);
+			const newUser = await this.userProfileRegisterService.register(data);
 
 			if (!newUser) {
 				throw customApolloErrors.somethingWentWrong(
@@ -63,12 +59,11 @@ export class RegisterMutation {
 			}
 
 			// send emails
-			const confirmationUrl = await createConfirmationUrl(newUser.id);
-			const confirmationEmail = createConfirmationEmail(
+			const confirmationEmail = await createConfirmationEmail(
 				newUser.email,
-				confirmationUrl
+				newUser.id
 			);
-			sendEmail(confirmationEmail);
+			await sendEmail(confirmationEmail);
 
 			// context
 			createUserContext(context, {

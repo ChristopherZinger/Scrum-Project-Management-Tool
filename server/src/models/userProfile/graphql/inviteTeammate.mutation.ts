@@ -9,6 +9,7 @@ import { ApolloError } from "apollo-server-errors";
 import { sendEmail } from "../../../core/auto-email/email-service";
 import { createTeammageInvitationEmail } from "../../../core/auto-email/email-templates/teammate-invitation-email";
 import { redis } from "../../../core/setup-redis-and-express-session";
+import { CONST } from "../../../core/CONST";
 
 @injectable()
 @Resolver()
@@ -53,8 +54,12 @@ export class InviteTeammateMutation {
 		// TODO: check if user with this email is assigned to other company
 
 		// push user to companys pending invitation in redis
-		const pendingInvitationPrefix =
-			"pending_invitations_" + user.profile.company.id;
+
+		const pendingInvitationPrefix = CONST.redisPrefix.pendingInvitationList(
+			user.profile.company.id
+		);
+
+		console.log(pendingInvitationPrefix);
 
 		if (await redis.exists(pendingInvitationPrefix)) {
 			const listLength = await redis.llen(pendingInvitationPrefix);

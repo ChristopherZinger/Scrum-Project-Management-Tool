@@ -4,17 +4,23 @@ import { Modal } from "../../../atoms/Modal/Modal";
 import { Input, InputError } from "../../../atoms/Inputs/Input";
 import { Grid } from "semantic-ui-react";
 import { Formik, Form } from "formik";
-import { useInviteTeammateMutation } from "../../../../types.d";
+import { useInviteTeammateMutation, useTeammatesQuery } from "../../../../types.d";
 
 export const TeamTile = () => {
   const [addTeammemberIsOpen, setAddTeammemberIsOpen] = useState(false);
   const [inviteTeammate] = useInviteTeammateMutation();
+  const teammates = useTeammatesQuery();
 
   return (
     <>
       <DashboardCard title="Team">
         <button onClick={() => setAddTeammemberIsOpen(true)}> Invite Teammember </button>
-        <p>List of your team members</p>
+        {teammates.loading && "loading"}
+        {teammates.data && (
+          <>
+            {teammates.data.teammates.map(el => <p>{el}</p>)}
+          </>
+        )}
       </DashboardCard>
 
       <Modal open={addTeammemberIsOpen}>
@@ -27,6 +33,7 @@ export const TeamTile = () => {
             onSubmit={async (values) => {
               try {
                 await inviteTeammate({ variables: { email: values.email } })
+                await teammates.refetch();
                 setAddTeammemberIsOpen(false)
               } catch (err) {
                 console.log(err)

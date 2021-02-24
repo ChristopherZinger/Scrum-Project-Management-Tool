@@ -62,6 +62,7 @@ export type RegisterWithInvitationInputType = {
 export type Query = {
   __typename?: 'Query';
   teammateInvitationData: Scalars['String'];
+  teammates: Array<Scalars['String']>;
   test: Scalars['String'];
   user?: Maybe<UserProfileResponse>;
 };
@@ -211,6 +212,14 @@ export type TeammateInvitationDataQueryVariables = Exact<{
 export type TeammateInvitationDataQuery = (
   { __typename?: 'Query' }
   & Pick<Query, 'teammateInvitationData'>
+);
+
+export type TeammatesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TeammatesQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'teammates'>
 );
 
 
@@ -478,3 +487,33 @@ export function useTeammateInvitationDataLazyQuery(baseOptions?: Apollo.LazyQuer
 export type TeammateInvitationDataQueryHookResult = ReturnType<typeof useTeammateInvitationDataQuery>;
 export type TeammateInvitationDataLazyQueryHookResult = ReturnType<typeof useTeammateInvitationDataLazyQuery>;
 export type TeammateInvitationDataQueryResult = Apollo.QueryResult<TeammateInvitationDataQuery, TeammateInvitationDataQueryVariables>;
+export const TeammatesDocument = gql`
+    query Teammates {
+  teammates
+}
+    `;
+
+/**
+ * __useTeammatesQuery__
+ *
+ * To run a query within a React component, call `useTeammatesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeammatesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTeammatesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTeammatesQuery(baseOptions?: Apollo.QueryHookOptions<TeammatesQuery, TeammatesQueryVariables>) {
+        return Apollo.useQuery<TeammatesQuery, TeammatesQueryVariables>(TeammatesDocument, baseOptions);
+      }
+export function useTeammatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeammatesQuery, TeammatesQueryVariables>) {
+          return Apollo.useLazyQuery<TeammatesQuery, TeammatesQueryVariables>(TeammatesDocument, baseOptions);
+        }
+export type TeammatesQueryHookResult = ReturnType<typeof useTeammatesQuery>;
+export type TeammatesLazyQueryHookResult = ReturnType<typeof useTeammatesLazyQuery>;
+export type TeammatesQueryResult = Apollo.QueryResult<TeammatesQuery, TeammatesQueryVariables>;

@@ -1,5 +1,4 @@
 import { TYPES } from "../../../core/TYPES";
-import { ContextType } from "../../../core/context/context-type";
 import { UserRepository } from "../../user/model/User.repository";
 import { UserProfileRepository } from "../model/UserProfile.repository";
 import bcrypt from "bcryptjs";
@@ -21,7 +20,7 @@ export class UserProfileService {
 
 	public async register(
 		data: RegisterUserProfileInputType,
-		context: ContextType
+		userRole?: UserRole
 	): Promise<User | null> {
 		const emailIsTaken = await this.userRepository.emailIsTaken(data.email);
 
@@ -34,7 +33,7 @@ export class UserProfileService {
 			const user = new User();
 			user.email = data.email;
 			user.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(12));
-			user.role = UserRole.BASE_USER;
+			user.role = userRole || UserRole.BASE_USER;
 			await this.userRepository.save(user);
 
 			const userProfile = new UserProfile();

@@ -4,9 +4,11 @@ import { Modal } from "../../../atoms/Modal/Modal";
 import { Input, InputError } from "../../../atoms/Inputs/Input";
 import { Grid } from "semantic-ui-react";
 import { Formik, Form } from "formik";
+import { useInviteTeammateMutation } from "../../../../types.d";
 
 export const TeamTile = () => {
   const [addTeammemberIsOpen, setAddTeammemberIsOpen] = useState(false);
+  const [inviteTeammate] = useInviteTeammateMutation();
 
   return (
     <>
@@ -22,9 +24,14 @@ export const TeamTile = () => {
         <Modal.Content>
           <Formik
             initialValues={{ email: "", firstname: "", lastname: "" }}
-            onSubmit={(values) => {
-              console.log(values)
-              setAddTeammemberIsOpen(false)
+            onSubmit={async (values) => {
+              try {
+                await inviteTeammate({ variables: { email: values.email } })
+                setAddTeammemberIsOpen(false)
+              } catch (err) {
+                console.log(err)
+              }
+
             }}
           >
             {() =>

@@ -10,6 +10,8 @@ export type SessionUserType = {
 	emailConfirmed: Date | null;
 	isActive: boolean;
 	removedAt?: Date;
+	profileId: number;
+	companyId: number | null;
 };
 
 // https://stackoverflow.com/questions/65108033/property-user-does-not-exist-on-type-session-partialsessiondata

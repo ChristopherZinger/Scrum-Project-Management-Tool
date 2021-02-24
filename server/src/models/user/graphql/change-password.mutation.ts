@@ -1,3 +1,4 @@
+import { UserSessionDM } from "./../datamappers/UserSession.dm";
 import { UserProfileDM } from "../../userProfile/datamappers/UserProfileResponse.dm";
 import { UserRepository } from "./../model/User.repository";
 import { injectable } from "inversify";
@@ -11,6 +12,7 @@ import { passwordChangeTokenPrefix } from "../../../core/auto-email/email-templa
 import bcrypt from "bcryptjs";
 import { UserProfile } from "../../userProfile/model/UserProfile.model";
 import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
+import { Company } from "../../company/model/Company.model";
 
 @InputType()
 class ChangePassword {
@@ -29,7 +31,8 @@ class ChangePassword {
 export class ChangePasswordMutation {
 	constructor(
 		private userRepository: UserRepository,
-		private userProfileDM: UserProfileDM
+		private userProfileDM: UserProfileDM,
+		private userSessionDM: UserSessionDM
 	) {}
 	@Mutation(() => UserProfileResponse, { nullable: true })
 	async changePassword(
@@ -45,14 +48,14 @@ export class ChangePasswordMutation {
 
 		// db user
 		const user = await this.userRepository.findById(parseInt(userId, 10), {
-			include: [{ model: UserProfile }]
+			include: [{ model: UserProfile, include: [{ model: Company }] }]
 		});
 
 		if (!user) {
 			throw customApolloErrors.userMissingForId();
 		}
 
-		if (!user.profile) {
+		if (!user.profile || !user.profile.company) {
 			throw customApolloErrors.couldNotLoadUserData();
 		}
 
@@ -62,13 +65,14 @@ export class ChangePasswordMutation {
 		await redis.del(passwordChangeTokenPrefix + data.token);
 
 		// update context - login user
-		createUserContext(context, {
-			id: updatedUser.id,
-			email: updatedUser.email,
-			isActive: updatedUser.isActive,
-			emailConfirmed: updatedUser.emailConfirmed,
-			role: updatedUser.role
-		});
+		createUserContext(
+			context,
+			this.userSessionDM.createUserSessionType(
+				updatedUser,
+				user.profile,
+				user.profile.company.id
+			)
+		);
 
 		return this.userProfileDM.createUserProfileResponse(user, user.profile);
 	}

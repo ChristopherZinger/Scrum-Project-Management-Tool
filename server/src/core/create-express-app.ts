@@ -22,7 +22,7 @@ export async function createExpressApp() {
 
 	const app = express();
 
-	app.set("trust proxy", true);
+	app.set("trust proxy", process.env.NODE_ENV === "production");
 
 	setupRedisAndExpressSession(app);
 
@@ -32,12 +32,17 @@ export async function createExpressApp() {
 		formatError: formatErrors
 	});
 
+	const origin =
+		process.env.NODE_ENV === "production"
+			? "https://scrum-arch-service.com"
+			: "localhost";
+
 	apolloServer.applyMiddleware({
 		app,
 		path: "/graphql",
 		cors: {
 			credentials: true,
-			origin: "https://scrum-arch-service.com"
+			origin
 		}
 	});
 

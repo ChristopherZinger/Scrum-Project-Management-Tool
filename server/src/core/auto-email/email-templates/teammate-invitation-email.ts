@@ -2,9 +2,12 @@ import { IEmailTemplate } from "../email-service";
 import { redis } from "../../setup-redis-and-express-session";
 import { v4 } from "uuid";
 
-const teammateInvitationPrefix = "teammate_invitation_";
+export const teammateInvitationPrefix = "teammate_invitation_";
 
-const createTeammateInvitationUrl = async (email: string) => {
+const createTeammateInvitationUrl = async (
+	email: string,
+	companyId: number
+) => {
 	const token = v4();
 	await redis.set(
 		teammateInvitationPrefix + token,
@@ -13,14 +16,15 @@ const createTeammateInvitationUrl = async (email: string) => {
 		60 * 60 * 24 * 30
 	); // 30 days
 
-	return `http://localhost:3000/register-witch-invitation/${token}`;
+	return `http://localhost:3000/register-with-invitation/${companyId}/${token}`;
 };
 
 export const createTeammageInvitationEmail = async (
 	userEmail: string,
-	companyName: string
+	companyName: string,
+	companyId: number
 ): Promise<IEmailTemplate> => {
-	const url = await createTeammateInvitationUrl(userEmail);
+	const url = await createTeammateInvitationUrl(userEmail, companyId);
 
 	return {
 		from: '"Automatic Email" <foo@example.com>',

@@ -14,7 +14,6 @@ import {
 	Int
 } from "type-graphql";
 import { redis } from "../../../core/setup-redis-and-express-session";
-import { teammateInvitationPrefix } from "../../../core/auto-email/email-templates/teammate-invitation-email";
 import { injectable } from "inversify";
 import { Length } from "class-validator";
 import { createUserContext } from "./../../../core/context/create-user-context";
@@ -58,7 +57,9 @@ export class RegisterWithInvitationMutation {
 		@Ctx() context: ContextType
 	): Promise<UserProfileResponse> {
 		// get email from redis
-		const email = await redis.get(teammateInvitationPrefix + data.token);
+		const email = await redis.get(
+			CONST.redisPrefix.teammateInvitationPrefix + data.token
+		);
 
 		if (!email) {
 			throw customApolloErrors.invalidToken();

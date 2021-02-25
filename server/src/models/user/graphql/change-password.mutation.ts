@@ -8,11 +8,11 @@ import { Length } from "class-validator";
 import { redis } from "../../../core/setup-redis-and-express-session";
 import { ContextType } from "../../../core/context/context-type";
 import { createUserContext } from "../../../core/context/create-user-context";
-import { passwordChangeTokenPrefix } from "../../../core/auto-email/email-templates/change-passoword-email";
 import bcrypt from "bcryptjs";
 import { UserProfile } from "../../userProfile/model/UserProfile.model";
 import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
 import { Company } from "../../company/model/Company.model";
+import { CONST } from "../../../core/CONST";
 
 @InputType()
 class ChangePassword {
@@ -40,7 +40,9 @@ export class ChangePasswordMutation {
 		@Ctx() context: ContextType
 	): Promise<UserProfileResponse | null> {
 		// token user
-		const userId = await redis.get(passwordChangeTokenPrefix + data.token);
+		const userId = await redis.get(
+			CONST.redisPrefix.passwordChangeTokenPrefix + data.token
+		);
 		if (!userId) {
 			console.error("Incorrect token. Could not get user id from redis");
 			throw customApolloErrors.invalidToken();
@@ -62,7 +64,7 @@ export class ChangePasswordMutation {
 		// update model
 		user.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(12));
 		const updatedUser = await this.userRepository.save(user);
-		await redis.del(passwordChangeTokenPrefix + data.token);
+		await redis.del(CONST.redisPrefix.passwordChangeTokenPrefix + data.token);
 
 		// update context - login user
 		createUserContext(

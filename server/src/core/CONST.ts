@@ -7,7 +7,11 @@ export const CONST = {
 	},
 
 	redisPrefix: {
-		pendingInvitationList: (companyId: number) =>
-			"pending_invitation_list_" + companyId
+		pendingInvitationList: (companyId: number) => {
+			return "pending_invitation_list_" + companyId;
+		},
+		passwordChangeTokenPrefix: "password-change-token-",
+		emailConfirmationTokenPrefix: "confirmation-token-",
+		teammateInvitationPrefix: "teammate_invitation_"
 	}
 };

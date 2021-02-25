@@ -1,8 +1,7 @@
 import { IEmailTemplate } from "../email-service";
 import { redis } from "../../setup-redis-and-express-session";
 import { v4 } from "uuid";
-
-export const teammateInvitationPrefix = "teammate_invitation_";
+import { CONST } from "../../../core/CONST";
 
 const createTeammateInvitationUrl = async (
 	email: string,
@@ -10,7 +9,7 @@ const createTeammateInvitationUrl = async (
 ) => {
 	const token = v4();
 	await redis.set(
-		teammateInvitationPrefix + token,
+		CONST.redisPrefix.teammateInvitationPrefix + token,
 		email,
 		"ex",
 		60 * 60 * 24 * 30

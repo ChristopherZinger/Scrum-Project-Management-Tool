@@ -1,13 +1,14 @@
 import { IEmailTemplate } from "../email-service";
 import { v4 } from "uuid";
 import { redis } from "../../setup-redis-and-express-session";
+import { CONST } from "../../../core/CONST";
 
 export const emailConfirmationTokenPrefix = "confirmation-token-";
 
 const createConfirmationUrl = async (userId: number) => {
 	const token = v4();
 	await redis.set(
-		emailConfirmationTokenPrefix + token,
+		CONST.redisPrefix.emailConfirmationTokenPrefix + token,
 		userId,
 		"ex",
 		60 * 60 * 24

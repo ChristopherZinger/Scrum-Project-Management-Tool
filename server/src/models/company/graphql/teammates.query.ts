@@ -15,11 +15,7 @@ import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors"
 import { CONST } from "../../../core/CONST";
 import { ApolloError } from "apollo-server-express";
 import { redis } from "../../../core/setup-redis-and-express-session";
-
-interface ITeammatesResponse {
-	invitedUsers: string[];
-	registeredUsers: ITeammateResponse[];
-}
+import { ITeammateResponse, ITeammatesResponse } from "../type-guards";
 
 @ObjectType()
 class TeammatesResponse implements ITeammatesResponse {
@@ -28,12 +24,6 @@ class TeammatesResponse implements ITeammatesResponse {
 
 	@Field(() => [TeammateResponse])
 	public registeredUsers!: ITeammateResponse[];
-}
-
-export interface ITeammateResponse {
-	firstname: string;
-	lastname: string;
-	email: string;
 }
 
 @ObjectType()

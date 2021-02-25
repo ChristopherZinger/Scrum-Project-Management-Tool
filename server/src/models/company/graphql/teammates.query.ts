@@ -15,7 +15,10 @@ import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors"
 import { CONST } from "../../../core/CONST";
 import { ApolloError } from "apollo-server-express";
 import { redis } from "../../../core/setup-redis-and-express-session";
-import { ITeammateResponse, ITeammatesResponse } from "../type-guards";
+import {
+	ITeammateResponse,
+	ITeammatesResponse
+} from "../../userProfile/type-guards";
 
 @ObjectType()
 class TeammatesResponse implements ITeammatesResponse {
@@ -62,6 +65,7 @@ export class TeammatesQuery {
 			throw new ApolloError("Company not found.", "COMPANY_NOT_FOUND");
 		}
 
+		// find pending invitations in redis
 		const pendingInvitationPrefix = CONST.redisPrefix.pendingInvitationList(
 			company.id
 		);
@@ -72,6 +76,7 @@ export class TeammatesQuery {
 			-1
 		);
 
+		// find teammates in db
 		const allUsersOfCompany = await this.userProfileRepository.findTeammates(
 			context
 		);

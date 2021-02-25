@@ -14,6 +14,17 @@ export interface IUserProfileResponse {
 	emailConfirmed: Date | null;
 }
 
+export interface ITeammateResponse {
+	firstname: string;
+	lastname: string;
+	email: string;
+}
+
+export interface ITeammatesResponse {
+	invitedUsers: string[];
+	registeredUsers: ITeammateResponse[];
+}
+
 export function userProfileHasUser(
 	userProfile: UserProfile
 ): userProfile is UserProfile {

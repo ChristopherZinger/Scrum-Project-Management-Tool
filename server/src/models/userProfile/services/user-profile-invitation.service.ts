@@ -23,7 +23,8 @@ export class UserProfileInvitationService {
 		}
 
 		const listPrefix = CONST.redisPrefix.pendingInvitationList(company.id);
-		const invitationList = await redis.get(listPrefix);
+		const invitationListString = await redis.get(listPrefix);
+		const invitationList = JSON.parse(invitationListString || "");
 
 		// create invitation email and token
 		const { emailTemplate, token } = await createTeammageInvitationEmail(
@@ -35,7 +36,7 @@ export class UserProfileInvitationService {
 
 		// add invitation to list
 
-		if (!invitationList) {
+		if (!invitationList.invitations) {
 			await redis.set(
 				listPrefix,
 				JSON.stringify({ invitations: [{ email, token }] })
@@ -100,17 +101,16 @@ export class UserProfileInvitationService {
 	public async getAllInvitations(context: ContextType): Promise<string[]> {
 		const company = await this.companyRepository.findForUser(context);
 		if (!company) {
-			throw customApolloErrors.sessionError();
+			console.error("Cant find company for this session.");
+			return [];
 		}
 
 		const listPrefix = CONST.redisPrefix.pendingInvitationList(company.id);
 		const invitationListString = await redis.get(listPrefix);
 
 		if (!invitationListString) {
-			throw new ApolloError(
-				"There was a problem with teamates invitation list",
-				"INVITATION_LIST_MISSING"
-			);
+			console.warn(`Can't find invitation list for prefix: ${listPrefix}`);
+			return [];
 		}
 		const invitationList = JSON.parse(invitationListString);
 
@@ -118,11 +118,9 @@ export class UserProfileInvitationService {
 			return invitationList.invitations
 				.filter((el: any) => typeof el.email === "string")
 				.map((el: any) => el.email as string);
+		} else {
+			console.warn("Incorrect type: invitation list");
+			return [];
 		}
-
-		throw new ApolloError(
-			"There was a problem with teamates invitation list",
-			"WRONG_DATA_TYPE"
-		);
 	}
 }

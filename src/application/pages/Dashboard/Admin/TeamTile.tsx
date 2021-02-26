@@ -19,11 +19,11 @@ export const TeamTile = () => {
         {teammates.data && (
           <>
             <h5>Users</h5>
-            {teammates.data.teammates.registeredUsers.map(el => <p>{`
+            {teammates.data.teammates.registeredUsers.map((el, i) => <p key={`registered-${i}`}>{`
               ${el.firstname} ${el.lastname} - ${el.email}
             `}</p>)}
             <h5>Pending Invitations:</h5>
-            {teammates.data.teammates.invitedUsers.map(el => <p>{el}</p>)}
+            {teammates.data.teammates.invitedUsers.map((el, i) => <p key={`pending-${i}`}>{el}</p>)}
           </>
         )}
       </DashboardCard>

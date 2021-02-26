@@ -1,3 +1,4 @@
+import { UserProfileInvitationService } from "./../services/user-profile-invitation.service";
 import { UserSessionDM } from "./../../user/datamappers/UserSession.dm";
 import { UserProfileDM } from "./../datamappers/UserProfileResponse.dm";
 import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
@@ -13,13 +14,11 @@ import {
 	Field,
 	Int
 } from "type-graphql";
-import { redis } from "../../../core/setup-redis-and-express-session";
 import { injectable } from "inversify";
 import { Length } from "class-validator";
 import { createUserContext } from "./../../../core/context/create-user-context";
 import { createConfirmationEmail } from "../../../core/auto-email/email-templates/confirmation-email";
 import { sendEmail } from "../../../core/auto-email/email-service";
-import { CONST } from "../../../core/CONST";
 
 @InputType()
 class RegisterWithInvitationInputType {
@@ -48,7 +47,8 @@ export class RegisterWithInvitationMutation {
 	public constructor(
 		private userProfileService: UserProfileService,
 		private userProfileDM: UserProfileDM,
-		private userSessionDM: UserSessionDM
+		private userSessionDM: UserSessionDM,
+		private userProfileInvitationService: UserProfileInvitationService
 	) {}
 
 	@Mutation(() => UserProfileResponse)
@@ -57,8 +57,9 @@ export class RegisterWithInvitationMutation {
 		@Ctx() context: ContextType
 	): Promise<UserProfileResponse> {
 		// get email from redis
-		const email = await redis.get(
-			CONST.redisPrefix.teammateInvitationPrefix + data.token
+		const { email } = await this.userProfileInvitationService.getInvitation(
+			data.token,
+			data.companyId
 		);
 
 		if (!email) {
@@ -86,10 +87,10 @@ export class RegisterWithInvitationMutation {
 		}
 
 		// remove from redis pending invitations
-		const pendingInvitationPrefix = CONST.redisPrefix.pendingInvitationList(
-			newUser.profile.company.id
+		await this.userProfileInvitationService.removeInvitation(
+			data.companyId,
+			data.token
 		);
-		await redis.lrem(pendingInvitationPrefix, 1, email);
 
 		// context
 		createUserContext(

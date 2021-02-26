@@ -28,7 +28,7 @@ export const TeamTile = () => {
         )}
       </DashboardCard>
 
-      <Modal open={addTeammemberIsOpen}>
+      <Modal open={addTeammemberIsOpen} >
         <Modal.Header>
           Add Team Member
         </Modal.Header>
@@ -83,7 +83,10 @@ export const TeamTile = () => {
         </Modal.Content>
         <Modal.Actions>
           <button type="submit" form="foo">
-            okay
+            Invite
+          </button>
+          <button onClick={() => setAddTeammemberIsOpen(false)}>
+            Cancel
           </button>
         </Modal.Actions>
 

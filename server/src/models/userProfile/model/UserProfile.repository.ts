@@ -3,7 +3,6 @@ import { ContextType } from "./../../../core/context/context-type";
 import { BaseRepository } from "../../../core/base-repository";
 import { UserProfile } from "./UserProfile.model";
 import { injectable } from "inversify";
-import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
 import { Company } from "../../company/model/Company.model";
 import { User } from "../../user/model/User.model";
 
@@ -16,7 +15,8 @@ export class UserProfileRepository extends BaseRepository<UserProfile> {
 		options?: FindOptions
 	): Promise<UserProfile[]> {
 		if (!context.session.user) {
-			throw customApolloErrors.sessionError();
+			console.error("Session is missing the user.");
+			return [];
 		}
 
 		return await this.model.findAll({

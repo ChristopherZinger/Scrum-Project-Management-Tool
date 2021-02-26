@@ -33,7 +33,11 @@ export class InviteTeammateMutation {
 		// TODO: check if user with this email is assigned to other company
 
 		// push user to companys pending invitation in redis and send email
-		this.userProfileInvitationServices.addInvitation(context, email);
+		try {
+			await this.userProfileInvitationServices.addInvitation(context, email);
+		} catch (err) {
+			console.error(err);
+		}
 
 		return true;
 	}

@@ -35,21 +35,25 @@ export class UserProfileInvitationService {
 		await sendEmail(emailTemplate);
 
 		// add invitation to list
-
-		if (!invitationList.invitations) {
-			await redis.set(
-				listPrefix,
-				JSON.stringify({ invitations: [{ email, token }] })
-			);
-		} else {
-			const list = JSON.parse(invitationList);
-
-			if (Array.isArray(list.invitations)) {
-				list.invitations.push({ email, token });
-				await redis.set(listPrefix, JSON.stringify(list));
+		try {
+			if (!invitationList.invitations) {
+				await redis.set(
+					listPrefix,
+					JSON.stringify({ invitations: [{ email, token }] })
+				);
 			} else {
-				throw new Error("There was a problem with teamates invitation list");
+				if (Array.isArray(invitationList.invitations)) {
+					invitationList.invitations.push({ email, token });
+					await redis.set(listPrefix, JSON.stringify(invitationList));
+				} else {
+					throw new Error("There was a problem with teamates invitation list");
+				}
 			}
+		} catch (err) {
+			console.error(
+				"Error occured while adding invitation to pending list. ",
+				err
+			);
 		}
 	}
 
@@ -62,12 +66,9 @@ export class UserProfileInvitationService {
 			const updatedList = listOfInvitations.invitations.filter(
 				(el: any) => el.email !== emailOrToken && el.token !== emailOrToken
 			);
-			redis.set(listPrefix, JSON.stringify(updatedList));
+			await redis.set(listPrefix, JSON.stringify(updatedList));
 		} else {
-			throw new ApolloError(
-				"Could not find invitation list for this company",
-				"INVITATION_LIST_MISSING"
-			);
+			throw new Error("Could not find invitation list for this company");
 		}
 	}
 
@@ -108,6 +109,8 @@ export class UserProfileInvitationService {
 		const listPrefix = CONST.redisPrefix.pendingInvitationList(company.id);
 		const invitationListString = await redis.get(listPrefix);
 
+		console.log(invitationListString);
+
 		if (!invitationListString) {
 			console.warn(`Can't find invitation list for prefix: ${listPrefix}`);
 			return [];
@@ -119,7 +122,7 @@ export class UserProfileInvitationService {
 				.filter((el: any) => typeof el.email === "string")
 				.map((el: any) => el.email as string);
 		} else {
-			console.warn("Incorrect type: invitation list");
+			console.warn(`No invitations found for ${listPrefix}`);
 			return [];
 		}
 	}

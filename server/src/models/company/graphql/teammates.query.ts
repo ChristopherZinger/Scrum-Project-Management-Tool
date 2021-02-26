@@ -61,6 +61,7 @@ export class TeammatesQuery {
 			context
 		);
 
+		// map data for users in db
 		const registeredUsers = allUsersOfCompany
 			.filter(profile => !!profile.user)
 			.map(profile =>

@@ -4,12 +4,13 @@ import { Modal } from "../../../atoms/Modal/Modal";
 import { Input, InputError } from "../../../atoms/Inputs/Input";
 import { Grid } from "semantic-ui-react";
 import { Formik, Form } from "formik";
-import { useInviteTeammateMutation, useTeammatesQuery } from "../../../../types.d";
+import { useInviteTeammateMutation, useTeammatesQuery, useCancellInvitationMutation } from "../../../../types.d";
 
 export const TeamTile = () => {
   const [addTeammemberIsOpen, setAddTeammemberIsOpen] = useState(false);
   const [inviteTeammate] = useInviteTeammateMutation();
   const teammates = useTeammatesQuery();
+  const [cancellInvitation] = useCancellInvitationMutation();
 
   return (
     <>
@@ -23,7 +24,19 @@ export const TeamTile = () => {
               ${el.firstname} ${el.lastname} - ${el.email}
             `}</p>)}
             <h5>Pending Invitations:</h5>
-            {teammates.data.teammates.invitedUsers.map((el, i) => <p key={`pending-${i}`}>{el}</p>)}
+            {teammates.data.teammates.invitedUsers.map((email, i) => {
+              return (
+                <p onClick={async () => {
+                  try {
+                    await cancellInvitation({ variables: { email } })
+                    await teammates.refetch();
+                  } catch (err) {
+                    console.log(err)
+                  }
+
+                }} key={`pending-${i}`}>{email}</p>
+              )
+            })}
           </>
         )}
       </DashboardCard>

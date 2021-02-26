@@ -77,7 +77,6 @@ export type Query = {
   __typename?: 'Query';
   teammateInvitationData: Scalars['String'];
   teammates: TeammatesResponse;
-  test: Scalars['String'];
   user?: Maybe<UserProfileResponse>;
 };
 
@@ -93,6 +92,7 @@ export type Mutation = {
   confirmUserEmail?: Maybe<UserProfileResponse>;
   requestConfirmationEmail: Scalars['Boolean'];
   requestPasswordChangeEmail: Scalars['Boolean'];
+  cancellInvitation: Scalars['Boolean'];
   inviteTeammate: Scalars['Boolean'];
   login?: Maybe<UserProfileResponse>;
   logout: Scalars['Boolean'];
@@ -121,6 +121,11 @@ export type MutationRequestPasswordChangeEmailArgs = {
 };
 
 
+export type MutationCancellInvitationArgs = {
+  email: Scalars['String'];
+};
+
+
 export type MutationInviteTeammateArgs = {
   email: Scalars['String'];
 };
@@ -139,6 +144,16 @@ export type MutationRegisterArgs = {
 export type MutationRegisterWithInvitationArgs = {
   data: RegisterWithInvitationInputType;
 };
+
+export type CancellInvitationMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type CancellInvitationMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'cancellInvitation'>
+);
 
 export type InviteTeammateMutationVariables = Exact<{
   email: Scalars['String'];
@@ -244,6 +259,36 @@ export type TeammatesQuery = (
 );
 
 
+export const CancellInvitationDocument = gql`
+    mutation CancellInvitation($email: String!) {
+  cancellInvitation(email: $email)
+}
+    `;
+export type CancellInvitationMutationFn = Apollo.MutationFunction<CancellInvitationMutation, CancellInvitationMutationVariables>;
+
+/**
+ * __useCancellInvitationMutation__
+ *
+ * To run a mutation, you first call `useCancellInvitationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancellInvitationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancellInvitationMutation, { data, loading, error }] = useCancellInvitationMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useCancellInvitationMutation(baseOptions?: Apollo.MutationHookOptions<CancellInvitationMutation, CancellInvitationMutationVariables>) {
+        return Apollo.useMutation<CancellInvitationMutation, CancellInvitationMutationVariables>(CancellInvitationDocument, baseOptions);
+      }
+export type CancellInvitationMutationHookResult = ReturnType<typeof useCancellInvitationMutation>;
+export type CancellInvitationMutationResult = Apollo.MutationResult<CancellInvitationMutation>;
+export type CancellInvitationMutationOptions = Apollo.BaseMutationOptions<CancellInvitationMutation, CancellInvitationMutationVariables>;
 export const InviteTeammateDocument = gql`
     mutation InviteTeammate($email: String!) {
   inviteTeammate(email: $email)

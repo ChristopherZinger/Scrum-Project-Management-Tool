@@ -60,9 +60,10 @@ export class UserProfileInvitationService {
 	public async removeInvitation(companyId: number, emailOrToken: string) {
 		const listPrefix = CONST.redisPrefix.pendingInvitationList(companyId);
 		const invitationList = await redis.get(listPrefix);
+		console.log(listPrefix, invitationList);
+		const listOfInvitations = JSON.parse(invitationList || "");
 
-		if (invitationList) {
-			const listOfInvitations = JSON.parse(invitationList);
+		if (listOfInvitations.invitations) {
 			const updatedList = listOfInvitations.invitations.filter(
 				(el: any) => el.email !== emailOrToken && el.token !== emailOrToken
 			);

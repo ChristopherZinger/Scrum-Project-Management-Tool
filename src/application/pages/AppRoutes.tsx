@@ -10,7 +10,7 @@ import { LandingPage } from "./LandingPage/LandingPage";
 import { RegisterCompany } from "./Register/RegisterCompany";
 import { RegisterWithInvitation } from "./Register/RegisterWithInvitation";
 import { UserAuthStateContext } from "../../App";
-import { DashboardLayout } from "./Dashboard/DashboardLayout";
+import { Dashboard } from "./Dashboard/Dashboard";
 
 export enum Routes {
     HOME = '/',
@@ -37,7 +37,7 @@ export function AppRoutes () {
                 </Route>
                 <Route path="/register-with-invitation/:companyId/:token" component={RegisterWithInvitation} />
                 <Route path={Routes.HOME}>
-                    {!user ? <LandingPage /> : <DashboardLayout user={user} />}
+                    {!user ? <LandingPage /> : <Dashboard user={user} />}
                 </Route>
             </Switch>
         </Router>

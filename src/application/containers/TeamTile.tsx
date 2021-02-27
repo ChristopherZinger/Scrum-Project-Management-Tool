@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { DashboardCard } from "../../../atoms/DashboardCard/DashboardCard";
-import { Modal } from "../../../atoms/Modal/Modal";
-import { Input, InputError } from "../../../atoms/Inputs/Input";
+import { DashboardCard } from "../atoms/DashboardCard/DashboardCard";
+import { Modal } from "../atoms/Modal/Modal";
+import { Input, InputError } from "../atoms/Inputs/Input";
 import { Grid } from "semantic-ui-react";
 import { Formik, Form } from "formik";
-import { useInviteTeammateMutation, useTeammatesQuery, useCancellInvitationMutation } from "../../../../types.d";
+import { useInviteTeammateMutation, useTeammatesQuery, useCancellInvitationMutation } from "../../types.d";
 
 export const TeamTile = () => {
   const [addTeammemberIsOpen, setAddTeammemberIsOpen] = useState(false);

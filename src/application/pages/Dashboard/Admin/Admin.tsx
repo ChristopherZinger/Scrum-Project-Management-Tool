@@ -2,7 +2,7 @@ import React from "react";
 import { Grid } from "semantic-ui-react";
 import { DashboardCard } from "../../../atoms/DashboardCard/DashboardCard";
 import { Heading } from "../../../atoms/style";
-import { TeamTile } from "./TeamTile";
+import { TeamCard } from "../../../components/TeamCard/TeamCard";
 
 export const Admin = () => {
   return (
@@ -19,7 +19,7 @@ export const Admin = () => {
         </Grid.Column>
 
         <Grid.Column>
-          <TeamTile />
+          <TeamCard />
         </Grid.Column>
 
       </Grid.Row>

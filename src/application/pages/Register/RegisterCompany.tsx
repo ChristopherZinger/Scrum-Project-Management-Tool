@@ -2,7 +2,7 @@ import React from "react";
 import { MarginWrapper } from "../../atoms/MarginWrapper/MarginWrapper";
 import { Grid, Image } from "semantic-ui-react";
 import { Navbar } from "../../components/Navbar/Navbar";
-import { decorativeFont, Heading } from "../../atoms/style";
+import { decorativeFont, Heading } from "../../../global-styles/global-styles";
 import signupImg from "../../images/mobile_life.svg";
 import { AuthFormWrapper } from "./styledElements/AuthFormWrapper";
 import { Formik, Form } from "formik";

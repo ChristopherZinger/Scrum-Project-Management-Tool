@@ -6,7 +6,7 @@ import { MarginWrapper } from "../../atoms/MarginWrapper/MarginWrapper";
 import accessAccountImg from "../../images/access_account.svg";
 import styled from "styled-components";
 import { Input, InputError } from "../../atoms/Inputs/Input";
-import { decorativeFont, Heading } from "../../atoms/style";
+import { decorativeFont, Heading } from "../../../global-styles/global-styles";
 import { useLoginMutation } from "../../../types.d";
 import { Formik, Form } from "formik";
 import { UserAuthDispatchContext } from "../../../App";

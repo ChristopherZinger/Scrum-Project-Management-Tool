@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Grid } from "semantic-ui-react";
-import { Heading } from "../../../atoms/style";
+import { Heading } from "../../../../global-styles/global-styles";
 import { DashboardCard } from "../../../atoms/DashboardCard/DashboardCard";
 import { UserAuthStateContext } from "../../../../App";
 

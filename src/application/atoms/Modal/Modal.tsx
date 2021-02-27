@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Modal as SemanticUIModal } from "semantic-ui-react"
-import { Colors } from "../style";
+import { Colors } from "../../../global-styles/global-styles";
 
 export const Modal = styled(SemanticUIModal)`
   &&& {

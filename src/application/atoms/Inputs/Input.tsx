@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Field, ErrorMessage } from "formik";
-import { Colors } from "../style";
+import { Colors } from "../../../global-styles/global-styles";
 
 export const InputError = styled(ErrorMessage)`
     &&&{

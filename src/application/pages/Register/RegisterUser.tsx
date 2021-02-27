@@ -6,9 +6,8 @@ import { HoverStyleButton } from "../../atoms/Buttons/HoverStyleButton";
 import { MarginWrapper } from "../../atoms/MarginWrapper/MarginWrapper";
 import signupImg from "../../images/mobile_life.svg";
 import { Input, InputError } from "../../atoms/Inputs/Input";
-import { decorativeFont, Heading } from "../../atoms/style";
+import { decorativeFont, Heading } from "../../../global-styles/global-styles";
 import { Formik, Form } from "formik";
-import { ToggleRegisterType } from "./ToggleRegisterType/ToggleRegisterType";
 import { useRegisterMutation } from "../../../types.d";
 import { UserAuthDispatchContext } from "../../../App";
 import { useHistory } from "react-router-dom";
@@ -16,6 +15,9 @@ import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { AuthFormWrapper } from "./styledElements/AuthFormWrapper";
 import { Routes } from "../AppRoutes";
+import { Underlineable } from "../../atoms/Underlineable/Underlineable";
+import { Checkbox } from "semantic-ui-react";
+import styled from "styled-components";
 
 export const RegisterUser = () => {
   const [isOfficeAdmin, setIsOfficeAdmin] = useState(false);
@@ -172,5 +174,38 @@ export const RegisterUser = () => {
         </Grid.Row>
       </Grid>
     </MarginWrapper >
+  )
+}
+
+const Wrapper = styled.div`
+    display: flex;
+    justify-content: center;
+
+    p {
+        font-size: 20px
+    }
+`
+
+type Props = {
+  isAdmin: boolean;
+  click: () => void;
+}
+
+const ToggleRegisterType = (props: Props) => {
+  return (
+    <Wrapper>
+      <p>I am a &nbsp;</p>
+      <Underlineable text=" office owner or administrator" underline={props.isAdmin} underlineStyle={{ bottom: "20px" }} />
+
+      <Checkbox
+        slider
+        name="isOfficeAdmin" checked={props.isAdmin}
+        onClick={props.click}
+        style={{ margin: "0px 20px" }}
+      />
+
+      <p>I am a &nbsp;</p>
+      <Underlineable text="team member" underline={!props.isAdmin} underlineStyle={{ bottom: "20px" }} />
+    </Wrapper>
   )
 }

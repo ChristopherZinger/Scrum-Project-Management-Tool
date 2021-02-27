@@ -6,7 +6,7 @@ import { HoverStyleButton } from "../../atoms/Buttons/HoverStyleButton";
 import { MarginWrapper } from "../../atoms/MarginWrapper/MarginWrapper";
 import signupImg from "../../images/mobile_life.svg";
 import { Input, InputError } from "../../atoms/Inputs/Input";
-import { decorativeFont, Heading } from "../../atoms/style";
+import { decorativeFont, Heading } from "../../../global-styles/global-styles";
 import { Formik, Form } from "formik";
 import { useRegisterWithInvitationMutation, useTeammateInvitationDataQuery } from "../../../types.d";
 import { useHistory, RouteComponentProps } from "react-router-dom";

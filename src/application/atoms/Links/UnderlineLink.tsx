@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Colors } from "../style";
+import { Colors } from "../../../global-styles/global-styles";
 
 const CustomLinkStyle = styled.div`
     position : absolute;

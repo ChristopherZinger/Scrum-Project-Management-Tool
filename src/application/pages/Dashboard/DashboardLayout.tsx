@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { UserProfileResponse } from "../../../types.d";
 import styled from "styled-components";
-import { Colors } from "../../atoms/style";
+import { Colors } from "../../../global-styles/global-styles";
 import { Link, Switch, Route } from "react-router-dom";
 import { Profile } from "./Profile/Profile";
 import { Admin } from "./Admin/Admin";

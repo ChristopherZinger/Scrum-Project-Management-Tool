@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import landingPageImage from "../../images/landing-page-scrum.svg"
-import { mobileBreakPoint, tabletBreakPoint, computerBreakPoint } from "../../atoms/style";
+import { mobileBreakPoint, tabletBreakPoint, computerBreakPoint } from "../../../global-styles/global-styles";
 
 export const Jumbotron = styled.div`
     font-size: 60px;

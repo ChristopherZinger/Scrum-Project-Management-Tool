@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
 import { DashboardCard } from "../../../atoms/DashboardCard/DashboardCard";
-import { Heading } from "../../../atoms/style";
+import { Heading } from "../../../../global-styles/global-styles";
 import { TeamCard } from "../../../components/TeamCard/TeamCard";
 
 export const Admin = () => {

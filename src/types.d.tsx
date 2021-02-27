@@ -15,6 +15,19 @@ export type Scalars = {
   DateTime: Date;
 };
 
+export type TeammatesResponse = {
+  __typename?: 'TeammatesResponse';
+  invitedUsers: Array<Scalars['String']>;
+  registeredUsers: Array<TeammateResponse>;
+};
+
+export type TeammateResponse = {
+  __typename?: 'TeammateResponse';
+  firstname: Scalars['String'];
+  lastname: Scalars['String'];
+  email: Scalars['String'];
+};
+
 export type UserProfileResponse = {
   __typename?: 'UserProfileResponse';
   profileId: Scalars['Float'];
@@ -53,6 +66,7 @@ export type RegisterUserProfileInputType = {
 };
 
 export type RegisterWithInvitationInputType = {
+  companyId: Scalars['Int'];
   firstname: Scalars['String'];
   lastname: Scalars['String'];
   password: Scalars['String'];
@@ -62,7 +76,7 @@ export type RegisterWithInvitationInputType = {
 export type Query = {
   __typename?: 'Query';
   teammateInvitationData: Scalars['String'];
-  test: Scalars['String'];
+  teammates: TeammatesResponse;
   user?: Maybe<UserProfileResponse>;
 };
 
@@ -78,6 +92,7 @@ export type Mutation = {
   confirmUserEmail?: Maybe<UserProfileResponse>;
   requestConfirmationEmail: Scalars['Boolean'];
   requestPasswordChangeEmail: Scalars['Boolean'];
+  cancellInvitation: Scalars['Boolean'];
   inviteTeammate: Scalars['Boolean'];
   login?: Maybe<UserProfileResponse>;
   logout: Scalars['Boolean'];
@@ -106,6 +121,11 @@ export type MutationRequestPasswordChangeEmailArgs = {
 };
 
 
+export type MutationCancellInvitationArgs = {
+  email: Scalars['String'];
+};
+
+
 export type MutationInviteTeammateArgs = {
   email: Scalars['String'];
 };
@@ -124,6 +144,16 @@ export type MutationRegisterArgs = {
 export type MutationRegisterWithInvitationArgs = {
   data: RegisterWithInvitationInputType;
 };
+
+export type CancellInvitationMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type CancellInvitationMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'cancellInvitation'>
+);
 
 export type InviteTeammateMutationVariables = Exact<{
   email: Scalars['String'];
@@ -213,7 +243,52 @@ export type TeammateInvitationDataQuery = (
   & Pick<Query, 'teammateInvitationData'>
 );
 
+export type TeammatesQueryVariables = Exact<{ [key: string]: never; }>;
 
+
+export type TeammatesQuery = (
+  { __typename?: 'Query' }
+  & { teammates: (
+    { __typename?: 'TeammatesResponse' }
+    & Pick<TeammatesResponse, 'invitedUsers'>
+    & { registeredUsers: Array<(
+      { __typename?: 'TeammateResponse' }
+      & Pick<TeammateResponse, 'firstname' | 'lastname' | 'email'>
+    )> }
+  ) }
+);
+
+
+export const CancellInvitationDocument = gql`
+    mutation CancellInvitation($email: String!) {
+  cancellInvitation(email: $email)
+}
+    `;
+export type CancellInvitationMutationFn = Apollo.MutationFunction<CancellInvitationMutation, CancellInvitationMutationVariables>;
+
+/**
+ * __useCancellInvitationMutation__
+ *
+ * To run a mutation, you first call `useCancellInvitationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancellInvitationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancellInvitationMutation, { data, loading, error }] = useCancellInvitationMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useCancellInvitationMutation(baseOptions?: Apollo.MutationHookOptions<CancellInvitationMutation, CancellInvitationMutationVariables>) {
+        return Apollo.useMutation<CancellInvitationMutation, CancellInvitationMutationVariables>(CancellInvitationDocument, baseOptions);
+      }
+export type CancellInvitationMutationHookResult = ReturnType<typeof useCancellInvitationMutation>;
+export type CancellInvitationMutationResult = Apollo.MutationResult<CancellInvitationMutation>;
+export type CancellInvitationMutationOptions = Apollo.BaseMutationOptions<CancellInvitationMutation, CancellInvitationMutationVariables>;
 export const InviteTeammateDocument = gql`
     mutation InviteTeammate($email: String!) {
   inviteTeammate(email: $email)
@@ -478,3 +553,40 @@ export function useTeammateInvitationDataLazyQuery(baseOptions?: Apollo.LazyQuer
 export type TeammateInvitationDataQueryHookResult = ReturnType<typeof useTeammateInvitationDataQuery>;
 export type TeammateInvitationDataLazyQueryHookResult = ReturnType<typeof useTeammateInvitationDataLazyQuery>;
 export type TeammateInvitationDataQueryResult = Apollo.QueryResult<TeammateInvitationDataQuery, TeammateInvitationDataQueryVariables>;
+export const TeammatesDocument = gql`
+    query Teammates {
+  teammates {
+    invitedUsers
+    registeredUsers {
+      firstname
+      lastname
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __useTeammatesQuery__
+ *
+ * To run a query within a React component, call `useTeammatesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeammatesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTeammatesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTeammatesQuery(baseOptions?: Apollo.QueryHookOptions<TeammatesQuery, TeammatesQueryVariables>) {
+        return Apollo.useQuery<TeammatesQuery, TeammatesQueryVariables>(TeammatesDocument, baseOptions);
+      }
+export function useTeammatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeammatesQuery, TeammatesQueryVariables>) {
+          return Apollo.useLazyQuery<TeammatesQuery, TeammatesQueryVariables>(TeammatesDocument, baseOptions);
+        }
+export type TeammatesQueryHookResult = ReturnType<typeof useTeammatesQuery>;
+export type TeammatesLazyQueryHookResult = ReturnType<typeof useTeammatesLazyQuery>;
+export type TeammatesQueryResult = Apollo.QueryResult<TeammatesQuery, TeammatesQueryVariables>;

@@ -7,9 +7,9 @@ import { redis } from "../../../core/setup-redis-and-express-session";
 import { ContextType } from "../../../core/context/context-type";
 import { Permission } from "../../../core/authorization/permissions";
 import { updateUserContext } from "../../../core/context/update-user-context";
-import { emailConfirmationTokenPrefix } from "../../../core/auto-email/email-templates/confirmation-email";
 import { UserProfile } from "../../userProfile/model/UserProfile.model";
 import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
+import { CONST } from "../../../core/CONST";
 
 @injectable()
 @Resolver()
@@ -26,7 +26,9 @@ export class ConfirmUserEmailResolver {
 		@Ctx() context: ContextType
 	): Promise<UserProfileResponse> {
 		// token user
-		const userId = await redis.get(emailConfirmationTokenPrefix + token);
+		const userId = await redis.get(
+			CONST.redisPrefix.emailConfirmationTokenPrefix + token
+		);
 		if (!userId) {
 			throw customApolloErrors.invalidToken();
 		}
@@ -60,7 +62,7 @@ export class ConfirmUserEmailResolver {
 		user.emailConfirmed = new Date();
 		user.isActive = true;
 		const updatedUser = await this.userRepository.save(user);
-		await redis.del(emailConfirmationTokenPrefix + token);
+		await redis.del(CONST.redisPrefix.emailConfirmationTokenPrefix + token);
 
 		// update context
 		updateUserContext(context, {

@@ -17,8 +17,8 @@ export class TeammateInvitationDataQuery {
 	): Promise<string> {
 		// clear cookie
 		context.response.clearCookie(
-			CONST.sessionCookieName,
-			CONST.sessionCookieOptions
+			CONST.cookies.sessionCookieName,
+			CONST.cookies.sessionCookieOptions
 		);
 
 		const company = await this.companyRepository.findById(companyId);

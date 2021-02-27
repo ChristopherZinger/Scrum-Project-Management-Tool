@@ -68,7 +68,6 @@ export const RegisterWithInvitation = (props: Props) => {
                   }}
                   validationSchema={SignupValidationSchema}
                   onSubmit={async (values) => {
-                    console.log("submit")
                     if (values.password !== values.passwordRepeat) {
                       toast.error("Repeat the same password twice.")
                       return;
@@ -81,7 +80,8 @@ export const RegisterWithInvitation = (props: Props) => {
                             token: props.match.params.token,
                             password: values.password,
                             lastname: values.lastname,
-                            firstname: values.firstname
+                            firstname: values.firstname,
+                            companyId
                           }
                         }
                       })

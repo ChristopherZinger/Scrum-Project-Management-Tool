@@ -1,3 +1,4 @@
+import { UserSessionDM } from "./../../user/datamappers/UserSession.dm";
 import { injectable } from "inversify";
 import { UserProfileDM } from "./../datamappers/UserProfileResponse.dm";
 import { UserRepository } from "./../../user/model/User.repository";
@@ -9,6 +10,7 @@ import bcrypt from "bcryptjs";
 import { createUserContext } from "../../../core/context/create-user-context";
 import { UserProfile } from "../model/UserProfile.model";
 import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
+import { Company } from "../../company/model/Company.model";
 
 @InputType()
 class LoginInputType {
@@ -25,7 +27,8 @@ class LoginInputType {
 export class LoginMutation {
 	constructor(
 		private userRepository: UserRepository,
-		private userProfileDM: UserProfileDM
+		private userProfileDM: UserProfileDM,
+		private userSessionDM: UserSessionDM
 	) {}
 
 	@Mutation(() => UserProfileResponse, { nullable: true })
@@ -36,7 +39,7 @@ export class LoginMutation {
 		data.email = data.email.toLowerCase();
 
 		const user = await this.userRepository.findByEmail(data.email, {
-			include: [{ model: UserProfile }]
+			include: [{ model: UserProfile, include: [{ model: Company }] }]
 		});
 
 		if (!user) {
@@ -44,7 +47,7 @@ export class LoginMutation {
 			throw customApolloErrors.wrongCredentials();
 		}
 
-		if (!user.profile) {
+		if (!user.profile || !user.profile.company) {
 			throw customApolloErrors.couldNotLoadUserData();
 		}
 
@@ -54,17 +57,15 @@ export class LoginMutation {
 			throw customApolloErrors.wrongCredentials();
 		}
 
-		createUserContext(context, {
-			id: user.id,
-			email: user.email,
-			role: user.role,
-			emailConfirmed: user.emailConfirmed,
-			isActive: user.isActive,
-			removedAt: user.removedAt
-		});
+		createUserContext(
+			context,
+			this.userSessionDM.createUserSessionType(
+				user,
+				user.profile,
+				user.profile.company.id
+			)
+		);
 
-		// 	console.log(`User: ${user.email} has logged in.`);
-		console.log(context.session.cookie);
 		return this.userProfileDM.createUserProfileResponse(user, user.profile);
 	}
 }

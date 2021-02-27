@@ -2,10 +2,10 @@ import { ContextType, SessionUserType } from "./context-type";
 
 export function createUserContext(
 	context: ContextType,
-	updatedUserProperties: SessionUserType
+	user: SessionUserType
 ): boolean {
 	if (!context.session.user) {
-		context.session.user = updatedUserProperties;
+		context.session.user = user;
 		return true;
 	}
 

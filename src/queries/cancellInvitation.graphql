@@ -1,0 +1,3 @@
+mutation CancellInvitation($email: String!) {
+	cancellInvitation(email: $email)
+}

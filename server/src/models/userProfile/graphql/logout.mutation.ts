@@ -16,8 +16,8 @@ export class LogoutMutation {
 				}
 
 				context.response.clearCookie(
-					CONST.sessionCookieName,
-					CONST.sessionCookieOptions
+					CONST.cookies.sessionCookieName,
+					CONST.cookies.sessionCookieOptions
 				);
 				res(true);
 			})

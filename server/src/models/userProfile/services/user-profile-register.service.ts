@@ -9,6 +9,7 @@ import { RegisterUserProfileInputType } from "../graphql/register.mutation";
 import { UserRole } from "../../user/type-guards";
 import { injectable, inject } from "inversify";
 import { Sequelize } from "sequelize-typescript";
+import { Company } from "../../company/model/Company.model";
 
 @injectable()
 export class UserProfileService {
@@ -20,7 +21,8 @@ export class UserProfileService {
 
 	public async register(
 		data: RegisterUserProfileInputType,
-		userRole?: UserRole
+		userRole?: UserRole,
+		companyId?: number
 	): Promise<User | null> {
 		const emailIsTaken = await this.userRepository.emailIsTaken(data.email);
 
@@ -41,11 +43,17 @@ export class UserProfileService {
 			userProfile.lastname = data.lastname;
 			userProfile.userId = user.id;
 
+			if (companyId) {
+				userProfile.companyId = companyId;
+			}
+
 			await this.userProfileRepository.save(userProfile);
 		});
 
 		return await this.userRepository.findByEmail(data.email, {
-			include: [{ model: UserProfile }]
+			include: [
+				{ model: UserProfile, include: [{ model: Company, required: true }] }
+			]
 		});
 	}
 }

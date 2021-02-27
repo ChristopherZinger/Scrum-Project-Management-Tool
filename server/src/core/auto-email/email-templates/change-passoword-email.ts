@@ -1,13 +1,12 @@
 import { IEmailTemplate } from "../email-service";
 import { v4 } from "uuid";
 import { redis } from "../../setup-redis-and-express-session";
-
-export const passwordChangeTokenPrefix = "password-change-token-";
+import { CONST } from "../../../core/CONST";
 
 const createPasswordChangeUrl = async (userId: number) => {
 	const token = v4();
 	await redis.set(
-		passwordChangeTokenPrefix + token,
+		CONST.redisPrefix.passwordChangeTokenPrefix + token,
 		userId,
 		"ex",
 		60 * 60 * 24

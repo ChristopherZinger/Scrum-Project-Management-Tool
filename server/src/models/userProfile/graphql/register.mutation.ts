@@ -1,3 +1,4 @@
+import { UserSessionDM } from "./../../user/datamappers/UserSession.dm";
 import { createConfirmationEmail } from "../../../core/auto-email/email-templates/confirmation-email";
 import { ContextType } from "./../../../core/context/context-type";
 import { UserProfileResponse } from "./userProfileResponse.type";
@@ -34,7 +35,8 @@ export class RegisterUserProfileInputType {
 export class RegisterMutation {
 	public constructor(
 		private userProfileRegisterService: UserProfileService,
-		private userProfileDM: UserProfileDM
+		private userProfileDM: UserProfileDM,
+		private userSessionDM: UserSessionDM
 	) {}
 
 	@Mutation(() => UserProfileResponse, { nullable: true })
@@ -54,7 +56,7 @@ export class RegisterMutation {
 				);
 			}
 
-			if (!newUser.profile) {
+			if (!newUser.profile || !newUser.profile.company) {
 				throw customApolloErrors.couldNotLoadUserData();
 			}
 
@@ -66,14 +68,14 @@ export class RegisterMutation {
 			await sendEmail(confirmationEmail);
 
 			// context
-			createUserContext(context, {
-				id: newUser.id,
-				email: newUser.email,
-				role: newUser.role,
-				emailConfirmed: newUser.emailConfirmed,
-				isActive: newUser.isActive,
-				removedAt: newUser.removedAt
-			});
+			createUserContext(
+				context,
+				this.userSessionDM.createUserSessionType(
+					newUser,
+					newUser.profile,
+					newUser.profile.company.id
+				)
+			);
 
 			return this.userProfileDM.createUserProfileResponse(
 				newUser,

@@ -1,3 +1,4 @@
+import { UserSessionDM } from "./../datamappers/UserSession.dm";
 import { UserProfileDM } from "../../userProfile/datamappers/UserProfileResponse.dm";
 import { UserRepository } from "./../model/User.repository";
 import { injectable } from "inversify";
@@ -7,10 +8,11 @@ import { Length } from "class-validator";
 import { redis } from "../../../core/setup-redis-and-express-session";
 import { ContextType } from "../../../core/context/context-type";
 import { createUserContext } from "../../../core/context/create-user-context";
-import { passwordChangeTokenPrefix } from "../../../core/auto-email/email-templates/change-passoword-email";
 import bcrypt from "bcryptjs";
 import { UserProfile } from "../../userProfile/model/UserProfile.model";
 import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
+import { Company } from "../../company/model/Company.model";
+import { CONST } from "../../../core/CONST";
 
 @InputType()
 class ChangePassword {
@@ -29,7 +31,8 @@ class ChangePassword {
 export class ChangePasswordMutation {
 	constructor(
 		private userRepository: UserRepository,
-		private userProfileDM: UserProfileDM
+		private userProfileDM: UserProfileDM,
+		private userSessionDM: UserSessionDM
 	) {}
 	@Mutation(() => UserProfileResponse, { nullable: true })
 	async changePassword(
@@ -37,7 +40,9 @@ export class ChangePasswordMutation {
 		@Ctx() context: ContextType
 	): Promise<UserProfileResponse | null> {
 		// token user
-		const userId = await redis.get(passwordChangeTokenPrefix + data.token);
+		const userId = await redis.get(
+			CONST.redisPrefix.passwordChangeTokenPrefix + data.token
+		);
 		if (!userId) {
 			console.error("Incorrect token. Could not get user id from redis");
 			throw customApolloErrors.invalidToken();
@@ -45,30 +50,31 @@ export class ChangePasswordMutation {
 
 		// db user
 		const user = await this.userRepository.findById(parseInt(userId, 10), {
-			include: [{ model: UserProfile }]
+			include: [{ model: UserProfile, include: [{ model: Company }] }]
 		});
 
 		if (!user) {
 			throw customApolloErrors.userMissingForId();
 		}
 
-		if (!user.profile) {
+		if (!user.profile || !user.profile.company) {
 			throw customApolloErrors.couldNotLoadUserData();
 		}
 
 		// update model
 		user.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(12));
 		const updatedUser = await this.userRepository.save(user);
-		await redis.del(passwordChangeTokenPrefix + data.token);
+		await redis.del(CONST.redisPrefix.passwordChangeTokenPrefix + data.token);
 
 		// update context - login user
-		createUserContext(context, {
-			id: updatedUser.id,
-			email: updatedUser.email,
-			isActive: updatedUser.isActive,
-			emailConfirmed: updatedUser.emailConfirmed,
-			role: updatedUser.role
-		});
+		createUserContext(
+			context,
+			this.userSessionDM.createUserSessionType(
+				updatedUser,
+				user.profile,
+				user.profile.company.id
+			)
+		);
 
 		return this.userProfileDM.createUserProfileResponse(user, user.profile);
 	}

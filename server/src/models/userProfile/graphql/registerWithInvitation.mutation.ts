@@ -1,11 +1,19 @@
+import { UserProfileInvitationService } from "./../services/user-profile-invitation.service";
+import { UserSessionDM } from "./../../user/datamappers/UserSession.dm";
 import { UserProfileDM } from "./../datamappers/UserProfileResponse.dm";
 import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
 import { UserProfileService } from "./../services/user-profile-register.service";
 import { ContextType } from "./../../../core/context/context-type";
 import { UserProfileResponse } from "./userProfileResponse.type";
-import { Resolver, Mutation, Arg, Ctx, InputType, Field } from "type-graphql";
-import { redis } from "../../../core/setup-redis-and-express-session";
-import { teammateInvitationPrefix } from "../../../core/auto-email/email-templates/teammate-invitation-email";
+import {
+	Resolver,
+	Mutation,
+	Arg,
+	Ctx,
+	InputType,
+	Field,
+	Int
+} from "type-graphql";
 import { injectable } from "inversify";
 import { Length } from "class-validator";
 import { createUserContext } from "./../../../core/context/create-user-context";
@@ -14,6 +22,9 @@ import { sendEmail } from "../../../core/auto-email/email-service";
 
 @InputType()
 class RegisterWithInvitationInputType {
+	@Field(() => Int)
+	public companyId!: number;
+
 	@Field(() => String)
 	public firstname!: string;
 
@@ -35,7 +46,9 @@ class RegisterWithInvitationInputType {
 export class RegisterWithInvitationMutation {
 	public constructor(
 		private userProfileService: UserProfileService,
-		private userProfileDM: UserProfileDM
+		private userProfileDM: UserProfileDM,
+		private userSessionDM: UserSessionDM,
+		private userProfileInvitationService: UserProfileInvitationService
 	) {}
 
 	@Mutation(() => UserProfileResponse)
@@ -44,16 +57,23 @@ export class RegisterWithInvitationMutation {
 		@Ctx() context: ContextType
 	): Promise<UserProfileResponse> {
 		// get email from redis
-		const email = await redis.get(teammateInvitationPrefix + data.token);
+		const { email } = await this.userProfileInvitationService.getInvitation(
+			data.token,
+			data.companyId
+		);
 
 		if (!email) {
 			throw customApolloErrors.invalidToken();
 		}
 
-		const newUser = await this.userProfileService.register({
-			...data,
-			email
-		});
+		const newUser = await this.userProfileService.register(
+			{
+				...data,
+				email
+			},
+			undefined,
+			data.companyId
+		);
 
 		if (!newUser) {
 			throw customApolloErrors.somethingWentWrong(
@@ -62,19 +82,25 @@ export class RegisterWithInvitationMutation {
 			);
 		}
 
-		if (!newUser.profile) {
+		if (!newUser.profile || !newUser.profile.company) {
 			throw customApolloErrors.couldNotLoadUserData();
 		}
 
+		// remove from redis pending invitations
+		await this.userProfileInvitationService.removeInvitation(
+			data.companyId,
+			data.token
+		);
+
 		// context
-		createUserContext(context, {
-			id: newUser.id,
-			email: newUser.email,
-			role: newUser.role,
-			emailConfirmed: newUser.emailConfirmed,
-			isActive: newUser.isActive,
-			removedAt: newUser.removedAt
-		});
+		createUserContext(
+			context,
+			this.userSessionDM.createUserSessionType(
+				newUser,
+				newUser.profile,
+				newUser.profile.company?.id || null
+			)
+		);
 
 		// send email
 		const confirmationEmail = await createConfirmationEmail(

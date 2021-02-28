@@ -4,15 +4,14 @@ import { Modal } from "../../atoms/Modal/Modal";
 import { Input, InputError } from "../../atoms/Inputs/Input";
 import { Grid } from "semantic-ui-react";
 import { Formik, Form } from "formik";
-import { useCreateProjectMutation, useProjectsQuery } from "../../../types.d";
+import { useCreateProjectMutation, useProjectsQuery, useRemoveProjectMutation } from "../../../types.d";
 import { FlexDiv } from "../../atoms/FlexDiv/FlexDiv";
 
 export const ProjectListCard = () => {
   const [addProjectIsOpen, setAddProjectIsOpen] = useState(false);
-  const [createProject, createProjecResult] = useCreateProjectMutation();
+  const [createProject] = useCreateProjectMutation();
+  const [removeProject] = useRemoveProjectMutation();
   const projects = useProjectsQuery();
-
-  console.log(projects.data?.projects)
 
   return (
     <>
@@ -24,8 +23,10 @@ export const ProjectListCard = () => {
               {projects.data.projects.map(project =>
                 <FlexDiv>
                   {`${project.pid} ${project.title}`}
-                remove
-              </FlexDiv>)}
+                  <p onClick={() => removeProject({ variables: { projectId: project.id } })}>
+                    remove
+                  </p>
+                </FlexDiv>)}
             </>
           )}
         </div>
@@ -48,7 +49,6 @@ export const ProjectListCard = () => {
                     }
                   }
                 })
-                console.log(newProject)
                 setAddProjectIsOpen(false)
               } catch (err) {
                 console.log(err)

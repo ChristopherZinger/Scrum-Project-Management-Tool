@@ -102,6 +102,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   RegisterCompany: Scalars['Boolean'];
   createProject: ProjectResponseType;
+  removeProject: ProjectResponseType;
   changePassword?: Maybe<UserProfileResponse>;
   confirmUserEmail?: Maybe<UserProfileResponse>;
   requestConfirmationEmail: Scalars['Boolean'];
@@ -122,6 +123,11 @@ export type MutationRegisterCompanyArgs = {
 
 export type MutationCreateProjectArgs = {
   data: CreateProjectInputType;
+};
+
+
+export type MutationRemoveProjectArgs = {
+  projectId: Scalars['Int'];
 };
 
 
@@ -273,6 +279,19 @@ export type RegisterWithInvitationMutation = (
   & { registerWithInvitation: (
     { __typename?: 'UserProfileResponse' }
     & Pick<UserProfileResponse, 'email' | 'firstname' | 'lastname' | 'isActive' | 'emailConfirmed'>
+  ) }
+);
+
+export type RemoveProjectMutationVariables = Exact<{
+  projectId: Scalars['Int'];
+}>;
+
+
+export type RemoveProjectMutation = (
+  { __typename?: 'Mutation' }
+  & { removeProject: (
+    { __typename?: 'ProjectResponseType' }
+    & Pick<ProjectResponseType, 'title' | 'pid'>
   ) }
 );
 
@@ -632,6 +651,39 @@ export function useRegisterWithInvitationMutation(baseOptions?: Apollo.MutationH
 export type RegisterWithInvitationMutationHookResult = ReturnType<typeof useRegisterWithInvitationMutation>;
 export type RegisterWithInvitationMutationResult = Apollo.MutationResult<RegisterWithInvitationMutation>;
 export type RegisterWithInvitationMutationOptions = Apollo.BaseMutationOptions<RegisterWithInvitationMutation, RegisterWithInvitationMutationVariables>;
+export const RemoveProjectDocument = gql`
+    mutation RemoveProject($projectId: Int!) {
+  removeProject(projectId: $projectId) {
+    title
+    pid
+  }
+}
+    `;
+export type RemoveProjectMutationFn = Apollo.MutationFunction<RemoveProjectMutation, RemoveProjectMutationVariables>;
+
+/**
+ * __useRemoveProjectMutation__
+ *
+ * To run a mutation, you first call `useRemoveProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeProjectMutation, { data, loading, error }] = useRemoveProjectMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useRemoveProjectMutation(baseOptions?: Apollo.MutationHookOptions<RemoveProjectMutation, RemoveProjectMutationVariables>) {
+        return Apollo.useMutation<RemoveProjectMutation, RemoveProjectMutationVariables>(RemoveProjectDocument, baseOptions);
+      }
+export type RemoveProjectMutationHookResult = ReturnType<typeof useRemoveProjectMutation>;
+export type RemoveProjectMutationResult = Apollo.MutationResult<RemoveProjectMutation>;
+export type RemoveProjectMutationOptions = Apollo.BaseMutationOptions<RemoveProjectMutation, RemoveProjectMutationVariables>;
 export const TeammateInvitationDataDocument = gql`
     query TeammateInvitationData($companyId: Int!) {
   teammateInvitationData(companyId: $companyId)

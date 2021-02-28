@@ -30,13 +30,9 @@ export class ProjectsQuery {
 			context.session.user.companyId
 		);
 
-		console.log(projects.length);
-
 		const projectList = projects.map((project: Project) =>
 			this.projectResponseDM.createProjectResponse(project)
 		);
-
-		console.log(projectList);
 
 		return projectList;
 	}

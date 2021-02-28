@@ -60,7 +60,6 @@ export class UserProfileInvitationService {
 	public async removeInvitation(companyId: number, emailOrToken: string) {
 		const listPrefix = CONST.redisPrefix.pendingInvitationList(companyId);
 		const invitationList = await redis.get(listPrefix);
-		console.log(listPrefix, invitationList);
 		const listOfInvitations = JSON.parse(invitationList || "");
 
 		if (listOfInvitations.invitations) {
@@ -109,8 +108,6 @@ export class UserProfileInvitationService {
 
 		const listPrefix = CONST.redisPrefix.pendingInvitationList(company.id);
 		const invitationListString = await redis.get(listPrefix);
-
-		console.log(invitationListString);
 
 		if (!invitationListString) {
 			console.warn(`Can't find invitation list for prefix: ${listPrefix}`);

@@ -4,18 +4,31 @@ import { Modal } from "../../atoms/Modal/Modal";
 import { Input, InputError } from "../../atoms/Inputs/Input";
 import { Grid } from "semantic-ui-react";
 import { Formik, Form } from "formik";
-import { useCreateProjectMutation } from "../../../types.d";
-
+import { useCreateProjectMutation, useProjectsQuery } from "../../../types.d";
+import { FlexDiv } from "../../atoms/FlexDiv/FlexDiv";
 
 export const ProjectListCard = () => {
   const [addProjectIsOpen, setAddProjectIsOpen] = useState(false);
   const [createProject, createProjecResult] = useCreateProjectMutation();
+  const projects = useProjectsQuery();
+
+  console.log(projects.data?.projects)
 
   return (
     <>
       <DashboardCard title="Projects:">
         <button onClick={() => setAddProjectIsOpen(true)}> create project </button>
-
+        <div>
+          {projects.data && (
+            <>
+              {projects.data.projects.map(project =>
+                <FlexDiv>
+                  {`${project.pid} ${project.title}`}
+                remove
+              </FlexDiv>)}
+            </>
+          )}
+        </div>
       </DashboardCard>
 
       <Modal open={addProjectIsOpen} >

@@ -16,7 +16,7 @@ export class ProjectsQuery {
 	) {}
 
 	@Query(() => [ProjectResponseType])
-	public async project(
+	public async projects(
 		@Ctx() context: ContextType
 	): Promise<ProjectResponseType[]> {
 		if (!context.session.user?.companyId) {
@@ -26,13 +26,17 @@ export class ProjectsQuery {
 			);
 		}
 
-		const projects = await this.projectRepository.findAllById(
+		const projects = await this.projectRepository.findAllForCompany(
 			context.session.user.companyId
 		);
+
+		console.log(projects.length);
 
 		const projectList = projects.map((project: Project) =>
 			this.projectResponseDM.createProjectResponse(project)
 		);
+
+		console.log(projectList);
 
 		return projectList;
 	}

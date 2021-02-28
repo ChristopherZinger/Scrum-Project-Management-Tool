@@ -1,3 +1,4 @@
+import { FindOptions } from "sequelize";
 import { CreateProjectInputType } from "./../graphql/createProject.mutation";
 import { Project } from "./Project.model";
 import { BaseRepository } from "../../../core/base-repository";
@@ -19,5 +20,12 @@ export class ProjectRepository extends BaseRepository<Project> {
 			project.pid = data.pid;
 		}
 		return await project.save();
+	}
+
+	public async findAllForCompany(
+		companyId: number,
+		options?: FindOptions
+	): Promise<Project[]> {
+		return await this.model.findAll({ where: { companyId }, ...options });
 	}
 }

@@ -30,9 +30,9 @@ export type TeammateResponse = {
 
 export type ProjectResponseType = {
   __typename?: 'ProjectResponseType';
-  pid: Scalars['String'];
+  id: Scalars['Int'];
+  pid?: Maybe<Scalars['String']>;
   title: Scalars['String'];
-  companyId: Scalars['Float'];
 };
 
 export type UserProfileResponse = {
@@ -89,6 +89,7 @@ export type Query = {
   __typename?: 'Query';
   teammateInvitationData: Scalars['String'];
   teammates: TeammatesResponse;
+  projects: Array<ProjectResponseType>;
   user?: Maybe<UserProfileResponse>;
 };
 
@@ -182,7 +183,7 @@ export type CreateProjectMutation = (
   { __typename?: 'Mutation' }
   & { createProject: (
     { __typename?: 'ProjectResponseType' }
-    & Pick<ProjectResponseType, 'title' | 'pid' | 'companyId'>
+    & Pick<ProjectResponseType, 'title' | 'pid'>
   ) }
 );
 
@@ -225,6 +226,17 @@ export type MyProfileQuery = (
   & { user?: Maybe<(
     { __typename?: 'UserProfileResponse' }
     & Pick<UserProfileResponse, 'email' | 'isActive' | 'emailConfirmed' | 'firstname' | 'lastname'>
+  )> }
+);
+
+export type ProjectsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ProjectsQuery = (
+  { __typename?: 'Query' }
+  & { projects: Array<(
+    { __typename?: 'ProjectResponseType' }
+    & Pick<ProjectResponseType, 'title' | 'pid' | 'id'>
   )> }
 );
 
@@ -325,7 +337,6 @@ export const CreateProjectDocument = gql`
   createProject(data: $data) {
     title
     pid
-    companyId
   }
 }
     `;
@@ -485,6 +496,40 @@ export function useMyProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type MyProfileQueryHookResult = ReturnType<typeof useMyProfileQuery>;
 export type MyProfileLazyQueryHookResult = ReturnType<typeof useMyProfileLazyQuery>;
 export type MyProfileQueryResult = Apollo.QueryResult<MyProfileQuery, MyProfileQueryVariables>;
+export const ProjectsDocument = gql`
+    query Projects {
+  projects {
+    title
+    pid
+    id
+  }
+}
+    `;
+
+/**
+ * __useProjectsQuery__
+ *
+ * To run a query within a React component, call `useProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useProjectsQuery(baseOptions?: Apollo.QueryHookOptions<ProjectsQuery, ProjectsQueryVariables>) {
+        return Apollo.useQuery<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, baseOptions);
+      }
+export function useProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsQuery, ProjectsQueryVariables>) {
+          return Apollo.useLazyQuery<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, baseOptions);
+        }
+export type ProjectsQueryHookResult = ReturnType<typeof useProjectsQuery>;
+export type ProjectsLazyQueryHookResult = ReturnType<typeof useProjectsLazyQuery>;
+export type ProjectsQueryResult = Apollo.QueryResult<ProjectsQuery, ProjectsQueryVariables>;
 export const RegisterCompanyDocument = gql`
     mutation RegisterCompany($data: RegisterCompanyInputType!) {
   RegisterCompany(data: $data)

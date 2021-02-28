@@ -7,6 +7,7 @@ import { Profile } from "./Profile/Profile";
 import { Admin } from "./Admin/Admin";
 import { LogoutModal } from "../../components/LogoutModal/LogoutModal";
 import { Sidenav, sideNavWidth } from "../../components/Sidenav/Sidenav";
+import { RoutesMain } from "../AppRoutes";
 
 
 const StyledDashboardContainer = styled.div`
@@ -30,7 +31,7 @@ export const Dashboard = (props: Props) => {
 
       <StyledDashboardContainer >
         <Switch>
-          <Route path="/profile" >
+          <Route path={[RoutesMain.HOME, RoutesMain.DASHBOARD]} >
             <Profile />
           </Route>
           <Route path="/admin">

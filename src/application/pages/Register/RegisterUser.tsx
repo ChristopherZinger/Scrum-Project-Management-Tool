@@ -14,7 +14,7 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { AuthFormWrapper } from "./styledElements/AuthFormWrapper";
-import { Routes } from "../AppRoutes";
+import { RoutesMain } from "../AppRoutes";
 import { Underlineable } from "../../atoms/Underlineable/Underlineable";
 import { Checkbox } from "semantic-ui-react";
 import styled from "styled-components";
@@ -87,7 +87,7 @@ export const RegisterUser = () => {
                     })
                     if (userData.data) {
                       dispatch({ type: "login", user: userData.data.register })
-                      history.push(isOfficeAdmin ? Routes.REGISTER_COMPANY : Routes.DASHBOARD)
+                      history.push(isOfficeAdmin ? RoutesMain.REGISTER_COMPANY : RoutesMain.DASHBOARD)
                     } else {
                       throw new Error("No data received")
                     }

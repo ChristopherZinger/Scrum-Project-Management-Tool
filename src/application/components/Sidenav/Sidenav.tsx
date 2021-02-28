@@ -7,6 +7,7 @@ import settingsIcon from "../../images/icons/settings.svg"
 import homeIcon from "../../images/icons/house.svg"
 import { useLocation } from "react-router-dom";
 import { Icon } from "../../atoms/Icon/Icon";
+import { RoutesMain } from "../../pages/AppRoutes";
 
 export const sideNavWidth = "70px";
 
@@ -38,7 +39,7 @@ export const Sidenav = (props: Props) => {
 
   return (
     <StyledSideNav>
-      <Link to="/profile">
+      <Link to={RoutesMain.DASHBOARD}>
         <div className="btn">
           <Icon src={homeIcon} />
         </div>

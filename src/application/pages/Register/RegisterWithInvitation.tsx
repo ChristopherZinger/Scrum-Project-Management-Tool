@@ -13,7 +13,7 @@ import { useHistory, RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { AuthFormWrapper } from "./styledElements/AuthFormWrapper";
-import { Routes } from "../AppRoutes";
+import { RoutesMain } from "../AppRoutes";
 import { UserAuthDispatchContext } from "../../../App";
 
 interface IParams { token: string, companyId: string }
@@ -88,7 +88,7 @@ export const RegisterWithInvitation = (props: Props) => {
 
                       if (data) {
                         dispatch({ type: "login", user: data.registerWithInvitation })
-                        history.push(Routes.DASHBOARD)
+                        history.push(RoutesMain.DASHBOARD)
                       } else {
                         throw new Error("No data received")
                       }

@@ -2,31 +2,51 @@ import React, { useState } from "react";
 import { DashboardCard } from "../../atoms/DashboardCard/DashboardCard";
 import { Modal } from "../../atoms/Modal/Modal";
 import { Input, InputError } from "../../atoms/Inputs/Input";
-import { Grid } from "semantic-ui-react";
+import { Divider, Grid, } from "semantic-ui-react";
 import { Formik, Form } from "formik";
 import { useCreateProjectMutation, useProjectsQuery, useRemoveProjectMutation } from "../../../types.d";
-import { FlexDiv } from "../../atoms/FlexDiv/FlexDiv";
+import { Link } from "react-router-dom";
+import { ButtonText } from "../../atoms/Buttons/ButtonText";
+import { CardButton } from "../../atoms/Buttons/CardButton";
+import { CardListItem } from "../../atoms/CardListItem/CardListItem";
 
 export const ProjectListCard = () => {
   const [addProjectIsOpen, setAddProjectIsOpen] = useState(false);
   const [createProject] = useCreateProjectMutation();
-  const [removeProject] = useRemoveProjectMutation();
+  const [removeProject, removeProjectResult] = useRemoveProjectMutation();
   const projects = useProjectsQuery();
 
   return (
     <>
-      <DashboardCard title="Projects:">
-        <button onClick={() => setAddProjectIsOpen(true)}> create project </button>
+      <DashboardCard title="Projects">
+        <div>
+          <CardButton
+            popupText="Add new project"
+            iconName="plus"
+            onClick={() => setAddProjectIsOpen(true)}
+          />
+        </div>
+
+        <Divider hidden />
+
         <div>
           {projects.data && (
             <>
-              {projects.data.projects.map(project =>
-                <FlexDiv>
-                  {`${project.pid} ${project.title}`}
-                  <p onClick={() => removeProject({ variables: { projectId: project.id } })}>
-                    remove
-                  </p>
-                </FlexDiv>)}
+              {projects.data.projects.map((project) =>
+                <CardListItem key={project.id} >
+                  <Link to={`project/${project.id}`} >
+                    {`${project.pid || ""} ${project.title}`}
+                  </Link>
+                  <ButtonText
+                    text="remove"
+                    onClick={async () => {
+                      await removeProject({ variables: { projectId: project.id } });
+                      await projects.refetch();
+                    }}
+                    isLoading={removeProjectResult.loading}
+                  />
+                </CardListItem>
+              )}
             </>
           )}
         </div>
@@ -41,7 +61,7 @@ export const ProjectListCard = () => {
             initialValues={{ pid: "", title: "" }}
             onSubmit={async (values) => {
               try {
-                const newProject = await createProject({
+                await createProject({
                   variables: {
                     data: {
                       title: values.title,

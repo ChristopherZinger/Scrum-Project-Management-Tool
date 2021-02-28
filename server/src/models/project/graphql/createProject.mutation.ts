@@ -1,3 +1,4 @@
+import { ProjectResponseDM } from "./../datamappers/ProjectResponse.dm";
 import { ProjectResponseType } from "./ProjectResponse.type";
 import { ProjectRepository } from "./../model/Project.repository";
 import { ContextType } from "./../../../core/context/context-type";
@@ -9,16 +10,12 @@ import {
 	Arg,
 	Authorized,
 	InputType,
-	Field,
-	Int
+	Field
 } from "type-graphql";
 import customApolloErrors from "../../../core/formatErrors/custom-apollo-errors";
 
 @InputType()
 export class CreateProjectInputType {
-	@Field(() => Int)
-	projectId!: number;
-
 	@Field()
 	title!: string;
 
@@ -29,7 +26,11 @@ export class CreateProjectInputType {
 @injectable()
 @Resolver()
 export class createProjectMutation {
-	public constructor(private projectRepository: ProjectRepository) {}
+	public constructor(
+		private projectRepository: ProjectRepository,
+		private projectResponseDM: ProjectResponseDM
+	) {}
+
 	@Authorized()
 	@Mutation(() => ProjectResponseType)
 	public async createProject(
@@ -51,6 +52,7 @@ export class createProjectMutation {
 			...data,
 			companyId: context.session.user.companyId
 		});
-		return project;
+
+		return this.projectResponseDM.createProjectResponse(project);
 	}
 }

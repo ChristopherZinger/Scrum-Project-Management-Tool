@@ -28,6 +28,13 @@ export type TeammateResponse = {
   email: Scalars['String'];
 };
 
+export type ProjectResponseType = {
+  __typename?: 'ProjectResponseType';
+  pid: Scalars['String'];
+  title: Scalars['String'];
+  companyId: Scalars['Float'];
+};
+
 export type UserProfileResponse = {
   __typename?: 'UserProfileResponse';
   profileId: Scalars['Float'];
@@ -46,6 +53,11 @@ export type RegisterCompanyInputType = {
   street?: Maybe<Scalars['String']>;
   buildingNumber?: Maybe<Scalars['String']>;
   zipCode?: Maybe<Scalars['String']>;
+};
+
+export type CreateProjectInputType = {
+  title: Scalars['String'];
+  pid: Scalars['String'];
 };
 
 export type ChangePassword = {
@@ -88,6 +100,7 @@ export type QueryTeammateInvitationDataArgs = {
 export type Mutation = {
   __typename?: 'Mutation';
   RegisterCompany: Scalars['Boolean'];
+  createProject: ProjectResponseType;
   changePassword?: Maybe<UserProfileResponse>;
   confirmUserEmail?: Maybe<UserProfileResponse>;
   requestConfirmationEmail: Scalars['Boolean'];
@@ -103,6 +116,11 @@ export type Mutation = {
 
 export type MutationRegisterCompanyArgs = {
   data: RegisterCompanyInputType;
+};
+
+
+export type MutationCreateProjectArgs = {
+  data: CreateProjectInputType;
 };
 
 
@@ -153,6 +171,19 @@ export type CancellInvitationMutationVariables = Exact<{
 export type CancellInvitationMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'cancellInvitation'>
+);
+
+export type CreateProjectMutationVariables = Exact<{
+  data: CreateProjectInputType;
+}>;
+
+
+export type CreateProjectMutation = (
+  { __typename?: 'Mutation' }
+  & { createProject: (
+    { __typename?: 'ProjectResponseType' }
+    & Pick<ProjectResponseType, 'title' | 'pid' | 'companyId'>
+  ) }
 );
 
 export type InviteTeammateMutationVariables = Exact<{
@@ -289,6 +320,40 @@ export function useCancellInvitationMutation(baseOptions?: Apollo.MutationHookOp
 export type CancellInvitationMutationHookResult = ReturnType<typeof useCancellInvitationMutation>;
 export type CancellInvitationMutationResult = Apollo.MutationResult<CancellInvitationMutation>;
 export type CancellInvitationMutationOptions = Apollo.BaseMutationOptions<CancellInvitationMutation, CancellInvitationMutationVariables>;
+export const CreateProjectDocument = gql`
+    mutation CreateProject($data: CreateProjectInputType!) {
+  createProject(data: $data) {
+    title
+    pid
+    companyId
+  }
+}
+    `;
+export type CreateProjectMutationFn = Apollo.MutationFunction<CreateProjectMutation, CreateProjectMutationVariables>;
+
+/**
+ * __useCreateProjectMutation__
+ *
+ * To run a mutation, you first call `useCreateProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProjectMutation, { data, loading, error }] = useCreateProjectMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateProjectMutation(baseOptions?: Apollo.MutationHookOptions<CreateProjectMutation, CreateProjectMutationVariables>) {
+        return Apollo.useMutation<CreateProjectMutation, CreateProjectMutationVariables>(CreateProjectDocument, baseOptions);
+      }
+export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
+export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
+export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
 export const InviteTeammateDocument = gql`
     mutation InviteTeammate($email: String!) {
   inviteTeammate(email: $email)

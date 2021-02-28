@@ -21,6 +21,17 @@ export abstract class BaseRepository<TModel extends Model<unknown, unknown>> {
 		return result || null;
 	}
 
+	public async findAllById(
+		id: number,
+		options?: FindOptions
+	): Promise<TModel[]> {
+		const result = await this.model.findAll<TModel>({
+			where: { id },
+			...options
+		});
+		return result;
+	}
+
 	public async save(model: TModel, options?: SaveOptions) {
 		return await model.save(options);
 	}

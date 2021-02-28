@@ -3,7 +3,7 @@ import { Project } from "./Project.model";
 import { BaseRepository } from "../../../core/base-repository";
 import { injectable } from "inversify";
 
-interface CreateProjectData extends CreateProjectInputType {
+interface CreateProjectInputData extends CreateProjectInputType {
 	companyId: number;
 }
 
@@ -11,15 +11,13 @@ interface CreateProjectData extends CreateProjectInputType {
 export class ProjectRepository extends BaseRepository<Project> {
 	protected model = Project;
 
-	public async create(data: CreateProjectData): Promise<Project> {
+	public async create(data: CreateProjectInputData): Promise<Project> {
 		const project = new this.model();
 		project.title = data.title;
 		project.companyId = data.companyId;
-		if (project.pid) {
+		if (data.pid) {
 			project.pid = data.pid;
 		}
-		const newProject = await project.save();
-
-		return newProject;
+		return await project.save();
 	}
 }

@@ -1,5 +1,5 @@
 export interface IProjectResponse {
+	id: number;
 	title: string;
-	pid?: string;
-	companyId: number;
+	pid: string | null;
 }

@@ -17,8 +17,7 @@ const migration = {
 					},
 					pid: {
 						// public id
-						type: DataTypes.STRING,
-						allowNull: true
+						type: DataTypes.STRING
 					},
 					companyId: {
 						type: DataTypes.INTEGER,

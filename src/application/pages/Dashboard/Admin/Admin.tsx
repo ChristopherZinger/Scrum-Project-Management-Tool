@@ -3,10 +3,11 @@ import { Grid } from "semantic-ui-react";
 import { DashboardCard } from "../../../atoms/DashboardCard/DashboardCard";
 import { Heading } from "../../../../global-styles/global-styles";
 import { TeamCard } from "../../../components/TeamCard/TeamCard";
+import { InvitationsCard } from "../../../components/InvitationsCard/InvitationsCard";
 
 export const Admin = () => {
   return (
-    <Grid stackable>
+    <Grid stackable stretched>
       <Grid.Row>
         <Heading.H2>Admin</Heading.H2>
       </Grid.Row>
@@ -22,6 +23,11 @@ export const Admin = () => {
           <TeamCard />
         </Grid.Column>
 
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column>
+          <InvitationsCard />
+        </Grid.Column>
       </Grid.Row>
     </Grid>
   )

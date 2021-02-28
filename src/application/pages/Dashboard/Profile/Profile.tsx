@@ -3,6 +3,7 @@ import { Grid } from "semantic-ui-react";
 import { Heading } from "../../../../global-styles/global-styles";
 import { DashboardCard } from "../../../atoms/DashboardCard/DashboardCard";
 import { UserAuthStateContext } from "../../../../App";
+import { ProjectListCard } from "../../../components/ProjectListCard/ProjectListCard";
 
 export const Profile = () => {
   const { user } = useContext(UserAuthStateContext);
@@ -29,9 +30,7 @@ export const Profile = () => {
         </Grid.Column>
 
         <Grid.Column>
-          <DashboardCard title="Projects">
-            <p>You are not assigned to any project yet</p>
-          </DashboardCard>
+          <ProjectListCard />
         </Grid.Column>
 
         <Grid.Column>

@@ -28,6 +28,13 @@ export type TeammateResponse = {
   email: Scalars['String'];
 };
 
+export type ProjectResponseType = {
+  __typename?: 'ProjectResponseType';
+  id: Scalars['Int'];
+  pid?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+};
+
 export type UserProfileResponse = {
   __typename?: 'UserProfileResponse';
   profileId: Scalars['Float'];
@@ -46,6 +53,11 @@ export type RegisterCompanyInputType = {
   street?: Maybe<Scalars['String']>;
   buildingNumber?: Maybe<Scalars['String']>;
   zipCode?: Maybe<Scalars['String']>;
+};
+
+export type CreateProjectInputType = {
+  title: Scalars['String'];
+  pid: Scalars['String'];
 };
 
 export type ChangePassword = {
@@ -77,6 +89,7 @@ export type Query = {
   __typename?: 'Query';
   teammateInvitationData: Scalars['String'];
   teammates: TeammatesResponse;
+  projects: Array<ProjectResponseType>;
   user?: Maybe<UserProfileResponse>;
 };
 
@@ -88,6 +101,7 @@ export type QueryTeammateInvitationDataArgs = {
 export type Mutation = {
   __typename?: 'Mutation';
   RegisterCompany: Scalars['Boolean'];
+  createProject: ProjectResponseType;
   changePassword?: Maybe<UserProfileResponse>;
   confirmUserEmail?: Maybe<UserProfileResponse>;
   requestConfirmationEmail: Scalars['Boolean'];
@@ -103,6 +117,11 @@ export type Mutation = {
 
 export type MutationRegisterCompanyArgs = {
   data: RegisterCompanyInputType;
+};
+
+
+export type MutationCreateProjectArgs = {
+  data: CreateProjectInputType;
 };
 
 
@@ -155,6 +174,19 @@ export type CancellInvitationMutation = (
   & Pick<Mutation, 'cancellInvitation'>
 );
 
+export type CreateProjectMutationVariables = Exact<{
+  data: CreateProjectInputType;
+}>;
+
+
+export type CreateProjectMutation = (
+  { __typename?: 'Mutation' }
+  & { createProject: (
+    { __typename?: 'ProjectResponseType' }
+    & Pick<ProjectResponseType, 'title' | 'pid'>
+  ) }
+);
+
 export type InviteTeammateMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
@@ -194,6 +226,17 @@ export type MyProfileQuery = (
   & { user?: Maybe<(
     { __typename?: 'UserProfileResponse' }
     & Pick<UserProfileResponse, 'email' | 'isActive' | 'emailConfirmed' | 'firstname' | 'lastname'>
+  )> }
+);
+
+export type ProjectsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ProjectsQuery = (
+  { __typename?: 'Query' }
+  & { projects: Array<(
+    { __typename?: 'ProjectResponseType' }
+    & Pick<ProjectResponseType, 'title' | 'pid' | 'id'>
   )> }
 );
 
@@ -289,6 +332,39 @@ export function useCancellInvitationMutation(baseOptions?: Apollo.MutationHookOp
 export type CancellInvitationMutationHookResult = ReturnType<typeof useCancellInvitationMutation>;
 export type CancellInvitationMutationResult = Apollo.MutationResult<CancellInvitationMutation>;
 export type CancellInvitationMutationOptions = Apollo.BaseMutationOptions<CancellInvitationMutation, CancellInvitationMutationVariables>;
+export const CreateProjectDocument = gql`
+    mutation CreateProject($data: CreateProjectInputType!) {
+  createProject(data: $data) {
+    title
+    pid
+  }
+}
+    `;
+export type CreateProjectMutationFn = Apollo.MutationFunction<CreateProjectMutation, CreateProjectMutationVariables>;
+
+/**
+ * __useCreateProjectMutation__
+ *
+ * To run a mutation, you first call `useCreateProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProjectMutation, { data, loading, error }] = useCreateProjectMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateProjectMutation(baseOptions?: Apollo.MutationHookOptions<CreateProjectMutation, CreateProjectMutationVariables>) {
+        return Apollo.useMutation<CreateProjectMutation, CreateProjectMutationVariables>(CreateProjectDocument, baseOptions);
+      }
+export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
+export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
+export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
 export const InviteTeammateDocument = gql`
     mutation InviteTeammate($email: String!) {
   inviteTeammate(email: $email)
@@ -420,6 +496,40 @@ export function useMyProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type MyProfileQueryHookResult = ReturnType<typeof useMyProfileQuery>;
 export type MyProfileLazyQueryHookResult = ReturnType<typeof useMyProfileLazyQuery>;
 export type MyProfileQueryResult = Apollo.QueryResult<MyProfileQuery, MyProfileQueryVariables>;
+export const ProjectsDocument = gql`
+    query Projects {
+  projects {
+    title
+    pid
+    id
+  }
+}
+    `;
+
+/**
+ * __useProjectsQuery__
+ *
+ * To run a query within a React component, call `useProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useProjectsQuery(baseOptions?: Apollo.QueryHookOptions<ProjectsQuery, ProjectsQueryVariables>) {
+        return Apollo.useQuery<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, baseOptions);
+      }
+export function useProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsQuery, ProjectsQueryVariables>) {
+          return Apollo.useLazyQuery<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, baseOptions);
+        }
+export type ProjectsQueryHookResult = ReturnType<typeof useProjectsQuery>;
+export type ProjectsLazyQueryHookResult = ReturnType<typeof useProjectsLazyQuery>;
+export type ProjectsQueryResult = Apollo.QueryResult<ProjectsQuery, ProjectsQueryVariables>;
 export const RegisterCompanyDocument = gql`
     mutation RegisterCompany($data: RegisterCompanyInputType!) {
   RegisterCompany(data: $data)

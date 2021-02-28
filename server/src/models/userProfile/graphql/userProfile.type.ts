@@ -21,4 +21,7 @@ export class UserProfileType {
 
 	@Field(() => CompanyType, { nullable: true })
 	company?: CompanyType;
+
+	@Field()
+	companyId?: number;
 }

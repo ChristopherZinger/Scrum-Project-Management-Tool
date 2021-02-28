@@ -1,3 +1,4 @@
+import { Project } from "./../../project/model/Project.model";
 import { Column, Model, Table, HasMany } from "sequelize-typescript";
 import { UserProfile } from "../../userProfile/model/UserProfile.model";
 
@@ -29,4 +30,7 @@ export class Company extends Model<Company> {
 
 	@HasMany(() => UserProfile)
 	public readonly userProfiles?: UserProfile[];
+
+	@HasMany(() => Project)
+	public readonly projects!: Project[];
 }

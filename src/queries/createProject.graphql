@@ -1,0 +1,6 @@
+mutation CreateProject($data: CreateProjectInputType!) {
+	createProject(data: $data) {
+		title
+		pid
+	}
+}

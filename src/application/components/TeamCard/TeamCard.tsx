@@ -4,13 +4,13 @@ import { Modal } from "../../atoms/Modal/Modal";
 import { Input, InputError } from "../../atoms/Inputs/Input";
 import { Grid } from "semantic-ui-react";
 import { Formik, Form } from "formik";
-import { useInviteTeammateMutation, useTeammatesQuery, useCancellInvitationMutation } from "../../../types.d";
+import { useInviteTeammateMutation, useTeammatesQuery } from "../../../types.d";
+
 
 export const TeamCard = () => {
   const [addTeammemberIsOpen, setAddTeammemberIsOpen] = useState(false);
   const [inviteTeammate] = useInviteTeammateMutation();
   const teammates = useTeammatesQuery();
-  const [cancellInvitation] = useCancellInvitationMutation();
 
   return (
     <>
@@ -23,20 +23,6 @@ export const TeamCard = () => {
             {teammates.data.teammates.registeredUsers.map((el, i) => <p key={`registered-${i}`}>{`
               ${el.firstname} ${el.lastname} - ${el.email}
             `}</p>)}
-            <h5>Pending Invitations:</h5>
-            {teammates.data.teammates.invitedUsers.map((email, i) => {
-              return (
-                <p onClick={async () => {
-                  try {
-                    await cancellInvitation({ variables: { email } })
-                    await teammates.refetch();
-                  } catch (err) {
-                    console.log(err)
-                  }
-
-                }} key={`pending-${i}`}>{email}</p>
-              )
-            })}
           </>
         )}
       </DashboardCard>
@@ -47,7 +33,7 @@ export const TeamCard = () => {
         </Modal.Header>
         <Modal.Content>
           <Formik
-            initialValues={{ email: "", firstname: "", lastname: "" }}
+            initialValues={{ email: "" }}
             onSubmit={async (values) => {
               try {
                 await inviteTeammate({ variables: { email: values.email } })
@@ -60,25 +46,9 @@ export const TeamCard = () => {
             }}
           >
             {() =>
-              <Form id="foo">
+              <Form id="invitation-form">
                 <Grid>
                   <Grid.Row columns="equal">
-                    <Grid.Column>
-                      <div style={{ marginBottom: "50px" }}>
-                        <label>First Name</label>
-                        <Input
-                          name="firstname"
-                          type="text" />
-                        <InputError name="firstname" />
-                      </div>
-
-                      <div style={{ marginBottom: "50px" }}>
-                        <label>Last Name</label>
-                        <Input name="lastname" type="text" />
-                        <InputError name="lastname" />
-                      </div>
-                    </Grid.Column>
-
                     <Grid.Column>
                       <div style={{ marginBottom: "50px" }}>
                         <label>Email</label>
@@ -95,7 +65,7 @@ export const TeamCard = () => {
 
         </Modal.Content>
         <Modal.Actions>
-          <button type="submit" form="foo">
+          <button type="submit" form="invitation-form">
             Invite
           </button>
           <button onClick={() => setAddTeammemberIsOpen(false)}>
@@ -107,3 +77,6 @@ export const TeamCard = () => {
     </>
   )
 }
+
+
+

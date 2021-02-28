@@ -7,6 +7,8 @@ const StyledWrapper = styled.div`
   border: 1px solid ${Colors.UI03};
   min-width: 100%;
   padding: 20px;
+  max-height: 350px;
+  overflow-y: auto;
 
   h1 {
     font-size: 16px;

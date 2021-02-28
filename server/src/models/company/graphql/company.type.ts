@@ -1,3 +1,4 @@
+import { ProjectType } from "./../../project/graphql/Project.type";
 import { UserProfileType } from "../../userProfile/graphql/userProfile.type";
 import { ObjectType, Field, ID } from "type-graphql";
 
@@ -26,4 +27,7 @@ export class CompanyType {
 
 	@Field(() => [UserProfileType])
 	userProfiles!: UserProfileType[];
+
+	@Field(() => [ProjectType])
+	projects!: ProjectType[];
 }

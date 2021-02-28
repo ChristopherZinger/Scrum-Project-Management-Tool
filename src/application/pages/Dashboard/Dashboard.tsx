@@ -8,7 +8,7 @@ import { Admin } from "./Admin/Admin";
 import { LogoutModal } from "../../components/LogoutModal/LogoutModal";
 import { Sidenav, sideNavWidth } from "../../components/Sidenav/Sidenav";
 import { RoutesMain } from "../AppRoutes";
-
+import { Project } from "./Project/Project";
 
 const StyledDashboardContainer = styled.div`
   padding: 30px;
@@ -17,6 +17,11 @@ const StyledDashboardContainer = styled.div`
   background-color: ${Colors.UI02};
   min-height: 100vh;
 `;
+
+export enum RoutesDashboard {
+  ADMIN = "/admin",
+  PROJECT = "/project/:id"
+}
 
 type Props = {
   user: UserProfileResponse | null;
@@ -31,15 +36,19 @@ export const Dashboard = (props: Props) => {
 
       <StyledDashboardContainer >
         <Switch>
+          <Route path={RoutesDashboard.ADMIN}>
+            <Admin />
+          </Route>
+
+          <Route path={RoutesDashboard.PROJECT}>
+            <Project />
+          </Route>
+
           <Route path={[RoutesMain.HOME, RoutesMain.DASHBOARD]} >
             <Profile />
           </Route>
-          <Route path="/admin">
-            <Admin />
-          </Route>
         </Switch>
       </StyledDashboardContainer>
-
 
       { logoutModalIsOpen && (
         <LogoutModal

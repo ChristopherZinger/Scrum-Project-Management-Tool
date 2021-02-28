@@ -20,7 +20,7 @@ export class Project extends Model<Project> {
 	public title!: string;
 
 	@Column(DataType.STRING)
-	public pid!: string | null;
+	public pid?: string;
 
 	@BelongsTo(() => Company)
 	public readonly company!: Company;

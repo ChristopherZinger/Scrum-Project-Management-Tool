@@ -9,8 +9,8 @@ export class ProjectType {
 	@Field()
 	title!: string;
 
-	@Field({ nullable: true })
-	pid!: string;
+	@Field()
+	pid?: string;
 
 	@Field()
 	companyId!: number;

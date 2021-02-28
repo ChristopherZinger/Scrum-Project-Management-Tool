@@ -6,6 +6,7 @@ import logoutIcon from "../../images/icons/logout.svg";
 import settingsIcon from "../../images/icons/settings.svg"
 import homeIcon from "../../images/icons/house.svg"
 import { useLocation } from "react-router-dom";
+import { Icon } from "../../atoms/Icon/Icon";
 
 export const sideNavWidth = "70px";
 
@@ -26,24 +27,7 @@ const StyledSideNav = styled.div`
   }
 `;
 
-const SidenavIcon = styled.div<{
-  src: string,
-  color?: string,
-}>`
-  position: relative;
-  display: block;
-  top:50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: ${props => props.color || Colors.UI05};
-  height: 25px;
-  width: 25px;
 
-  mask: url(${props => props.src}) no-repeat center ;
-  mask-size: cover;
-  -webkit-mask: url(${props => props.src}) no-repeat center;
-  -webkit-mask-size: cover;
-`;
 
 type Props = {
   clickLogout: () => void;
@@ -56,17 +40,17 @@ export const Sidenav = (props: Props) => {
     <StyledSideNav>
       <Link to="/profile">
         <div className="btn">
-          <SidenavIcon src={homeIcon} />
+          <Icon src={homeIcon} />
         </div>
       </Link>
       <Link to="/admin" className="btn">
         <div className="btn">
-          <SidenavIcon src={settingsIcon} />
+          <Icon src={settingsIcon} />
         </div>
       </Link>
       <Link to={location.pathname} className="btn" onClick={props.clickLogout}>
         <div className="btn">
-          <SidenavIcon src={logoutIcon} />
+          <Icon src={logoutIcon} />
         </div>
       </Link>
     </StyledSideNav>

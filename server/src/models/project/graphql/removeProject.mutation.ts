@@ -29,7 +29,7 @@ export class RemoveProject {
 			);
 		}
 
-		project.destroy();
+		await project.destroy();
 
 		return this.projectResponseDM.createProjectResponse(project);
 	}

@@ -89,6 +89,7 @@ export type Query = {
   __typename?: 'Query';
   teammateInvitationData: Scalars['String'];
   teammates: TeammatesResponse;
+  project: ProjectResponseType;
   projects: Array<ProjectResponseType>;
   user?: Maybe<UserProfileResponse>;
 };
@@ -96,6 +97,11 @@ export type Query = {
 
 export type QueryTeammateInvitationDataArgs = {
   companyId: Scalars['Int'];
+};
+
+
+export type QueryProjectArgs = {
+  projectId: Scalars['Int'];
 };
 
 export type Mutation = {
@@ -233,6 +239,19 @@ export type MyProfileQuery = (
     { __typename?: 'UserProfileResponse' }
     & Pick<UserProfileResponse, 'email' | 'isActive' | 'emailConfirmed' | 'firstname' | 'lastname'>
   )> }
+);
+
+export type ProjectQueryVariables = Exact<{
+  projectId: Scalars['Int'];
+}>;
+
+
+export type ProjectQuery = (
+  { __typename?: 'Query' }
+  & { project: (
+    { __typename?: 'ProjectResponseType' }
+    & Pick<ProjectResponseType, 'title' | 'pid'>
+  ) }
 );
 
 export type ProjectsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -515,6 +534,40 @@ export function useMyProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type MyProfileQueryHookResult = ReturnType<typeof useMyProfileQuery>;
 export type MyProfileLazyQueryHookResult = ReturnType<typeof useMyProfileLazyQuery>;
 export type MyProfileQueryResult = Apollo.QueryResult<MyProfileQuery, MyProfileQueryVariables>;
+export const ProjectDocument = gql`
+    query Project($projectId: Int!) {
+  project(projectId: $projectId) {
+    title
+    pid
+  }
+}
+    `;
+
+/**
+ * __useProjectQuery__
+ *
+ * To run a query within a React component, call `useProjectQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useProjectQuery(baseOptions: Apollo.QueryHookOptions<ProjectQuery, ProjectQueryVariables>) {
+        return Apollo.useQuery<ProjectQuery, ProjectQueryVariables>(ProjectDocument, baseOptions);
+      }
+export function useProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectQuery, ProjectQueryVariables>) {
+          return Apollo.useLazyQuery<ProjectQuery, ProjectQueryVariables>(ProjectDocument, baseOptions);
+        }
+export type ProjectQueryHookResult = ReturnType<typeof useProjectQuery>;
+export type ProjectLazyQueryHookResult = ReturnType<typeof useProjectLazyQuery>;
+export type ProjectQueryResult = Apollo.QueryResult<ProjectQuery, ProjectQueryVariables>;
 export const ProjectsDocument = gql`
     query Projects {
   projects {

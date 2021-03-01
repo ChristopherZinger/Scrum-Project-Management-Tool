@@ -10,7 +10,7 @@ import { Input, InputError } from "../../atoms/Inputs/Input";
 import { HoverStyleButton } from "../../atoms/Buttons/HoverStyleButton";
 import { useRegisterCompanyMutation } from "../../../types.d";
 import { useHistory } from "react-router-dom";
-import { Routes } from "../AppRoutes";
+import { RoutesMain } from "../AppRoutes";
 
 export const RegisterCompany = () => {
   const history = useHistory();
@@ -60,7 +60,7 @@ export const RegisterCompany = () => {
                       }
                     })
 
-                    history.push(Routes.DASHBOARD)
+                    history.push(RoutesMain.DASHBOARD)
                   } catch (err) {
                     console.log(err)
                   }

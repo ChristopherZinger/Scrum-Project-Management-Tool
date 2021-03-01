@@ -12,7 +12,7 @@ import { RegisterWithInvitation } from "./Register/RegisterWithInvitation";
 import { UserAuthStateContext } from "../../App";
 import { Dashboard } from "./Dashboard/Dashboard";
 
-export enum Routes {
+export enum RoutesMain {
     HOME = '/',
     LOGIN = '/login',
     REGISTER_PROFILE = '/register-profile',
@@ -26,19 +26,29 @@ export function AppRoutes () {
     return (
         <Router>
             <Switch>
-                <Route path={Routes.LOGIN} >
-                    <Login />
-                </Route>
-                <Route path={Routes.REGISTER_PROFILE} >
-                    <RegisterUser />
-                </Route>
-                <Route path={Routes.REGISTER_COMPANY} >
-                    <RegisterCompany />
-                </Route>
-                <Route path="/register-with-invitation/:companyId/:token" component={RegisterWithInvitation} />
-                <Route path={Routes.HOME}>
-                    {!user ? <LandingPage /> : <Dashboard user={user} />}
-                </Route>
+                {user && (
+                    <Route path={[RoutesMain.HOME, RoutesMain.DASHBOARD]}>
+                        <Dashboard user={user} />
+                    </Route>
+                )}
+
+                {!user && (
+                    <>
+                        <Route path={RoutesMain.LOGIN} >
+                            <Login />
+                        </Route>
+                        <Route path={RoutesMain.REGISTER_PROFILE} >
+                            <RegisterUser />
+                        </Route>
+                        <Route path={RoutesMain.REGISTER_COMPANY} >
+                            <RegisterCompany />
+                        </Route>
+                        <Route path="/register-with-invitation/:companyId/:token" component={RegisterWithInvitation} />
+                        <Route path={RoutesMain.HOME}>
+                            <LandingPage />
+                        </Route>
+                    </>
+                )}
             </Switch>
         </Router>
     )

@@ -4,16 +4,14 @@ import { Modal } from "../../atoms/Modal/Modal";
 import { Input, InputError } from "../../atoms/Inputs/Input";
 import { Divider, Grid, } from "semantic-ui-react";
 import { Formik, Form } from "formik";
-import { useCreateProjectMutation, useProjectsQuery, useRemoveProjectMutation } from "../../../types.d";
+import { useCreateProjectMutation, useProjectsQuery } from "../../../types.d";
 import { Link } from "react-router-dom";
-import { ButtonText } from "../../atoms/Buttons/ButtonText";
 import { CardButton } from "../../atoms/Buttons/CardButton";
 import { CardListItem } from "../../atoms/CardListItem/CardListItem";
 
 export const ProjectListCard = () => {
   const [addProjectIsOpen, setAddProjectIsOpen] = useState(false);
   const [createProject] = useCreateProjectMutation();
-  const [removeProject, removeProjectResult] = useRemoveProjectMutation();
   const projects = useProjectsQuery();
 
   return (
@@ -34,17 +32,9 @@ export const ProjectListCard = () => {
             <>
               {projects.data.projects.map((project) =>
                 <CardListItem key={project.id} >
-                  <Link to={`project/${project.id}`} >
+                  <Link to={`/project/${project.id}`} >
                     {`${project.pid || ""} ${project.title}`}
                   </Link>
-                  <ButtonText
-                    text="remove"
-                    onClick={async () => {
-                      await removeProject({ variables: { projectId: project.id } });
-                      await projects.refetch();
-                    }}
-                    isLoading={removeProjectResult.loading}
-                  />
                 </CardListItem>
               )}
             </>

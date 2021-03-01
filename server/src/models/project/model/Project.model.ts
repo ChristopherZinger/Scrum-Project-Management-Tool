@@ -1,10 +1,13 @@
+import { Sprint } from "./../../sprint/model/Sprint.model";
 import {
 	Column,
 	Model,
 	ForeignKey,
 	BelongsTo,
 	Table,
-	DataType
+	DataType,
+	HasMany,
+	AllowNull
 } from "sequelize-typescript";
 import { Company } from "../../company/model/Company.model";
 
@@ -28,4 +31,15 @@ export class Project extends Model<Project> {
 	@ForeignKey(() => Company)
 	@Column
 	public companyId!: number;
+
+	@HasMany(() => Sprint)
+	public readonly sprints?: Sprint[];
+
+	@BelongsTo(() => Sprint)
+	public readonly activeSprint!: Sprint;
+
+	@ForeignKey(() => Sprint)
+	@AllowNull(true)
+	@Column(DataType.INTEGER)
+	public activeSprintId!: number | null;
 }

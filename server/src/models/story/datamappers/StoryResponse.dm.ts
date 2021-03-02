@@ -10,7 +10,7 @@ export class StoryResponseDM {
 			title: story.title,
 			description: story.description,
 			status: story.status,
-			projectId: story.projectId,
+			userProfileId: story.userProfileId,
 			sprintId: story.sprintId
 		};
 	}

@@ -1,3 +1,4 @@
+import { UserProfile } from "./../../userProfile/model/UserProfile.model";
 import { Sprint } from "./../../sprint/model/Sprint.model";
 import {
 	Column,
@@ -8,7 +9,6 @@ import {
 	DataType,
 	AllowNull
 } from "sequelize-typescript";
-import { Project } from "../../project/model/Project.model";
 
 export enum StoryStatus { // update the migration if you edit this enum
 	TODO = "TODO",
@@ -41,12 +41,12 @@ export class Story extends Model<Story> {
 	)
 	public status!: StoryStatus | null;
 
-	@ForeignKey(() => Project)
+	@ForeignKey(() => UserProfile)
 	@Column
-	public projectId!: number;
+	public userProfileId!: number;
 
-	@BelongsTo(() => Project)
-	public readonly project!: Project;
+	@BelongsTo(() => UserProfile)
+	public readonly userProfile?: UserProfile;
 
 	@ForeignKey(() => Sprint)
 	@AllowNull(true)

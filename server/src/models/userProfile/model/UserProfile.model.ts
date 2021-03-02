@@ -1,10 +1,12 @@
+import { Story } from "../../story/model/Story.model";
 import { Company } from "./../../company/model/Company.model";
 import {
 	Column,
 	Model,
 	BelongsTo,
 	ForeignKey,
-	Table
+	Table,
+	HasMany
 } from "sequelize-typescript";
 import { User } from "../../user/model/User.model";
 
@@ -35,4 +37,7 @@ export class UserProfile extends Model<UserProfile> {
 
 	@BelongsTo(() => Company)
 	public readonly company?: Company;
+
+	@HasMany(() => Story)
+	public readonly stories?: Story[];
 }

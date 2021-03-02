@@ -1,3 +1,4 @@
+import { StoryType } from "./../../story/graphql/Story.type";
 import { ProjectType } from "./../../project/graphql/Project.type";
 import { ObjectType, Field, ID } from "type-graphql";
 
@@ -20,4 +21,7 @@ export class SprintType {
 
 	@Field(() => ProjectType)
 	project?: ProjectType;
+
+	@Field(() => [StoryType])
+	stories!: StoryType[];
 }

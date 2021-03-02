@@ -1,3 +1,4 @@
+import { StoryResponseType } from "./../../story/graphql/StoryResponse.type";
 import { IProjectResponse } from "./../type-guards";
 import { Field, ObjectType, Int } from "type-graphql";
 
@@ -11,4 +12,7 @@ export class ProjectResponseType implements IProjectResponse {
 
 	@Field()
 	title!: string;
+
+	@Field(() => [StoryResponseType], { nullable: true })
+	backlog?: StoryResponseType[];
 }

@@ -10,7 +10,6 @@ export const Navbar = () => {
     const [logoutModalIsOpen, setLogoutModalIsOpen] = useState(false);
     const { user } = useContext(UserAuthStateContext);
 
-
     return (
         <Grid>
             <Grid.Row only="tablet computer" style={{ marginBottom: "80px" }}>

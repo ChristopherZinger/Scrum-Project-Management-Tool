@@ -14,7 +14,7 @@ type Props = {
 export const ButtonText = (props: Props) => {
   if (!props.isLoading) {
     return (
-      <p style={{ color: `${props.color || Colors.Warning}` }}
+      <p style={{ color: `${props.color || Colors.Warning}`, cursor: "pointer" }}
         onClick={async () => (props.isActive || true) && await props.onClick()
         }>
         {props.text}

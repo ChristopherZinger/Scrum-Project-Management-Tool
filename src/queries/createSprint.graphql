@@ -1,0 +1,8 @@
+mutation CreateSprint($projectId: Int!, $setAsActiveSprint: Boolean!) {
+	createSprint(projectId: $projectId, setAsActiveSprint: $setAsActiveSprint) {
+		isFinished
+		startsAt
+		endsAt
+		projectId
+	}
+}

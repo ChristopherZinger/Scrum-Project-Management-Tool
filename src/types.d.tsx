@@ -35,6 +35,15 @@ export type ProjectResponseType = {
   title: Scalars['String'];
 };
 
+export type SprintResponseType = {
+  __typename?: 'SprintResponseType';
+  projectId: Scalars['Int'];
+  startsAt: Scalars['DateTime'];
+  endsAt: Scalars['DateTime'];
+  isFinished: Scalars['Boolean'];
+};
+
+
 export type UserProfileResponse = {
   __typename?: 'UserProfileResponse';
   profileId: Scalars['Float'];
@@ -44,7 +53,6 @@ export type UserProfileResponse = {
   isActive: Scalars['Boolean'];
   emailConfirmed?: Maybe<Scalars['DateTime']>;
 };
-
 
 export type RegisterCompanyInputType = {
   email: Scalars['String'];
@@ -109,6 +117,8 @@ export type Mutation = {
   RegisterCompany: Scalars['Boolean'];
   createProject: ProjectResponseType;
   removeProject: ProjectResponseType;
+  archiveActiveSprint: SprintResponseType;
+  createSprint: SprintResponseType;
   changePassword?: Maybe<UserProfileResponse>;
   confirmUserEmail?: Maybe<UserProfileResponse>;
   requestConfirmationEmail: Scalars['Boolean'];
@@ -134,6 +144,17 @@ export type MutationCreateProjectArgs = {
 
 export type MutationRemoveProjectArgs = {
   projectId: Scalars['Int'];
+};
+
+
+export type MutationArchiveActiveSprintArgs = {
+  projectId: Scalars['Int'];
+};
+
+
+export type MutationCreateSprintArgs = {
+  projectId: Scalars['Int'];
+  setAsActiveSprint: Scalars['Boolean'];
 };
 
 
@@ -176,6 +197,19 @@ export type MutationRegisterWithInvitationArgs = {
   data: RegisterWithInvitationInputType;
 };
 
+export type ArchiveActiveSprintMutationVariables = Exact<{
+  projectId: Scalars['Int'];
+}>;
+
+
+export type ArchiveActiveSprintMutation = (
+  { __typename?: 'Mutation' }
+  & { archiveActiveSprint: (
+    { __typename?: 'SprintResponseType' }
+    & Pick<SprintResponseType, 'startsAt' | 'endsAt' | 'isFinished' | 'projectId'>
+  ) }
+);
+
 export type CancellInvitationMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
@@ -196,6 +230,20 @@ export type CreateProjectMutation = (
   & { createProject: (
     { __typename?: 'ProjectResponseType' }
     & Pick<ProjectResponseType, 'title' | 'pid'>
+  ) }
+);
+
+export type CreateSprintMutationVariables = Exact<{
+  projectId: Scalars['Int'];
+  setAsActiveSprint: Scalars['Boolean'];
+}>;
+
+
+export type CreateSprintMutation = (
+  { __typename?: 'Mutation' }
+  & { createSprint: (
+    { __typename?: 'SprintResponseType' }
+    & Pick<SprintResponseType, 'isFinished' | 'startsAt' | 'endsAt' | 'projectId'>
   ) }
 );
 
@@ -340,6 +388,41 @@ export type TeammatesQuery = (
 );
 
 
+export const ArchiveActiveSprintDocument = gql`
+    mutation ArchiveActiveSprint($projectId: Int!) {
+  archiveActiveSprint(projectId: $projectId) {
+    startsAt
+    endsAt
+    isFinished
+    projectId
+  }
+}
+    `;
+export type ArchiveActiveSprintMutationFn = Apollo.MutationFunction<ArchiveActiveSprintMutation, ArchiveActiveSprintMutationVariables>;
+
+/**
+ * __useArchiveActiveSprintMutation__
+ *
+ * To run a mutation, you first call `useArchiveActiveSprintMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useArchiveActiveSprintMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [archiveActiveSprintMutation, { data, loading, error }] = useArchiveActiveSprintMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useArchiveActiveSprintMutation(baseOptions?: Apollo.MutationHookOptions<ArchiveActiveSprintMutation, ArchiveActiveSprintMutationVariables>) {
+        return Apollo.useMutation<ArchiveActiveSprintMutation, ArchiveActiveSprintMutationVariables>(ArchiveActiveSprintDocument, baseOptions);
+      }
+export type ArchiveActiveSprintMutationHookResult = ReturnType<typeof useArchiveActiveSprintMutation>;
+export type ArchiveActiveSprintMutationResult = Apollo.MutationResult<ArchiveActiveSprintMutation>;
+export type ArchiveActiveSprintMutationOptions = Apollo.BaseMutationOptions<ArchiveActiveSprintMutation, ArchiveActiveSprintMutationVariables>;
 export const CancellInvitationDocument = gql`
     mutation CancellInvitation($email: String!) {
   cancellInvitation(email: $email)
@@ -403,6 +486,42 @@ export function useCreateProjectMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
 export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
 export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
+export const CreateSprintDocument = gql`
+    mutation CreateSprint($projectId: Int!, $setAsActiveSprint: Boolean!) {
+  createSprint(projectId: $projectId, setAsActiveSprint: $setAsActiveSprint) {
+    isFinished
+    startsAt
+    endsAt
+    projectId
+  }
+}
+    `;
+export type CreateSprintMutationFn = Apollo.MutationFunction<CreateSprintMutation, CreateSprintMutationVariables>;
+
+/**
+ * __useCreateSprintMutation__
+ *
+ * To run a mutation, you first call `useCreateSprintMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSprintMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSprintMutation, { data, loading, error }] = useCreateSprintMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *      setAsActiveSprint: // value for 'setAsActiveSprint'
+ *   },
+ * });
+ */
+export function useCreateSprintMutation(baseOptions?: Apollo.MutationHookOptions<CreateSprintMutation, CreateSprintMutationVariables>) {
+        return Apollo.useMutation<CreateSprintMutation, CreateSprintMutationVariables>(CreateSprintDocument, baseOptions);
+      }
+export type CreateSprintMutationHookResult = ReturnType<typeof useCreateSprintMutation>;
+export type CreateSprintMutationResult = Apollo.MutationResult<CreateSprintMutation>;
+export type CreateSprintMutationOptions = Apollo.BaseMutationOptions<CreateSprintMutation, CreateSprintMutationVariables>;
 export const InviteTeammateDocument = gql`
     mutation InviteTeammate($email: String!) {
   inviteTeammate(email: $email)

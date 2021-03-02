@@ -1,0 +1,8 @@
+mutation ArchiveActiveSprint($projectId: Int!) {
+	archiveActiveSprint(projectId: $projectId) {
+		startsAt
+		endsAt
+		isFinished
+		projectId
+	}
+}

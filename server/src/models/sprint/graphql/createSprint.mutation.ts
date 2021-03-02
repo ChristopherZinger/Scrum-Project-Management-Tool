@@ -1,4 +1,3 @@
-import { Project } from "./../../../../../src/application/pages/Dashboard/Project/Project";
 import { ProjectRepository } from "./../../project/model/Project.repository";
 import { ApolloError } from "apollo-server-express";
 import { SprintResponseType } from "./SprintResponse.type";

@@ -25,11 +25,11 @@ const migration = {
 						}),
 						allowNull: true
 					},
-					projectId: {
+					userProfileId: {
 						type: DataTypes.INTEGER,
-						allowNull: false,
+						allowNull: true,
 						references: {
-							model: "Project",
+							model: "UserProfile",
 							key: "id"
 						}
 					},

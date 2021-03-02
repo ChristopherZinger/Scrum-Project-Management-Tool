@@ -10,7 +10,7 @@ import {
 } from "sequelize-typescript";
 import { Project } from "../../project/model/Project.model";
 
-enum StoryStatus { // update the migration if you edit this enum
+export enum StoryStatus { // update the migration if you edit this enum
 	TODO = "TODO",
 	DEVELOPEMENT = "DEVELOPEMENT",
 	REVIEW = "REVIEW",

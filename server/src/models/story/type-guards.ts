@@ -4,6 +4,6 @@ export interface IStoryResponse {
 	title: string;
 	description: string | null;
 	status: StoryStatus | null;
-	userProfileId: number;
+	userProfileId: number | null;
 	sprintId: number | null;
 }

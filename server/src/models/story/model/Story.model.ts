@@ -43,7 +43,7 @@ export class Story extends Model<Story> {
 
 	@ForeignKey(() => UserProfile)
 	@Column
-	public userProfileId!: number;
+	public userProfileId!: number | null;
 
 	@BelongsTo(() => UserProfile)
 	public readonly userProfile?: UserProfile;

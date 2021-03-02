@@ -28,4 +28,10 @@ export class StoryType {
 
 	@Field(() => SprintType, { nullable: true })
 	sprint!: SprintType | null;
+
+	@Field(() => ProjectType)
+	project?: ProjectType;
+
+	@Field(() => Int)
+	projectId!: number;
 }

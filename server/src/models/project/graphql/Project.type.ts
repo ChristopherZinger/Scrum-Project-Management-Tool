@@ -19,6 +19,9 @@ export class ProjectType {
 	@Field(() => CompanyType)
 	company!: CompanyType;
 
+	@Field(() => [SprintType])
+	sprints!: SprintType[];
+
 	@Field()
 	activeSprintId!: number;
 

@@ -1,4 +1,5 @@
-import { CompanyType } from "@/models/company/graphql/company.type";
+import { StoryType } from "./../../story/graphql/Story.type";
+import { CompanyType } from "../../company/graphql/company.type";
 import { ObjectType, Field, ID } from "type-graphql";
 import { UserType } from "../../user/graphql/user.type";
 
@@ -24,4 +25,7 @@ export class UserProfileType {
 
 	@Field()
 	companyId?: number;
+
+	@Field(() => [StoryType])
+	stories!: StoryType[];
 }

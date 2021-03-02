@@ -9,6 +9,7 @@ import {
 	DataType,
 	AllowNull
 } from "sequelize-typescript";
+import { Project } from "../../../models/project/model/Project.model";
 
 export enum StoryStatus { // update the migration if you edit this enum
 	TODO = "TODO",
@@ -42,7 +43,7 @@ export class Story extends Model<Story> {
 	public status!: StoryStatus | null;
 
 	@ForeignKey(() => UserProfile)
-	@Column
+	@Column(DataType.INTEGER)
 	public userProfileId!: number | null;
 
 	@BelongsTo(() => UserProfile)
@@ -55,4 +56,11 @@ export class Story extends Model<Story> {
 
 	@BelongsTo(() => Sprint)
 	public readonly sprint!: Sprint;
+
+	@ForeignKey(() => Project)
+	@Column(DataType.INTEGER)
+	public projectId!: number;
+
+	@BelongsTo(() => Project)
+	public readonly project!: Project;
 }

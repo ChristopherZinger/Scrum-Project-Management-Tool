@@ -1,6 +1,11 @@
 import { StoryStatus } from "./../model/Story.model";
 import { IStoryResponse } from "./../type-guards";
-import { Field, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType, registerEnumType } from "type-graphql";
+
+// register to graphql
+registerEnumType(StoryStatus, {
+	name: "StoryStatus"
+});
 
 @ObjectType()
 export class StoryResponseType implements IStoryResponse {
@@ -10,15 +15,15 @@ export class StoryResponseType implements IStoryResponse {
 	@Field()
 	title!: string;
 
-	@Field({ nullable: true })
+	@Field(() => String, { nullable: true })
 	description!: string | null;
 
-	@Field({ nullable: true })
-	status!: StoryStatus;
+	@Field(() => StoryStatus, { nullable: true })
+	status!: StoryStatus | null;
 
-	@Field({ nullable: true })
+	@Field(() => Int, { nullable: true })
 	userProfileId!: number | null;
 
-	@Field({ nullable: true })
+	@Field(() => Int, { nullable: true })
 	sprintId!: number | null;
 }

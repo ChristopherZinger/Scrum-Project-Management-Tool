@@ -1,3 +1,4 @@
+import { Story } from "./../../story/model/Story.model";
 import { Sprint } from "./../../sprint/model/Sprint.model";
 import {
 	Column,
@@ -42,4 +43,7 @@ export class Project extends Model<Project> {
 	@AllowNull(true)
 	@Column(DataType.INTEGER)
 	public activeSprintId!: number | null;
+
+	@HasMany(() => Story)
+	public readonly stories?: Story[];
 }

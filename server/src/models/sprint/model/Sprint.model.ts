@@ -4,8 +4,10 @@ import {
 	Model,
 	BelongsTo,
 	ForeignKey,
-	Table
+	Table,
+	HasMany
 } from "sequelize-typescript";
+import { Story } from "../../story/model/Story.model";
 
 @Table({
 	timestamps: true,
@@ -30,4 +32,7 @@ export class Sprint extends Model<Sprint> {
 	@ForeignKey(() => Project)
 	@Column
 	public projectId!: number;
+
+	@HasMany(() => Story)
+	public stories?: Story[];
 }

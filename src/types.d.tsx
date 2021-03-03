@@ -28,11 +28,30 @@ export type TeammateResponse = {
   email: Scalars['String'];
 };
 
+export type StoryResponseType = {
+  __typename?: 'StoryResponseType';
+  id: Scalars['Float'];
+  title: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  status?: Maybe<StoryStatus>;
+  userProfileId?: Maybe<Scalars['Int']>;
+  sprintId?: Maybe<Scalars['Int']>;
+};
+
+export enum StoryStatus {
+  Todo = 'TODO',
+  Developement = 'DEVELOPEMENT',
+  Review = 'REVIEW',
+  Test = 'TEST',
+  Done = 'DONE'
+}
+
 export type ProjectResponseType = {
   __typename?: 'ProjectResponseType';
   id: Scalars['Int'];
   pid?: Maybe<Scalars['String']>;
   title: Scalars['String'];
+  backlog?: Maybe<Array<StoryResponseType>>;
 };
 
 export type SprintResponseType = {
@@ -66,6 +85,14 @@ export type RegisterCompanyInputType = {
 export type CreateProjectInputType = {
   title: Scalars['String'];
   pid: Scalars['String'];
+};
+
+export type CreateStoryInputType = {
+  title: Scalars['String'];
+  description: Scalars['String'];
+  projectId: Scalars['Int'];
+  sprintId?: Maybe<Scalars['Float']>;
+  userProfileId?: Maybe<Scalars['Float']>;
 };
 
 export type ChangePassword = {
@@ -119,6 +146,7 @@ export type Mutation = {
   removeProject: ProjectResponseType;
   archiveActiveSprint: SprintResponseType;
   createSprint: SprintResponseType;
+  createStory: StoryResponseType;
   changePassword?: Maybe<UserProfileResponse>;
   confirmUserEmail?: Maybe<UserProfileResponse>;
   requestConfirmationEmail: Scalars['Boolean'];
@@ -155,6 +183,11 @@ export type MutationArchiveActiveSprintArgs = {
 export type MutationCreateSprintArgs = {
   projectId: Scalars['Int'];
   setAsActiveSprint: Scalars['Boolean'];
+};
+
+
+export type MutationCreateStoryArgs = {
+  data: CreateStoryInputType;
 };
 
 
@@ -247,6 +280,19 @@ export type CreateSprintMutation = (
   ) }
 );
 
+export type CreateStoryMutationVariables = Exact<{
+  data: CreateStoryInputType;
+}>;
+
+
+export type CreateStoryMutation = (
+  { __typename?: 'Mutation' }
+  & { createStory: (
+    { __typename?: 'StoryResponseType' }
+    & Pick<StoryResponseType, 'id' | 'title' | 'description' | 'status' | 'sprintId' | 'userProfileId'>
+  ) }
+);
+
 export type InviteTeammateMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
@@ -298,7 +344,11 @@ export type ProjectQuery = (
   { __typename?: 'Query' }
   & { project: (
     { __typename?: 'ProjectResponseType' }
-    & Pick<ProjectResponseType, 'title' | 'pid'>
+    & Pick<ProjectResponseType, 'id' | 'title' | 'pid'>
+    & { backlog?: Maybe<Array<(
+      { __typename?: 'StoryResponseType' }
+      & Pick<StoryResponseType, 'title' | 'description' | 'status'>
+    )>> }
   ) }
 );
 
@@ -522,6 +572,43 @@ export function useCreateSprintMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateSprintMutationHookResult = ReturnType<typeof useCreateSprintMutation>;
 export type CreateSprintMutationResult = Apollo.MutationResult<CreateSprintMutation>;
 export type CreateSprintMutationOptions = Apollo.BaseMutationOptions<CreateSprintMutation, CreateSprintMutationVariables>;
+export const CreateStoryDocument = gql`
+    mutation CreateStory($data: CreateStoryInputType!) {
+  createStory(data: $data) {
+    id
+    title
+    description
+    status
+    sprintId
+    userProfileId
+  }
+}
+    `;
+export type CreateStoryMutationFn = Apollo.MutationFunction<CreateStoryMutation, CreateStoryMutationVariables>;
+
+/**
+ * __useCreateStoryMutation__
+ *
+ * To run a mutation, you first call `useCreateStoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateStoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createStoryMutation, { data, loading, error }] = useCreateStoryMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateStoryMutation(baseOptions?: Apollo.MutationHookOptions<CreateStoryMutation, CreateStoryMutationVariables>) {
+        return Apollo.useMutation<CreateStoryMutation, CreateStoryMutationVariables>(CreateStoryDocument, baseOptions);
+      }
+export type CreateStoryMutationHookResult = ReturnType<typeof useCreateStoryMutation>;
+export type CreateStoryMutationResult = Apollo.MutationResult<CreateStoryMutation>;
+export type CreateStoryMutationOptions = Apollo.BaseMutationOptions<CreateStoryMutation, CreateStoryMutationVariables>;
 export const InviteTeammateDocument = gql`
     mutation InviteTeammate($email: String!) {
   inviteTeammate(email: $email)
@@ -656,8 +743,14 @@ export type MyProfileQueryResult = Apollo.QueryResult<MyProfileQuery, MyProfileQ
 export const ProjectDocument = gql`
     query Project($projectId: Int!) {
   project(projectId: $projectId) {
+    id
     title
     pid
+    backlog {
+      title
+      description
+      status
+    }
   }
 }
     `;

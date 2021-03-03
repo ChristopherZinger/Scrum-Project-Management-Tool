@@ -1,3 +1,4 @@
+import { Story } from "./../../story/model/Story.model";
 import { ApolloError } from "apollo-server-express";
 import { ProjectRepository } from "./../model/Project.repository";
 import { ProjectResponseDM } from "./../datamappers/ProjectResponse.dm";
@@ -18,7 +19,15 @@ export class ProjectQuery {
 	public async project(
 		@Arg("projectId", () => Int) projectId: number
 	): Promise<ProjectResponseType> {
-		const project = await this.projectRepository.findById(projectId);
+		let project;
+		try {
+			project = await this.projectRepository.findById(projectId, {
+				include: [{ model: Story }]
+			});
+		} catch (err) {
+			console.error(err);
+		}
+
 		if (!project) {
 			throw new ApolloError(
 				"Can't find project with this id",

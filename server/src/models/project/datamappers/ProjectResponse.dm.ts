@@ -10,9 +10,9 @@ export class ProjectResponseDM {
 	public createProjectResponse(project: Project): ProjectResponseType {
 		let stories;
 		if (project.stories) {
-			stories = project.stories
-				.map(s => this.storyResponseType.createStoryResponse(s))
-				.filter(s => !!s.sprintId);
+			stories = project.stories.map(s =>
+				this.storyResponseType.createStoryResponse(s)
+			);
 		}
 		return {
 			pid: project.pid || null,

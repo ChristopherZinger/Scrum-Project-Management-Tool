@@ -1,0 +1,10 @@
+mutation CreateStory($data: CreateStoryInputType!) {
+	createStory(data: $data) {
+		id
+		title
+		description
+		status
+		sprintId
+		userProfileId
+	}
+}

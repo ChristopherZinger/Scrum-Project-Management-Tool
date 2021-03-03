@@ -1,6 +1,12 @@
 query Project($projectId: Int!) {
 	project(projectId: $projectId) {
+		id
 		title
 		pid
+		backlog {
+			title
+			description
+			status
+		}
 	}
 }

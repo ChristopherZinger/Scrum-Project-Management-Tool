@@ -8,5 +8,10 @@ query Project($projectId: Int!) {
 			description
 			status
 		}
+		activeSprint {
+			startsAt
+			endsAt
+			isFinished
+		}
 	}
 }

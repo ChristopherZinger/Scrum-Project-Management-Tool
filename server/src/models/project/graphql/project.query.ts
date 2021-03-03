@@ -1,3 +1,4 @@
+import { Sprint } from "./../../sprint/model/Sprint.model";
 import { Story } from "./../../story/model/Story.model";
 import { ApolloError } from "apollo-server-express";
 import { ProjectRepository } from "./../model/Project.repository";
@@ -22,7 +23,7 @@ export class ProjectQuery {
 		let project;
 		try {
 			project = await this.projectRepository.findById(projectId, {
-				include: [{ model: Story }]
+				include: [{ model: Story }, { model: Sprint, as: "activeSprint" }]
 			});
 		} catch (err) {
 			console.error(err);

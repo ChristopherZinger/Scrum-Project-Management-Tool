@@ -28,6 +28,15 @@ export type TeammateResponse = {
   email: Scalars['String'];
 };
 
+export type SprintResponseType = {
+  __typename?: 'SprintResponseType';
+  projectId: Scalars['Int'];
+  startsAt: Scalars['DateTime'];
+  endsAt: Scalars['DateTime'];
+  isFinished: Scalars['Boolean'];
+};
+
+
 export type StoryResponseType = {
   __typename?: 'StoryResponseType';
   id: Scalars['Float'];
@@ -52,16 +61,8 @@ export type ProjectResponseType = {
   pid?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   backlog?: Maybe<Array<StoryResponseType>>;
+  activeSprint?: Maybe<SprintResponseType>;
 };
-
-export type SprintResponseType = {
-  __typename?: 'SprintResponseType';
-  projectId: Scalars['Int'];
-  startsAt: Scalars['DateTime'];
-  endsAt: Scalars['DateTime'];
-  isFinished: Scalars['Boolean'];
-};
-
 
 export type UserProfileResponse = {
   __typename?: 'UserProfileResponse';
@@ -348,7 +349,10 @@ export type ProjectQuery = (
     & { backlog?: Maybe<Array<(
       { __typename?: 'StoryResponseType' }
       & Pick<StoryResponseType, 'title' | 'description' | 'status'>
-    )>> }
+    )>>, activeSprint?: Maybe<(
+      { __typename?: 'SprintResponseType' }
+      & Pick<SprintResponseType, 'startsAt' | 'endsAt' | 'isFinished'>
+    )> }
   ) }
 );
 
@@ -750,6 +754,11 @@ export const ProjectDocument = gql`
       title
       description
       status
+    }
+    activeSprint {
+      startsAt
+      endsAt
+      isFinished
     }
   }
 }

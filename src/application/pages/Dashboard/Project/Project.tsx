@@ -46,7 +46,7 @@ export const Project = () => {
 
           <Grid.Row>
             <Grid.Column>
-              <ActiveSprintCard projectId={parseInt(params.id, 10)} />
+              <ActiveSprintCard project={project.data.project} />
             </Grid.Column>
           </Grid.Row>
         </>

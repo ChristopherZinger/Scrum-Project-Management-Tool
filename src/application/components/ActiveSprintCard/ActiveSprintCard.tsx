@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { DashboardCard } from "../../atoms/DashboardCard/DashboardCard";
 import { Modal } from "../../atoms/Modal/Modal";
 import { Formik, Field, Form } from "formik";
-import { useCreateSprintMutation, useArchiveActiveSprintMutation } from "../../../types.d";
+import { useCreateSprintMutation, useArchiveActiveSprintMutation, ProjectQuery } from "../../../types.d";
+import { CardButton } from "../../atoms/Buttons/CardButton";
 
 type Props = {
-  projectId: number
+  project: ProjectQuery["project"]
 }
 
 export const ActiveSprintCard = (props: Props) => {
@@ -13,20 +14,20 @@ export const ActiveSprintCard = (props: Props) => {
   const [createSprint] = useCreateSprintMutation();
   const [archiveActiveSprint] = useArchiveActiveSprintMutation();
 
-  const handleArchiveActiveSprint = async () => {
-    try {
-      const sprint = await archiveActiveSprint({ variables: { projectId: props.projectId } });
-      console.log(sprint)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
   return (
     <>
       <DashboardCard title="Active Sprint">
-        <button onClick={() => setIsCreateSprintModalOpen(true)}>create new sprint</button>
-        <button onClick={async () => await handleArchiveActiveSprint()}>finish curretn sprint</button>
+        <CardButton
+          popupText="Create new sprint"
+          iconName="plus"
+          onClick={() => setIsCreateSprintModalOpen(true)}
+        />
+
+        <CardButton
+          popupText="Finish curretn sprint"
+          iconName="paper plane"
+          onClick={async () => await archiveActiveSprint({ variables: { projectId: props.project.id } })}
+        />
       </DashboardCard>
 
       <Modal open={isCreateSprintModalOpen} >
@@ -41,7 +42,7 @@ export const ActiveSprintCard = (props: Props) => {
               try {
                 const sprint = await createSprint({
                   variables: {
-                    projectId: props.projectId,
+                    projectId: props.project.id,
                     setAsActiveSprint: values.setAsActiveSprint
                   }
                 })

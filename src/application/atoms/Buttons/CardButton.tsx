@@ -16,6 +16,7 @@ const BtnWrapper = styled.div`
   padding: 8px 10px;
   display: inline-block;
   border: 1px solid ${Colors.UI03} ;
+  cursor: pointer;
 `;
 
 export const CardButton = (props: Props) => {

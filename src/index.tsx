@@ -7,19 +7,17 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 const client = new ApolloClient({
   uri: '/graphql',
   credentials: "include",
-//   headers: {
-//     'Access-Control-Allow-Origin': "https://scrum-arch-service.com"
-//   },
+  //   headers: {
+  //     'Access-Control-Allow-Origin': "https://scrum-arch-service.com"
+  //   },
   cache: new InMemoryCache()
 });
 
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
-  </React.StrictMode>,
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>,
   document.getElementById('root')
 );
 

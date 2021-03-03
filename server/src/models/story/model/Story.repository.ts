@@ -2,6 +2,8 @@ import { Story } from "./Story.model";
 import { BaseRepository } from "../../../core/base-repository";
 import { injectable } from "inversify";
 import { CreateStoryInputType } from "../graphql/createStory.mutation";
+import { UpdateStoryInputType } from "../graphql/updateStory.mutation";
+import { Project } from "../../project/model/Project.model";
 
 @injectable()
 export class StoryRepository extends BaseRepository<Story> {
@@ -21,6 +23,28 @@ export class StoryRepository extends BaseRepository<Story> {
 			story.sprintId = data.sprintId;
 		}
 
+		return await this.save(story);
+	}
+
+	public async update(storyId: number, data: UpdateStoryInputType) {
+		const story = await this.findById(storyId, {
+			include: [{ model: Project }]
+		});
+
+		if (!story) {
+			throw new Error(`Cant't find story with id: ${storyId}`);
+		}
+
+		if (data.addToActiveSprint) {
+			if (!story.project) {
+				throw new Error(
+					`Could not laod project with id: ${story.projectId} for story with id: ${story.id}`
+				);
+			}
+			story.sprintId = story.project.activeSprintId;
+		}
+
+		story.status = data.status || story.status;
 		return await this.save(story);
 	}
 }

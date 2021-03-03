@@ -8,6 +8,7 @@ import { Formik, Form } from "formik";
 import { Input } from "../../atoms/Inputs/Input";
 import { Grid, Divider } from "semantic-ui-react";
 import { CardButton } from "../../atoms/Buttons/CardButton";
+import { StoryList } from "./StoryList";
 
 type Props = {
   project: ProjectQuery["project"]
@@ -26,13 +27,8 @@ export const BacklogCard = (props: Props) => {
           onClick={() => setModalIsOpen(true)}
         />
         <Divider hidden={true} />
-        <div>
-          {props.project.backlog?.map((story, i) =>
-            <div key={i}>
-              {story.title}
-            </div>
-          )}
-        </div>
+
+        <StoryList stories={props.project.backlog} />
       </DashboardCard>
 
       {modalIsOpen && (

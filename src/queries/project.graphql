@@ -4,6 +4,7 @@ query Project($projectId: Int!) {
 		title
 		pid
 		backlog {
+			id
 			title
 			description
 			status

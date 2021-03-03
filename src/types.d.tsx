@@ -348,7 +348,7 @@ export type ProjectQuery = (
     & Pick<ProjectResponseType, 'id' | 'title' | 'pid'>
     & { backlog?: Maybe<Array<(
       { __typename?: 'StoryResponseType' }
-      & Pick<StoryResponseType, 'title' | 'description' | 'status'>
+      & Pick<StoryResponseType, 'id' | 'title' | 'description' | 'status'>
     )>>, activeSprint?: Maybe<(
       { __typename?: 'SprintResponseType' }
       & Pick<SprintResponseType, 'startsAt' | 'endsAt' | 'isFinished'>
@@ -751,6 +751,7 @@ export const ProjectDocument = gql`
     title
     pid
     backlog {
+      id
       title
       description
       status

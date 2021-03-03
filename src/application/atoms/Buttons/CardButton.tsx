@@ -23,7 +23,7 @@ export const CardButton = (props: Props) => {
     return (
       <BtnWrapper>
         <Popup
-          content='Create new project.'
+          content={props.popupText}
           trigger={
             <p style={{ color: `${props.color || Colors.Warning}` }}
               onClick={async () => (props.isActive || true) && await props.onClick()

@@ -1,3 +1,4 @@
+import { SprintResponseType } from "./../../sprint/graphql/SprintResponse.type";
 import { StoryResponseType } from "./../../story/graphql/StoryResponse.type";
 import { IProjectResponse } from "./../type-guards";
 import { Field, ObjectType, Int } from "type-graphql";
@@ -15,4 +16,7 @@ export class ProjectResponseType implements IProjectResponse {
 
 	@Field(() => [StoryResponseType], { nullable: true })
 	backlog?: StoryResponseType[];
+
+	@Field(() => SprintResponseType, { nullable: true })
+	activeSprint?: SprintResponseType;
 }

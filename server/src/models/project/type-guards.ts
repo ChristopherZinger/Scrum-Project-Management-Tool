@@ -1,3 +1,4 @@
+import { SprintResponseType } from "./../sprint/graphql/SprintResponse.type";
 import { StoryResponseType } from "./../story/graphql/StoryResponse.type";
 
 export interface IProjectResponse {
@@ -5,4 +6,5 @@ export interface IProjectResponse {
 	title: string;
 	pid: string | null;
 	backlog?: StoryResponseType[];
+	activeSprint?: SprintResponseType;
 }

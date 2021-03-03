@@ -10,7 +10,6 @@ import { Grid, Divider } from "semantic-ui-react";
 
 type Props = {
   project: ProjectQuery["project"]
-
 }
 
 export const BacklogCard = (props: Props) => {
@@ -23,8 +22,8 @@ export const BacklogCard = (props: Props) => {
         <button onClick={() => setModalIsOpen(true)}>Add Story</button>
         <Divider hidden />
         <div>
-          {props.project.backlog?.map(story =>
-            <div>
+          {props.project.backlog?.map((story, i) =>
+            <div key={i}>
               {story.title}
             </div>
           )}

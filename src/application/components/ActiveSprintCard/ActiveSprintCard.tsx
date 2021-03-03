@@ -107,20 +107,22 @@ const InfoPanel = styled.div`
 const ActiveSprint = (props: Props) => {
   return (
     <>
-      {props.project.activeSprint
-        ?
-        <>
-          <InfoPanel>
-            <p> {dayjs(props.project.activeSprint?.startsAt).format("dddd - D MMMM")}</p>
-            <p>to</p>
-            <p> {dayjs(props.project.activeSprint?.endsAt).format("dddd - D MMMM")}</p>
-          </InfoPanel>
-          <SprintTable />
-        </>
-        :
-        <>
-          <p style={{ color: Colors.UI05, fontSize: "14px", margin: "10px 0px", textAlign: "center" }}>This project doesn't have a active sprint at the moment.</p>
-        </>}
+      {
+        props.project.activeSprint
+          ?
+          <>
+            <InfoPanel>
+              <p> {dayjs(props.project.activeSprint?.startsAt).format("dddd - D MMMM")}</p>
+              <p>to</p>
+              <p> {dayjs(props.project.activeSprint?.endsAt).format("dddd - D MMMM")}</p>
+            </InfoPanel>
+            <SprintTable />
+          </>
+          :
+          <>
+            <p style={{ color: Colors.UI05, fontSize: "14px", margin: "10px 0px", textAlign: "center" }}>This project doesn't have a active sprint at the moment.</p>
+          </>
+      }
     </>
   )
 }

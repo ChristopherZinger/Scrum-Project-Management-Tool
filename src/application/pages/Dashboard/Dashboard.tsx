@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { UserProfileResponse } from "../../../types.d";
 import styled from "styled-components";
 import { Colors } from "../../../global-styles/global-styles";
 import { Switch, Route } from "react-router-dom";
@@ -23,11 +22,7 @@ export enum RoutesDashboard {
   PROJECT = "/project/:id"
 }
 
-type Props = {
-  user: UserProfileResponse | null;
-}
-
-export const Dashboard = (props: Props) => {
+export const Dashboard = () => {
   const [logoutModalIsOpen, setLogoutModalIsOpen] = useState(false);
 
   return (

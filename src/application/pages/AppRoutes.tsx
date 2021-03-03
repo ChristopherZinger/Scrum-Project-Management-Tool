@@ -26,30 +26,34 @@ export function AppRoutes () {
     return (
         <Router>
             <Switch>
-                {user && (
-                    <Route path={[RoutesMain.HOME, RoutesMain.DASHBOARD]}>
-                        <Dashboard user={user} />
-                    </Route>
-                )}
-
-                {!user && (
-                    <>
-                        <Route path={RoutesMain.LOGIN} >
-                            <Login />
-                        </Route>
-                        <Route path={RoutesMain.REGISTER_PROFILE} >
-                            <RegisterUser />
-                        </Route>
-                        <Route path={RoutesMain.REGISTER_COMPANY} >
-                            <RegisterCompany />
-                        </Route>
-                        <Route path="/register-with-invitation/:companyId/:token" component={RegisterWithInvitation} />
-                        <Route path={RoutesMain.HOME}>
-                            <LandingPage />
-                        </Route>
-                    </>
-                )}
+                {user && <AuthRoutes />}
+                {!user && <PublicRoutes />}
             </Switch>
         </Router>
     )
 }
+
+const AuthRoutes = () =>
+    <Route path={[RoutesMain.HOME, RoutesMain.DASHBOARD]}>
+        <Dashboard />
+    </Route>
+
+const PublicRoutes = () =>
+    <>
+        <Route path={RoutesMain.LOGIN} >
+            <Login />
+        </Route>
+        <Route path={RoutesMain.REGISTER_PROFILE} >
+            <RegisterUser />
+        </Route>
+
+        <Route path={RoutesMain.REGISTER_COMPANY} >
+            <RegisterCompany />
+        </Route>
+
+        <Route path="/register-with-invitation/:companyId/:token" component={RegisterWithInvitation} />
+
+        <Route path={RoutesMain.HOME}>
+            <LandingPage />
+        </Route>
+    </>

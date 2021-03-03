@@ -9,7 +9,9 @@ export const Admin = () => {
   return (
     <Grid stackable stretched>
       <Grid.Row>
-        <Heading.H2>Admin</Heading.H2>
+        <Grid.Column>
+          <Heading.H2>Admin</Heading.H2>
+        </Grid.Column>
       </Grid.Row>
 
       <Grid.Row columns="equal">

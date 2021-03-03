@@ -137,7 +137,7 @@ const SprintTable = () => {
         </Grid.Column>
       </Grid.Row>
 
-      <Grid.Row columns={5} equal={true}>
+      <Grid.Row columns={5} >
         <SprintColumn title="To do" />
         <SprintColumn title="Developement" />
         <SprintColumn title="Reivew" />

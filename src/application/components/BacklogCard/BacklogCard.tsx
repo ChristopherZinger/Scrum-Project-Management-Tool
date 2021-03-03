@@ -20,7 +20,7 @@ export const BacklogCard = (props: Props) => {
     <>
       <DashboardCard title="Backlog">
         <button onClick={() => setModalIsOpen(true)}>Add Story</button>
-        <Divider hidden />
+        <Divider hidden={true} />
         <div>
           {props.project.backlog?.map((story, i) =>
             <div key={i}>
@@ -61,12 +61,12 @@ export const BacklogCard = (props: Props) => {
                         <label htmlFor="title" >title</label>
                         <Input name="title" />
 
-                        <Divider hidden />
+                        <Divider hidden={true} />
 
                         <label htmlFor="description">description</label>
                         <Input name="description" />
 
-                        <Divider hiddden />
+                        <Divider hidden={true} />
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>

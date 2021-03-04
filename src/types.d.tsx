@@ -98,9 +98,9 @@ export type CreateStoryInputType = {
 
 export type UpdateStoryInputType = {
   storyId: Scalars['Int'];
-  status: StoryStatus;
-  addToActiveSprint: Scalars['Boolean'];
-  removeFromActiveSprint: Scalars['Boolean'];
+  status?: Maybe<StoryStatus>;
+  addToActiveSprint?: Maybe<Scalars['Boolean']>;
+  removeFromActiveSprint?: Maybe<Scalars['Boolean']>;
 };
 
 export type ChangePassword = {

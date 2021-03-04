@@ -1,4 +1,4 @@
-import { Story } from "./Story.model";
+import { Story, StoryStatus } from "./Story.model";
 import { BaseRepository } from "../../../core/base-repository";
 import { injectable } from "inversify";
 import { CreateStoryInputType } from "../graphql/createStory.mutation";
@@ -13,12 +13,21 @@ export class StoryRepository extends BaseRepository<Story> {
 		const story = new this.model();
 		story.title = data.title;
 		story.projectId = data.projectId;
+
+		if (!data.status) {
+			story.status = StoryStatus.BACKLOG;
+		} else {
+			story.status = data.status;
+		}
+
 		if (data.description) {
 			story.description = data.description;
 		}
+
 		if (data.userProfileId) {
 			story.userProfileId = data.userProfileId;
 		}
+
 		if (data.sprintId) {
 			story.sprintId = data.sprintId;
 		}
@@ -43,8 +52,15 @@ export class StoryRepository extends BaseRepository<Story> {
 			}
 			story.sprintId = story.project.activeSprintId;
 		}
+		if (data.status) {
+			if (!Object.values(StoryStatus).includes(data.status)) {
+				throw new Error(
+					`Incorrect status. "${data.status}" doesn't exist on StoryStatus.`
+				);
+			}
+			story.status = data.status;
+		}
 
-		story.status = data.status || story.status;
 		return await this.save(story);
 	}
 }

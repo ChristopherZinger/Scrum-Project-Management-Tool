@@ -19,7 +19,7 @@ export class UpdateStoryInputType {
 	@Field(() => Int)
 	storyId!: number;
 
-	@Field(() => StoryStatus, { nullable: true, defaultValue: null })
+	@Field(() => StoryStatus, { nullable: true })
 	status?: StoryStatus;
 
 	@Field({ nullable: true })

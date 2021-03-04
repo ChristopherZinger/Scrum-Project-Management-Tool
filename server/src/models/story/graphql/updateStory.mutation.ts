@@ -19,13 +19,13 @@ export class UpdateStoryInputType {
 	@Field(() => Int)
 	storyId!: number;
 
-	@Field(() => StoryStatus)
+	@Field(() => StoryStatus, { nullable: true, defaultValue: null })
 	status?: StoryStatus;
 
-	@Field()
+	@Field({ nullable: true })
 	addToActiveSprint?: boolean;
 
-	@Field()
+	@Field({ nullable: true })
 	removeFromActiveSprint?: boolean;
 }
 

@@ -14,8 +14,8 @@ export class StoryType {
 	@Field(() => String, { nullable: true })
 	description!: string | null;
 
-	@Field(() => StoryStatus, { nullable: true })
-	status!: StoryStatus | null;
+	@Field(() => StoryStatus)
+	status!: StoryStatus;
 
 	@Field(() => Int, { nullable: true })
 	userProfileId!: number | null;

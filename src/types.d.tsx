@@ -42,12 +42,13 @@ export type StoryResponseType = {
   id: Scalars['Float'];
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
-  status?: Maybe<StoryStatus>;
+  status: StoryStatus;
   userProfileId?: Maybe<Scalars['Int']>;
   sprintId?: Maybe<Scalars['Int']>;
 };
 
 export enum StoryStatus {
+  Backlog = 'BACKLOG',
   Todo = 'TODO',
   Developement = 'DEVELOPEMENT',
   Review = 'REVIEW',
@@ -92,8 +93,16 @@ export type CreateStoryInputType = {
   title: Scalars['String'];
   description: Scalars['String'];
   projectId: Scalars['Int'];
+  status?: Maybe<StoryStatus>;
   sprintId?: Maybe<Scalars['Float']>;
   userProfileId?: Maybe<Scalars['Float']>;
+};
+
+export type UpdateStoryInputType = {
+  storyId: Scalars['Int'];
+  status?: Maybe<StoryStatus>;
+  addToActiveSprint?: Maybe<Scalars['Boolean']>;
+  removeFromActiveSprint?: Maybe<Scalars['Boolean']>;
 };
 
 export type ChangePassword = {
@@ -148,6 +157,7 @@ export type Mutation = {
   archiveActiveSprint: SprintResponseType;
   createSprint: SprintResponseType;
   createStory: StoryResponseType;
+  updateStory: StoryResponseType;
   changePassword?: Maybe<UserProfileResponse>;
   confirmUserEmail?: Maybe<UserProfileResponse>;
   requestConfirmationEmail: Scalars['Boolean'];
@@ -189,6 +199,11 @@ export type MutationCreateSprintArgs = {
 
 export type MutationCreateStoryArgs = {
   data: CreateStoryInputType;
+};
+
+
+export type MutationUpdateStoryArgs = {
+  data: UpdateStoryInputType;
 };
 
 
@@ -438,6 +453,19 @@ export type TeammatesQuery = (
       { __typename?: 'TeammateResponse' }
       & Pick<TeammateResponse, 'firstname' | 'lastname' | 'email'>
     )> }
+  ) }
+);
+
+export type UpdateStoryMutationVariables = Exact<{
+  data: UpdateStoryInputType;
+}>;
+
+
+export type UpdateStoryMutation = (
+  { __typename?: 'Mutation' }
+  & { updateStory: (
+    { __typename?: 'StoryResponseType' }
+    & Pick<StoryResponseType, 'id' | 'title' | 'description' | 'status' | 'userProfileId' | 'sprintId'>
   ) }
 );
 
@@ -1027,3 +1055,40 @@ export function useTeammatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type TeammatesQueryHookResult = ReturnType<typeof useTeammatesQuery>;
 export type TeammatesLazyQueryHookResult = ReturnType<typeof useTeammatesLazyQuery>;
 export type TeammatesQueryResult = Apollo.QueryResult<TeammatesQuery, TeammatesQueryVariables>;
+export const UpdateStoryDocument = gql`
+    mutation UpdateStory($data: UpdateStoryInputType!) {
+  updateStory(data: $data) {
+    id
+    title
+    description
+    status
+    userProfileId
+    sprintId
+  }
+}
+    `;
+export type UpdateStoryMutationFn = Apollo.MutationFunction<UpdateStoryMutation, UpdateStoryMutationVariables>;
+
+/**
+ * __useUpdateStoryMutation__
+ *
+ * To run a mutation, you first call `useUpdateStoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateStoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateStoryMutation, { data, loading, error }] = useUpdateStoryMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateStoryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateStoryMutation, UpdateStoryMutationVariables>) {
+        return Apollo.useMutation<UpdateStoryMutation, UpdateStoryMutationVariables>(UpdateStoryDocument, baseOptions);
+      }
+export type UpdateStoryMutationHookResult = ReturnType<typeof useUpdateStoryMutation>;
+export type UpdateStoryMutationResult = Apollo.MutationResult<UpdateStoryMutation>;
+export type UpdateStoryMutationOptions = Apollo.BaseMutationOptions<UpdateStoryMutation, UpdateStoryMutationVariables>;

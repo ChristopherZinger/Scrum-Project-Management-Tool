@@ -1,3 +1,4 @@
+import { StoryStatus } from "../model/Story.model";
 import { IStoryResponse } from "./../type-guards";
 import { ApolloError } from "apollo-server-express";
 import { StoryResponseDM } from "./../datamappers/StoryResponse.dm";
@@ -26,6 +27,9 @@ export class CreateStoryInputType {
 
 	@Field(() => Int)
 	projectId!: number;
+
+	@Field(() => StoryStatus, { nullable: true })
+	status?: StoryStatus;
 
 	@Field({ nullable: true })
 	sprintId?: number;

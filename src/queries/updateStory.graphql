@@ -1,0 +1,10 @@
+mutation UpdateStory($data: UpdateStoryInputType!) {
+	updateStory(data: $data) {
+		id
+		title
+		description
+		status
+		userProfileId
+		sprintId
+	}
+}

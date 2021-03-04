@@ -3,7 +3,7 @@ export interface IStoryResponse {
 	id: number;
 	title: string;
 	description: string | null;
-	status: StoryStatus | null;
+	status: StoryStatus;
 	userProfileId: number | null;
 	sprintId: number | null;
 }

@@ -1,3 +1,4 @@
+import { StoryStatus } from "../../models/story/model/Story.model";
 import { QueryInterface, DataTypes } from "sequelize";
 
 const migration = {
@@ -21,9 +22,9 @@ const migration = {
 					},
 					status: {
 						type: DataTypes.ENUM({
-							values: ["TODO", "DEVELOPEMENT", "REVIEW", "TEST", "DONE"]
+							values: Object.values(StoryStatus)
 						}),
-						allowNull: true
+						allowNull: false
 					},
 					projectId: {
 						type: DataTypes.INTEGER,

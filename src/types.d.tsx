@@ -42,12 +42,13 @@ export type StoryResponseType = {
   id: Scalars['Float'];
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
-  status?: Maybe<StoryStatus>;
+  status: StoryStatus;
   userProfileId?: Maybe<Scalars['Int']>;
   sprintId?: Maybe<Scalars['Int']>;
 };
 
 export enum StoryStatus {
+  Backlog = 'BACKLOG',
   Todo = 'TODO',
   Developement = 'DEVELOPEMENT',
   Review = 'REVIEW',
@@ -92,6 +93,7 @@ export type CreateStoryInputType = {
   title: Scalars['String'];
   description: Scalars['String'];
   projectId: Scalars['Int'];
+  status?: Maybe<StoryStatus>;
   sprintId?: Maybe<Scalars['Float']>;
   userProfileId?: Maybe<Scalars['Float']>;
 };

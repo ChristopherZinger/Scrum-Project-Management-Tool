@@ -12,6 +12,7 @@ import {
 import { Project } from "../../../models/project/model/Project.model";
 
 export enum StoryStatus { // update the migration if you edit this enum
+	BACKLOG = "BACKLOG",
 	TODO = "TODO",
 	DEVELOPEMENT = "DEVELOPEMENT",
 	REVIEW = "REVIEW",
@@ -34,13 +35,12 @@ export class Story extends Model<Story> {
 	@Column(DataType.STRING)
 	public description!: string | null;
 
-	@AllowNull(true)
 	@Column(
 		DataType.ENUM({
-			values: [...Object.keys(StoryStatus)]
+			values: Object.values(StoryStatus)
 		})
 	)
-	public status!: StoryStatus | null;
+	public status!: StoryStatus;
 
 	@ForeignKey(() => UserProfile)
 	@Column(DataType.INTEGER)

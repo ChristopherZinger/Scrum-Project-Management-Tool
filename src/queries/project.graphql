@@ -10,6 +10,7 @@ query Project($projectId: Int!) {
 			status
 		}
 		activeSprint {
+			projectId
 			startsAt
 			endsAt
 			isFinished

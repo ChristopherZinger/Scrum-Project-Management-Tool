@@ -1,6 +1,6 @@
 
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { DashboardCard } from "../../atoms/DashboardCard/DashboardCard";
 import { useCreateStoryMutation, ProjectQuery } from "../../../types.d";
 import { Modal } from "../../atoms/Modal/Modal";
@@ -9,12 +9,14 @@ import { Input } from "../../atoms/Inputs/Input";
 import { Grid, Divider } from "semantic-ui-react";
 import { CardButton } from "../../atoms/Buttons/CardButton";
 import { StoryList } from "./StoryList";
+import { ProjectDispatch } from "../../context/project-context/ProjectContext";
 
 type Props = {
   project: ProjectQuery["project"]
 }
 
 export const BacklogCard = (props: Props) => {
+  const dispatch = useContext(ProjectDispatch)
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [createStory] = useCreateStoryMutation();
 
@@ -41,8 +43,8 @@ export const BacklogCard = (props: Props) => {
             <Formik
               initialValues={{ title: "", description: "" }}
               onSubmit={async (values) => {
-                console.log("sub")
-                await createStory({
+
+                const newStory = await createStory({
                   variables: {
                     data: {
                       title: values.title,
@@ -51,6 +53,9 @@ export const BacklogCard = (props: Props) => {
                     }
                   }
                 })
+                if (newStory.data && dispatch) {
+                  dispatch.createStory(newStory.data.createStory)
+                }
                 setModalIsOpen(false);
               }}
             >

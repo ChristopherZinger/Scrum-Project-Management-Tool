@@ -366,7 +366,7 @@ export type ProjectQuery = (
       & Pick<StoryResponseType, 'id' | 'title' | 'description' | 'status'>
     )>>, activeSprint?: Maybe<(
       { __typename?: 'SprintResponseType' }
-      & Pick<SprintResponseType, 'startsAt' | 'endsAt' | 'isFinished'>
+      & Pick<SprintResponseType, 'projectId' | 'startsAt' | 'endsAt' | 'isFinished'>
     )> }
   ) }
 );
@@ -785,6 +785,7 @@ export const ProjectDocument = gql`
       status
     }
     activeSprint {
+      projectId
       startsAt
       endsAt
       isFinished

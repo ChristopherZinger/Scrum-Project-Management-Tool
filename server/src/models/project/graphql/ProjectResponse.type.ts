@@ -19,4 +19,7 @@ export class ProjectResponseType implements IProjectResponse {
 
 	@Field(() => SprintResponseType, { nullable: true })
 	activeSprint?: SprintResponseType;
+
+	@Field(() => Int, { nullable: true })
+	activeSprintId!: number | null;
 }

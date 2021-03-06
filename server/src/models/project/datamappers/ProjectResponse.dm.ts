@@ -22,7 +22,8 @@ export class ProjectResponseDM {
 		let activeSprint;
 		if (project.activeSprint) {
 			activeSprint = this.sprintResponseDM.createSprintResponse(
-				project.activeSprint
+				project.activeSprint,
+				true
 			);
 		}
 
@@ -31,7 +32,8 @@ export class ProjectResponseDM {
 			title: project.title,
 			id: project.id,
 			backlog: stories,
-			activeSprint: activeSprint
+			activeSprint: activeSprint,
+			activeSprintId: project.activeSprintId
 		};
 	}
 }

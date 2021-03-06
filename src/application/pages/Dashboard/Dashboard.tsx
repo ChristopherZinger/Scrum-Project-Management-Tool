@@ -8,6 +8,7 @@ import { LogoutModal } from "../../components/LogoutModal/LogoutModal";
 import { Sidenav, sideNavWidth } from "../../components/Sidenav/Sidenav";
 import { RoutesMain } from "../AppRoutes";
 import { Project } from "./Project/Project";
+import { ProjectContextWrapper } from "../../context/project-context/ProjectContext";
 
 const StyledDashboardContainer = styled.div`
   padding: 30px;
@@ -36,7 +37,9 @@ export const Dashboard = () => {
           </Route>
 
           <Route path={RoutesDashboard.PROJECT}>
-            <Project />
+            <ProjectContextWrapper>
+              <Project />
+            </ProjectContextWrapper>
           </Route>
 
           <Route path={[RoutesMain.HOME, RoutesMain.DASHBOARD]} >

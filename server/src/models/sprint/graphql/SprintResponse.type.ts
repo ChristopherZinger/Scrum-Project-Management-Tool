@@ -4,6 +4,9 @@ import { Field, Int, ObjectType } from "type-graphql";
 @ObjectType()
 export class SprintResponseType implements ISprintResponse {
 	@Field(() => Int)
+	id!: number;
+
+	@Field(() => Int)
 	projectId!: number;
 
 	@Field()
@@ -14,4 +17,7 @@ export class SprintResponseType implements ISprintResponse {
 
 	@Field()
 	isFinished!: boolean;
+
+	@Field()
+	isActive!: boolean;
 }

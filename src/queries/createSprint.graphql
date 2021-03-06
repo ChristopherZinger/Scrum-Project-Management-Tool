@@ -1,8 +1,10 @@
 mutation CreateSprint($projectId: Int!, $setAsActiveSprint: Boolean!) {
 	createSprint(projectId: $projectId, setAsActiveSprint: $setAsActiveSprint) {
+		id
 		isFinished
 		startsAt
 		endsAt
 		projectId
+		isActive
 	}
 }

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { ProjectQuery, StoryResponseType, useUpdateStoryMutation, StoryStatus } from "../../../types.d";
 import { Checkbox, Divider, Dropdown, Grid } from "semantic-ui-react";
 import { Colors } from "../../../global-styles/global-styles";
 import styled from "styled-components";
 import { Modal } from "../../atoms/Modal/Modal";
 import { Formik, Form } from "formik";
+import { ProjectDispatch } from "../../context/project-context/ProjectContext";
 
 const LabelColor = styled.div`
   transform: translateY(4px);
@@ -26,7 +27,7 @@ export const StoryList = (props: { stories: ProjectQuery["project"]["backlog"] }
   )
 }
 
-const StoryListItem = (props: { story: StoryResponseType }) => {
+export const StoryListItem = (props: { story: StoryResponseType }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   return (
@@ -56,6 +57,7 @@ const StoryListItem = (props: { story: StoryResponseType }) => {
 
 const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }) => {
   const [updateStory, updateStoryResult] = useUpdateStoryMutation();
+  const projectDispatch = useContext(ProjectDispatch);
 
   return (
     <Modal open>
@@ -67,7 +69,7 @@ const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }
           initialValues={{ status: props.story.status, addToActiveSprint: false }}
           onSubmit={async (values) => {
             try {
-              await updateStory({
+              const updatedStory = await updateStory({
                 variables: {
                   data: {
                     storyId: props.story.id,
@@ -76,6 +78,9 @@ const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }
                   }
                 }
               })
+              if (updatedStory.data && projectDispatch) {
+                projectDispatch.updateStory(updatedStory.data.updateStory)
+              }
             } catch (err) {
               console.log(err.networkError)
               console.log(err.graphQLErrors)

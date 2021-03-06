@@ -30,10 +30,12 @@ export type TeammateResponse = {
 
 export type SprintResponseType = {
   __typename?: 'SprintResponseType';
+  id: Scalars['Int'];
   projectId: Scalars['Int'];
   startsAt: Scalars['DateTime'];
   endsAt: Scalars['DateTime'];
   isFinished: Scalars['Boolean'];
+  isActive: Scalars['Boolean'];
 };
 
 
@@ -63,6 +65,7 @@ export type ProjectResponseType = {
   title: Scalars['String'];
   backlog?: Maybe<Array<StoryResponseType>>;
   activeSprint?: Maybe<SprintResponseType>;
+  activeSprintId?: Maybe<Scalars['Int']>;
 };
 
 export type UserProfileResponse = {
@@ -255,7 +258,7 @@ export type ArchiveActiveSprintMutation = (
   { __typename?: 'Mutation' }
   & { archiveActiveSprint: (
     { __typename?: 'SprintResponseType' }
-    & Pick<SprintResponseType, 'startsAt' | 'endsAt' | 'isFinished' | 'projectId'>
+    & Pick<SprintResponseType, 'id' | 'startsAt' | 'endsAt' | 'isFinished' | 'projectId' | 'isActive'>
   ) }
 );
 
@@ -292,7 +295,7 @@ export type CreateSprintMutation = (
   { __typename?: 'Mutation' }
   & { createSprint: (
     { __typename?: 'SprintResponseType' }
-    & Pick<SprintResponseType, 'isFinished' | 'startsAt' | 'endsAt' | 'projectId'>
+    & Pick<SprintResponseType, 'id' | 'isFinished' | 'startsAt' | 'endsAt' | 'projectId' | 'isActive'>
   ) }
 );
 
@@ -360,13 +363,13 @@ export type ProjectQuery = (
   { __typename?: 'Query' }
   & { project: (
     { __typename?: 'ProjectResponseType' }
-    & Pick<ProjectResponseType, 'id' | 'title' | 'pid'>
+    & Pick<ProjectResponseType, 'id' | 'title' | 'pid' | 'activeSprintId'>
     & { backlog?: Maybe<Array<(
       { __typename?: 'StoryResponseType' }
-      & Pick<StoryResponseType, 'id' | 'title' | 'description' | 'status'>
+      & Pick<StoryResponseType, 'id' | 'title' | 'description' | 'status' | 'sprintId'>
     )>>, activeSprint?: Maybe<(
       { __typename?: 'SprintResponseType' }
-      & Pick<SprintResponseType, 'startsAt' | 'endsAt' | 'isFinished'>
+      & Pick<SprintResponseType, 'id' | 'projectId' | 'startsAt' | 'endsAt' | 'isFinished' | 'isActive'>
     )> }
   ) }
 );
@@ -378,7 +381,7 @@ export type ProjectsQuery = (
   { __typename?: 'Query' }
   & { projects: Array<(
     { __typename?: 'ProjectResponseType' }
-    & Pick<ProjectResponseType, 'title' | 'pid' | 'id'>
+    & Pick<ProjectResponseType, 'title' | 'pid' | 'id' | 'activeSprintId'>
   )> }
 );
 
@@ -473,10 +476,12 @@ export type UpdateStoryMutation = (
 export const ArchiveActiveSprintDocument = gql`
     mutation ArchiveActiveSprint($projectId: Int!) {
   archiveActiveSprint(projectId: $projectId) {
+    id
     startsAt
     endsAt
     isFinished
     projectId
+    isActive
   }
 }
     `;
@@ -571,10 +576,12 @@ export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProj
 export const CreateSprintDocument = gql`
     mutation CreateSprint($projectId: Int!, $setAsActiveSprint: Boolean!) {
   createSprint(projectId: $projectId, setAsActiveSprint: $setAsActiveSprint) {
+    id
     isFinished
     startsAt
     endsAt
     projectId
+    isActive
   }
 }
     `;
@@ -778,16 +785,21 @@ export const ProjectDocument = gql`
     id
     title
     pid
+    activeSprintId
     backlog {
       id
       title
       description
       status
+      sprintId
     }
     activeSprint {
+      id
+      projectId
       startsAt
       endsAt
       isFinished
+      isActive
     }
   }
 }
@@ -824,6 +836,7 @@ export const ProjectsDocument = gql`
     title
     pid
     id
+    activeSprintId
   }
 }
     `;

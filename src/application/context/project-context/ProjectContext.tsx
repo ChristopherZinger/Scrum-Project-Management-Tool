@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useReducer } from "react";
 import { useParams } from "react-router";
-import { ProjectResponseType, StoryResponseType, useProjectQuery } from "../../../types.d";
+import { ProjectResponseType, StoryResponseType, useProjectQuery, SprintResponseType } from "../../../types.d";
 import { Action } from "./actions";
 import { projectReducer } from "./reducers";
 
@@ -14,6 +14,10 @@ type Props = {
 
 interface IActionDispatch {
   loadProject: (data: ProjectResponseType) => void,
+
+  createSprint: (data: SprintResponseType) => void,
+  archiveSprint: (data: SprintResponseType) => void,
+
   createStory: (data: StoryResponseType) => void,
   updateStory: (data: StoryResponseType) => void,
 }
@@ -29,7 +33,14 @@ export const ProjectContextWrapper = (props: Props) => {
   const { data } = useProjectQuery({ variables: { projectId: parseInt(params.id, 10) } })
 
   const actions: IActionDispatch = {
+    // project
     loadProject: (data: ProjectResponseType) => dispatch({ type: Action.LOAD_PROJECT, data }),
+
+    // sprint
+    createSprint: (data: SprintResponseType) => dispatch({ type: Action.CREATE_SPRINT, data }),
+    archiveSprint: (data: SprintResponseType) => dispatch({ type: Action.ARCHIVE_SPRINT, data }),
+
+    // stories
     createStory: (data: StoryResponseType) => dispatch({ type: Action.CREATE_STORY, data }),
     updateStory: (data: StoryResponseType) => dispatch({ type: Action.UPDATE_STORY, data })
   }

@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { DashboardCard } from "../../atoms/DashboardCard/DashboardCard";
 import { Modal } from "../../atoms/Modal/Modal";
-import { Grid, Divider } from "semantic-ui-react"
 import { Formik, Field, Form } from "formik";
 import { useCreateSprintMutation, useArchiveActiveSprintMutation, ProjectQuery } from "../../../types.d";
 import { CardButton } from "../../atoms/Buttons/CardButton";
 import dayjs from "dayjs";
-import { Colors, Heading } from "../../../global-styles/global-styles";
+import { Colors } from "../../../global-styles/global-styles";
 import styled from "styled-components";
+import { ProjectDispatch } from "../../context/project-context/ProjectContext";
+import { SprintTable } from "./SprintTable";
+
 
 type Props = {
   project: ProjectQuery["project"]
@@ -17,18 +19,26 @@ export const ActiveSprintCard = (props: Props) => {
   const [isCreateSprintModalOpen, setIsCreateSprintModalOpen] = useState(false);
   const [createSprint] = useCreateSprintMutation();
   const [archiveActiveSprint] = useArchiveActiveSprintMutation();
+  const projectDispatch = useContext(ProjectDispatch)
 
   return (
     <>
       <DashboardCard title="Active Sprint">
         <div>
-
-
           {props.project.activeSprint ?
             <CardButton
               popupText="Finish curretn sprint"
               iconName="paper plane"
-              onClick={async () => await archiveActiveSprint({ variables: { projectId: props.project.id } })}
+              onClick={async () => {
+                try {
+                  const sprint = await archiveActiveSprint({ variables: { projectId: props.project.id } })
+                  if (sprint.data && projectDispatch) {
+                    projectDispatch.archiveSprint(sprint.data.archiveActiveSprint)
+                  }
+                } catch (err) {
+                  console.log(err)
+                }
+              }}
             />
             :
             <CardButton
@@ -61,11 +71,15 @@ export const ActiveSprintCard = (props: Props) => {
                     setAsActiveSprint: values.setAsActiveSprint
                   }
                 })
-                setIsCreateSprintModalOpen(false)
-                console.log(sprint)
+                if (sprint.data && projectDispatch) {
+                  projectDispatch.createSprint(sprint.data.createSprint)
+                } else {
+                  throw new Error("sprint response or project dispatch is missing.")
+                }
               } catch (err) {
                 console.log(err)
               }
+              setIsCreateSprintModalOpen(false)
             }}
           >
             {() =>
@@ -105,6 +119,12 @@ const InfoPanel = styled.div`
 `
 
 const ActiveSprint = (props: Props) => {
+
+  const activeStories = props.project.backlog?.filter(story => {
+    if (!story.sprintId) return false;
+    return story.sprintId === props.project.activeSprintId
+  })
+
   return (
     <>
       {
@@ -116,7 +136,7 @@ const ActiveSprint = (props: Props) => {
               <p>to</p>
               <p> {dayjs(props.project.activeSprint?.endsAt).format("dddd - D MMMM")}</p>
             </InfoPanel>
-            <SprintTable />
+            <SprintTable stories={activeStories || []} />
           </>
           :
           <>
@@ -128,32 +148,4 @@ const ActiveSprint = (props: Props) => {
 }
 
 
-const SprintTable = () => {
-  return (
-    <Grid>
-      <Grid.Row>
-        <Grid.Column>
-          <Heading.H4>Sprint Table</Heading.H4>
-        </Grid.Column>
-      </Grid.Row>
-
-      <Grid.Row columns={5} >
-        <SprintColumn title="To do" />
-        <SprintColumn title="Developement" />
-        <SprintColumn title="Reivew" />
-        <SprintColumn title="Testing" />
-        <SprintColumn title="Done" />
-      </Grid.Row>
-    </Grid>
-  )
-}
-
-const SprintColumn = (props: { title: string }) => {
-  return (
-    <Grid.Column>
-      <Heading.H5>{props.title}</Heading.H5>
-      <Divider />
-    </Grid.Column>
-  )
-}
 

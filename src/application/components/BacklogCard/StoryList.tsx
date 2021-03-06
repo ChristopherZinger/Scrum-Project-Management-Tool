@@ -27,7 +27,7 @@ export const StoryList = (props: { stories: ProjectQuery["project"]["backlog"] }
   )
 }
 
-const StoryListItem = (props: { story: StoryResponseType }) => {
+export const StoryListItem = (props: { story: StoryResponseType }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   return (

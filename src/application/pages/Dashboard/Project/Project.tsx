@@ -16,8 +16,6 @@ export const Project = () => {
   const history = useHistory();
   const { project } = useContext(ProjectContext)
 
-  console.log(project)
-
   return (
     <Grid stackable>
       <Grid.Row>

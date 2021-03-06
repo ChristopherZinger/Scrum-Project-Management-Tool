@@ -2,7 +2,7 @@
 
 import React, { useState, useContext } from "react";
 import { DashboardCard } from "../../atoms/DashboardCard/DashboardCard";
-import { useCreateStoryMutation, ProjectQuery } from "../../../types.d";
+import { useCreateStoryMutation, ProjectQuery, StoryStatus } from "../../../types.d";
 import { Modal } from "../../atoms/Modal/Modal";
 import { Formik, Form } from "formik";
 import { Input } from "../../atoms/Inputs/Input";
@@ -30,7 +30,7 @@ export const BacklogCard = (props: Props) => {
         />
         <Divider hidden={true} />
 
-        <StoryList stories={props.project.backlog} />
+        <StoryList stories={props.project.backlog?.filter(story => story.status === StoryStatus.Backlog)} />
       </DashboardCard>
 
       {modalIsOpen && (

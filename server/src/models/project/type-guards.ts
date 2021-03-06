@@ -7,4 +7,5 @@ export interface IProjectResponse {
 	pid: string | null;
 	backlog?: StoryResponseType[];
 	activeSprint?: SprintResponseType;
+	activeSprintId: number | null;
 }

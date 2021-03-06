@@ -3,17 +3,21 @@ query Project($projectId: Int!) {
 		id
 		title
 		pid
+		activeSprintId
 		backlog {
 			id
 			title
 			description
 			status
+			sprintId
 		}
 		activeSprint {
+			id
 			projectId
 			startsAt
 			endsAt
 			isFinished
+			isActive
 		}
 	}
 }

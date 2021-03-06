@@ -1,8 +1,10 @@
 mutation ArchiveActiveSprint($projectId: Int!) {
 	archiveActiveSprint(projectId: $projectId) {
+		id
 		startsAt
 		endsAt
 		isFinished
 		projectId
+		isActive
 	}
 }

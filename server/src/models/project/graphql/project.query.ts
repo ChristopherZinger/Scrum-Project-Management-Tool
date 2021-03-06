@@ -35,6 +35,7 @@ export class ProjectQuery {
 				"PROJECT_MISSSING"
 			);
 		}
+
 		return this.projectResponseDM.createProjectResponse(project);
 	}
 }

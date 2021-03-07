@@ -2,10 +2,16 @@ import React from "react";
 import styled from "styled-components"
 
 const SpinnerStyle = styled.div`
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  top: 50%;
+
   span {
     width: 4px;
     height: 25px;
-    background: white;
+    background: ${(props => props.color || "white")};
     display: inline-block;
     position: absolute;
     -webkit-animation: load1 2s infinite ease-in-out;
@@ -53,10 +59,8 @@ const SpinnerStyle = styled.div`
 }
 `
 
-export const Spinner = () => (
-  <SpinnerStyle style={{
-    position: "relative", width: "50px", height: "20px", left: "50%", transform: "translate(-50%)"
-  }}  >
+export const Spinner = (props: { [key: string]: string }) => (
+  <SpinnerStyle {...props}>
     <span></span>
     <span></span>
     <span></span>

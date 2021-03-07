@@ -6,6 +6,8 @@ import "./global-styles/fonts.css";
 import 'react-toastify/dist/ReactToastify.css';
 import "./global-styles/override-toastr-styles.css";
 import { ToastContainer } from "react-toastify";
+import { Spinner } from './application/atoms/Spinner/Spinner';
+import { Colors } from './global-styles/global-styles';
 
 function App () {
   return (
@@ -52,6 +54,7 @@ const UserAuthQueryWrapper = (props: { children: React.ReactNode }) => {
       dispatch({ type: "login", user: data.user })
     }
   }, [data])
+
   return (
     <>
       {error && (
@@ -59,7 +62,10 @@ const UserAuthQueryWrapper = (props: { children: React.ReactNode }) => {
       )}
 
       {loading && (
-        <div>loading...</div>
+        <div style={{ width: "100vw", height: "100vh", display: "block", position: "relative" }}>
+          <Spinner color={Colors.Text03} />
+
+        </div>
       )}
 
       { data && (

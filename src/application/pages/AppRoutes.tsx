@@ -11,6 +11,7 @@ import { RegisterCompany } from "./Register/RegisterCompany";
 import { RegisterWithInvitation } from "./Register/RegisterWithInvitation";
 import { UserAuthStateContext } from "../../App";
 import { Dashboard } from "./Dashboard/Dashboard";
+import { NotFound } from "./404/404";
 
 export enum RoutesMain {
     HOME = '/',
@@ -28,32 +29,20 @@ export function AppRoutes () {
             <Switch>
                 {user && <AuthRoutes />}
                 {!user && <PublicRoutes />}
+                <Route component={NotFound} />
             </Switch>
         </Router>
     )
 }
 
 const AuthRoutes = () =>
-    <Route path={[RoutesMain.HOME, RoutesMain.DASHBOARD]}>
-        <Dashboard />
-    </Route>
+    <Route path={[RoutesMain.HOME, RoutesMain.DASHBOARD]} component={Dashboard} />
 
 const PublicRoutes = () =>
     <>
-        <Route path={RoutesMain.LOGIN} >
-            <Login />
-        </Route>
-        <Route path={RoutesMain.REGISTER_PROFILE} >
-            <RegisterUser />
-        </Route>
-
-        <Route path={RoutesMain.REGISTER_COMPANY} >
-            <RegisterCompany />
-        </Route>
-
+        <Route path={RoutesMain.LOGIN} component={Login} />
+        <Route path={RoutesMain.REGISTER_PROFILE} component={RegisterUser} />
+        <Route path={RoutesMain.REGISTER_COMPANY} component={RegisterCompany} />
         <Route path="/register-with-invitation/:companyId/:token" component={RegisterWithInvitation} />
-
-        <Route path={RoutesMain.HOME}>
-            <LandingPage />
-        </Route>
+        <Route path={RoutesMain.HOME} exact component={LandingPage} />
     </>

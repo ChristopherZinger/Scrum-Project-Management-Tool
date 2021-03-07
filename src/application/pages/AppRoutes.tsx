@@ -38,6 +38,7 @@ export function AppRoutes () {
 const AuthRoutes = () =>
     <Route path={[RoutesMain.HOME, RoutesMain.DASHBOARD]} component={Dashboard} />
 
+
 const PublicRoutes = () =>
     <>
         <Route path={RoutesMain.LOGIN} component={Login} />

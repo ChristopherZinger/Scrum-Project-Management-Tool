@@ -5,9 +5,10 @@ import { useMyProfileQuery, UserProfileResponse } from "./types.d"
 import "./global-styles/fonts.css";
 import 'react-toastify/dist/ReactToastify.css';
 import "./global-styles/override-toastr-styles.css";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { Spinner } from './application/atoms/Spinner/Spinner';
 import { Colors } from './global-styles/global-styles';
+import { ApolloError } from '@apollo/client';
 
 function App () {
   return (
@@ -55,12 +56,33 @@ const UserAuthQueryWrapper = (props: { children: React.ReactNode }) => {
     }
   }, [data])
 
+  const handleProfileErrors = (error: ApolloError) => {
+    const messages = [];
+    for (let err of error.graphQLErrors) {
+      switch (err.extensions?.code) {
+        case "USER_MISSING_FOR_EMAIL":
+          messages.push("Session Error. User missing for email. Log in again please.")
+          break;
+
+        case "COULD_NOT_LOAD_USER_DATA":
+          messages.push("Session Error. User's data is missing. Log in again please.")
+          break;
+
+        default:
+          break;
+      }
+    }
+    if (messages.length === 0) {
+      messages.push("Upss! Something went wrong. Try again later.")
+    }
+    for (let msg of messages) {
+      toast.error(msg)
+    }
+
+  }
+
   return (
     <>
-      {error && (
-        <h4><span style={{ color: "red" }}>Error: </span> {error.message}</h4>
-      )}
-
       {loading && (
         <div style={{ width: "100vw", height: "100vh", display: "block", position: "relative" }}>
           <Spinner color={Colors.Text03} />
@@ -68,13 +90,15 @@ const UserAuthQueryWrapper = (props: { children: React.ReactNode }) => {
         </div>
       )}
 
-      { data && (
-        <UserAuthDispatchContext.Provider value={dispatch}>
-          < UserAuthStateContext.Provider value={state}>
-            {props.children}
-          </UserAuthStateContext.Provider>
-        </UserAuthDispatchContext.Provider>
-      )}
+      {error && handleProfileErrors(error)}
+
+      <UserAuthDispatchContext.Provider value={dispatch}>
+        <UserAuthStateContext.Provider value={state}>
+          {props.children}
+        </UserAuthStateContext.Provider>
+      </UserAuthDispatchContext.Provider>
     </>
   )
 }
+
+

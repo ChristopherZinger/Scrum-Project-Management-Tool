@@ -1,14 +1,18 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { Grid } from "semantic-ui-react";
+import { Grid, Icon, Modal } from "semantic-ui-react";
 import { UnderlineLink } from "../../atoms/Links/UnderlineLink";
 import { LogoutModal } from "../LogoutModal/LogoutModal";
 import { UserAuthStateContext } from "../../../App";
 import { RoutesMain } from "../../pages/AppRoutes";
+import styled from "styled-components";
+import { MarginWrapper } from "../../atoms/MarginWrapper/MarginWrapper";
 
 export const Navbar = () => {
     const [logoutModalIsOpen, setLogoutModalIsOpen] = useState(false);
+    const [mobileNavIsOn, setMobileNavIsOn] = useState(false);
     const { user } = useContext(UserAuthStateContext);
+
 
     return (
         <Grid>
@@ -43,11 +47,30 @@ export const Navbar = () => {
                             </Grid.Column>
                         </>
                     )}
-
-
-
-
             </Grid.Row>
+
+            <Grid.Row only="mobile" >
+                <Grid.Column>
+                    <Icon name="sidebar" onClick={() => setMobileNavIsOn(!mobileNavIsOn)} />
+                </Grid.Column>
+            </Grid.Row>
+
+            { mobileNavIsOn && (
+                <FullScreenModal>
+                    <MarginWrapper>
+                        <Grid>
+                            <Grid.Row only="mobile" >
+                                <Icon name="sidebar" onClick={() => setMobileNavIsOn(!mobileNavIsOn)} />
+                            </Grid.Row>
+                            <Grid.Row>
+
+                            </Grid.Row>
+                        </Grid>
+                    </MarginWrapper>
+                </FullScreenModal>
+            )}
+
+
             { logoutModalIsOpen && (
                 <LogoutModal
                     close={() => setLogoutModalIsOpen(false)}
@@ -56,5 +79,17 @@ export const Navbar = () => {
         </Grid>
     )
 }
+
+const FullScreenModal = styled.div`
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 300;
+
+    width: 100vw;
+    min-height: 100vh;
+
+    background-color: coral;
+`
 
 

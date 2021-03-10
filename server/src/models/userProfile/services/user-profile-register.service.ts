@@ -51,9 +51,7 @@ export class UserProfileService {
 		});
 
 		return await this.userRepository.findByEmail(data.email, {
-			include: [
-				{ model: UserProfile, include: [{ model: Company, required: true }] }
-			]
+			include: [{ model: UserProfile, include: [{ model: Company }] }]
 		});
 	}
 }

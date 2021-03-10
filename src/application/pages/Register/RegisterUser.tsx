@@ -69,11 +69,6 @@ export const RegisterUser = () => {
                 }}
                 validationSchema={SignupValidationSchema}
                 onSubmit={async (values) => {
-                  if (values.password !== values.passwordRepeat) {
-                    toast.error("Repeat the same password twice.")
-                    return;
-                  }
-
                   try {
                     const userData = await register({
                       variables: {
@@ -89,44 +84,14 @@ export const RegisterUser = () => {
                       dispatch({ type: "login", user: userData.data.register })
                       history.push(isOfficeAdmin ? RoutesMain.REGISTER_COMPANY : RoutesMain.DASHBOARD)
                     } else {
-                      throw new Error("No data received")
+                      throw new Error("Server did't respond.")
                     }
                   } catch (err) {
-                    if (error?.graphQLErrors) {
-                      for (const gqlError of error.graphQLErrors) {
-                        if (!gqlError.extensions?.code) {
-                          continue
-                        };
-
-                        switch (gqlError.extensions.code) {
-                          case "EMAIL_IS_TAKEN":
-                            toast.error("This email is already taken");
-                            break;
-
-                          case "ARGUMENT_VALIDATION_ERROR":
-                            if (gqlError.extensions.type === "ArgumentValidationError") {
-                              const inputErrors = gqlError.extensions.inputErrors;
-                              for (const inputError of inputErrors) {
-                                for (const key in inputError.constraints) {
-                                  toast.error(inputError.constraints[key])
-                                }
-                              }
-                            }
-                            break;
-
-                          default:
-                            toast.error("Something went wrong.")
-                            break;
-                        }
-                      }
-                    } else {
-                      toast.error("Something went wrong.")
-                    }
+                    toast.error(error?.message || err.message || "Ups! Registration failed. Try again later.")
                   }
                 }}
               >
                 {({ errors, touched }) => {
-
                   return (
                     <Form>
                       <div style={{ marginBottom: "50px" }}>

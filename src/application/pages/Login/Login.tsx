@@ -31,9 +31,6 @@ export const Login = () => {
   const [login, { loading, error }] = useLoginMutation();
   const dispatch = useContext(UserAuthDispatchContext);
 
-  console.log(error?.graphQLErrors)
-  console.log(error?.message)
-
   const LoginValidationSchema = Yup.object().shape({
     password: Yup.string()
       .required('Required'),

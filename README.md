@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# SCRUM app
 
-Boiler plate for application with Typescript, React, Apollo-Client, Apollo-Server-Express, Express, Type-Graphql
+Manage your project with SCRUM.
 
 ### Prerequirements
 

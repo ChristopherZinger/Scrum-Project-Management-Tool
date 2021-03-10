@@ -39,51 +39,42 @@ export class RegisterMutation {
 		private userSessionDM: UserSessionDM
 	) {}
 
-	@Mutation(() => UserProfileResponse, { nullable: true })
+	@Mutation(() => UserProfileResponse)
 	async register(
 		@Arg("data") data: RegisterUserProfileInputType,
 		@Ctx() context: ContextType
-	): Promise<UserProfileResponse | null> {
+	): Promise<UserProfileResponse> {
 		data.email = data.email.toLowerCase();
 
-		try {
-			const newUser = await this.userProfileRegisterService.register(data);
+		const newUser = await this.userProfileRegisterService.register(data);
 
-			if (!newUser) {
-				throw customApolloErrors.somethingWentWrong(
-					"",
-					"New user wasn't created."
-				);
-			}
-
-			if (!newUser.profile || !newUser.profile.company) {
-				throw customApolloErrors.couldNotLoadUserData();
-			}
-
-			// send emails
-			const confirmationEmail = await createConfirmationEmail(
-				newUser.email,
-				newUser.id
+		if (!newUser) {
+			throw customApolloErrors.somethingWentWrong(
+				"",
+				"New user wasn't created."
 			);
-			await sendEmail(confirmationEmail);
-
-			// context
-			createUserContext(
-				context,
-				this.userSessionDM.createUserSessionType(
-					newUser,
-					newUser.profile,
-					newUser.profile.company.id
-				)
-			);
-
-			return this.userProfileDM.createUserProfileResponse(
-				newUser,
-				newUser.profile
-			);
-		} catch (err) {
-			console.error(err);
 		}
-		return null;
+
+		if (!newUser.profile) {
+			throw customApolloErrors.couldNotLoadUserData();
+		}
+
+		// send emails
+		const confirmationEmail = await createConfirmationEmail(
+			newUser.email,
+			newUser.id
+		);
+		await sendEmail(confirmationEmail);
+
+		// context
+		createUserContext(
+			context,
+			this.userSessionDM.createUserSessionType(newUser, newUser.profile, null)
+		);
+
+		return this.userProfileDM.createUserProfileResponse(
+			newUser,
+			newUser.profile
+		);
 	}
 }

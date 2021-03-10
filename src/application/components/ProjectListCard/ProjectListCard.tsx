@@ -8,11 +8,13 @@ import { useCreateProjectMutation, useProjectsQuery } from "../../../types.d";
 import { Link } from "react-router-dom";
 import { CardButton } from "../../atoms/Buttons/CardButton";
 import { CardListItem } from "../../atoms/CardListItem/CardListItem";
+import { useRouteMatch } from "react-router-dom";
 
 export const ProjectListCard = () => {
   const [addProjectIsOpen, setAddProjectIsOpen] = useState(false);
   const [createProject] = useCreateProjectMutation();
   const projects = useProjectsQuery();
+  const match = useRouteMatch();
 
   return (
     <>
@@ -32,7 +34,7 @@ export const ProjectListCard = () => {
             <>
               {projects.data.projects.map((project) =>
                 <CardListItem key={project.id} >
-                  <Link to={`/project/${project.id}`} >
+                  <Link to={`${match.url}/project/${project.id}`} >
                     {`${project.pid || ""} ${project.title}`}
                   </Link>
                 </CardListItem>

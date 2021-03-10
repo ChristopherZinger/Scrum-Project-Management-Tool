@@ -6,9 +6,11 @@ import { Profile } from "./Profile/Profile";
 import { Admin } from "./Admin/Admin";
 import { LogoutModal } from "../../components/LogoutModal/LogoutModal";
 import { Sidenav, sideNavWidth } from "../../components/Sidenav/Sidenav";
-import { RoutesMain } from "../AppRoutes";
 import { Project } from "./Project/Project";
 import { ProjectContextWrapper } from "../../context/project-context/ProjectContext";
+import { useRouteMatch } from "react-router-dom";
+import { NotFound } from "../404/404";
+import { RoutesMain } from "../AppRoutes";
 
 const StyledDashboardContainer = styled.div`
   padding: 30px;
@@ -25,6 +27,7 @@ export enum RoutesDashboard {
 
 export const Dashboard = () => {
   const [logoutModalIsOpen, setLogoutModalIsOpen] = useState(false);
+  const match = useRouteMatch();
 
   return (
     <>
@@ -32,19 +35,14 @@ export const Dashboard = () => {
 
       <StyledDashboardContainer >
         <Switch>
-          <Route path={RoutesDashboard.ADMIN}>
-            <Admin />
-          </Route>
-
-          <Route path={RoutesDashboard.PROJECT}>
+          <Route path={[RoutesMain.DASHBOARD, RoutesMain.HOME]} exact component={Profile} />
+          <Route path={match.url + RoutesDashboard.ADMIN} component={Admin} />
+          <Route path={match.url + RoutesDashboard.PROJECT}>
             <ProjectContextWrapper>
               <Project />
             </ProjectContextWrapper>
           </Route>
-
-          <Route path={[RoutesMain.HOME, RoutesMain.DASHBOARD]} >
-            <Profile />
-          </Route>
+          <Route component={NotFound} />
         </Switch>
       </StyledDashboardContainer>
 

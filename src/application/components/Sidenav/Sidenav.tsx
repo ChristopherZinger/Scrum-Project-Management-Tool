@@ -28,8 +28,6 @@ const StyledSideNav = styled.div`
   }
 `;
 
-
-
 type Props = {
   clickLogout: () => void;
 }
@@ -44,7 +42,7 @@ export const Sidenav = (props: Props) => {
           <Icon src={homeIcon} />
         </div>
       </Link>
-      <Link to="/admin" className="btn">
+      <Link to={RoutesMain.DASHBOARD + "/admin"} className="btn">
         <div className="btn">
           <Icon src={settingsIcon} />
         </div>

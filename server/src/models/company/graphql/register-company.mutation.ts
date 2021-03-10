@@ -14,6 +14,7 @@ import {
 import { injectable } from "inversify";
 import { UserRepository } from "../../user/model/User.repository";
 import customApolloError from "../../../core/formatErrors/custom-apollo-errors";
+import { updateUserContext } from "../../../core/context/update-user-context";
 
 @InputType()
 export class RegisterCompanyInputType {
@@ -83,6 +84,9 @@ export class RegisterCompanyMutation {
 		// update users company
 		user.profile.companyId = company.id;
 		await this.userProfileRepository.save(user.profile);
+
+		// add company to user context
+		updateUserContext(context, { companyId: company.id });
 
 		return true;
 	}

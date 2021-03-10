@@ -169,7 +169,7 @@ export type Mutation = {
   inviteTeammate: Scalars['Boolean'];
   login?: Maybe<UserProfileResponse>;
   logout: Scalars['Boolean'];
-  register?: Maybe<UserProfileResponse>;
+  register: UserProfileResponse;
   registerWithInvitation: UserProfileResponse;
 };
 
@@ -402,10 +402,10 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = (
   { __typename?: 'Mutation' }
-  & { register?: Maybe<(
+  & { register: (
     { __typename?: 'UserProfileResponse' }
     & Pick<UserProfileResponse, 'email' | 'firstname' | 'lastname' | 'isActive' | 'emailConfirmed'>
-  )> }
+  ) }
 );
 
 export type RegisterWithInvitationMutationVariables = Exact<{

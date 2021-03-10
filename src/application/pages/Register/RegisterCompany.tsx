@@ -11,10 +11,11 @@ import { HoverStyleButton } from "../../atoms/Buttons/HoverStyleButton";
 import { useRegisterCompanyMutation } from "../../../types.d";
 import { useHistory } from "react-router-dom";
 import { RoutesMain } from "../AppRoutes";
+import { toast } from "react-toastify";
 
 export const RegisterCompany = () => {
   const history = useHistory();
-  const [registerCompany, { loading }] = useRegisterCompanyMutation();
+  const [registerCompany, { loading, error }] = useRegisterCompanyMutation();
   return (
     <MarginWrapper>
       <Navbar />
@@ -62,7 +63,7 @@ export const RegisterCompany = () => {
 
                     history.push(RoutesMain.DASHBOARD)
                   } catch (err) {
-                    console.log(err)
+                    toast.error(error?.message || err.message || "Ups! Registration failed. Try again later.")
                   }
                 }}
               >

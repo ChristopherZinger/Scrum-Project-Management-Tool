@@ -52,6 +52,7 @@ export class LoginMutation {
 		}
 
 		const valid = bcrypt.compareSync(data.password, user.password);
+
 		if (!valid) {
 			console.warn("Wrong credentials: password.");
 			throw customApolloErrors.wrongCredentials();

@@ -5,7 +5,7 @@ const message = (
 	message: string,
 	replaceMessage?: string,
 	appendMessage?: string
-) => replaceMessage || message + appendMessage || "";
+) => replaceMessage || message + (appendMessage || "");
 
 function customApolloErrors() {
 	return {

@@ -6,14 +6,14 @@ import { StoryListItem } from "../BacklogCard/StoryList";
 
 export const SprintTable = (props: { stories: StoryResponseType[] }) => {
   return (
-    <Grid>
+    <Grid stackable>
       <Grid.Row>
         <Grid.Column>
           <Heading.H4>Sprint Table</Heading.H4>
         </Grid.Column>
       </Grid.Row>
 
-      <Grid.Row columns={5} >
+      <Grid.Row columns={5}>
         <SprintColumn title="To do" stories={props.stories.filter(story => story.status === StoryStatus.Todo)} />
         <SprintColumn title="Developement" stories={props.stories.filter(story => story.status === StoryStatus.Developement)} />
         <SprintColumn title="Reivew" stories={props.stories.filter(story => story.status === StoryStatus.Review)} />

@@ -1,112 +1,36 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 import { DashboardCard } from "../../atoms/DashboardCard/DashboardCard";
-import { Modal } from "../../atoms/Modal/Modal";
-import { Formik, Field, Form } from "formik";
-import { useCreateSprintMutation, useArchiveActiveSprintMutation, ProjectQuery } from "../../../types.d";
-import { CardButton } from "../../atoms/Buttons/CardButton";
+import { ProjectQuery } from "../../../types.d";
 import dayjs from "dayjs";
 import { Colors } from "../../../global-styles/global-styles";
 import styled from "styled-components";
-import { ProjectDispatch } from "../../context/project-context/ProjectContext";
 import { SprintTable } from "./SprintTable";
-
+import { CreateSprintButton } from "./CreateSprintButton";
+import { ArchiveSprintButton } from "./ArchiveSprintButton";
 
 type Props = {
   project: ProjectQuery["project"]
 }
 
 export const ActiveSprintCard = (props: Props) => {
-  const [isCreateSprintModalOpen, setIsCreateSprintModalOpen] = useState(false);
-  const [createSprint] = useCreateSprintMutation();
-  const [archiveActiveSprint] = useArchiveActiveSprintMutation();
-  const projectDispatch = useContext(ProjectDispatch)
-
   return (
     <>
       <DashboardCard title="Active Sprint">
         <div>
           {props.project.activeSprint ?
-            <CardButton
-              popupText="Finish curretn sprint"
-              iconName="paper plane"
-              onClick={async () => {
-                try {
-                  const sprint = await archiveActiveSprint({ variables: { projectId: props.project.id } })
-                  if (sprint.data && projectDispatch) {
-                    projectDispatch.archiveSprint(sprint.data.archiveActiveSprint)
-                  }
-                } catch (err) {
-                  console.log(err)
-                }
-              }}
-            />
+            <ArchiveSprintButton project={props.project} />
             :
-            <CardButton
-              popupText="Create new sprint"
-              iconName="plus"
-              onClick={() => setIsCreateSprintModalOpen(true)}
-            />
+            <CreateSprintButton project={props.project} />
           }
         </div>
 
         <div>
           <ActiveSprint project={props.project} />
         </div>
-
       </DashboardCard>
-
-      <Modal open={isCreateSprintModalOpen} >
-        <Modal.Header>
-          Create New Sprint
-        </Modal.Header>
-
-        <Modal.Content>
-          <Formik
-            initialValues={{ setAsActiveSprint: true }}
-            onSubmit={async (values) => {
-              try {
-                const sprint = await createSprint({
-                  variables: {
-                    projectId: props.project.id,
-                    setAsActiveSprint: values.setAsActiveSprint
-                  }
-                })
-                if (sprint.data && projectDispatch) {
-                  projectDispatch.createSprint(sprint.data.createSprint)
-                } else {
-                  throw new Error("sprint response or project dispatch is missing.")
-                }
-              } catch (err) {
-                console.log(err)
-              }
-              setIsCreateSprintModalOpen(false)
-            }}
-          >
-            {() =>
-              <Form
-                id="sprint-form"
-              >
-                <label>Set as active sprint</label>
-                <Field type="checkbox" name="setAsActiveSprint" />
-              </Form>
-            }
-          </Formik>
-
-        </Modal.Content>
-
-        <Modal.Actions>
-          <button onClick={() => setIsCreateSprintModalOpen(false)}>
-            Cancel
-          </button>
-          <button type="submit" form="sprint-form">
-            Create
-          </button>
-        </Modal.Actions>
-      </Modal>
     </>
   )
 }
-
 
 const InfoPanel = styled.div`
   font-size: 14px;

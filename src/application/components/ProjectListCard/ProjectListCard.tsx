@@ -8,13 +8,12 @@ import { useCreateProjectMutation, useProjectsQuery } from "../../../types.d";
 import { Link } from "react-router-dom";
 import { CardButton } from "../../atoms/Buttons/CardButton";
 import { CardListItem } from "../../atoms/CardListItem/CardListItem";
-import { useRouteMatch } from "react-router-dom";
+import { RoutesMain } from "../../pages/AppRoutes";
 
 export const ProjectListCard = () => {
   const [addProjectIsOpen, setAddProjectIsOpen] = useState(false);
   const [createProject] = useCreateProjectMutation();
   const projects = useProjectsQuery();
-  const match = useRouteMatch();
 
   return (
     <>
@@ -34,8 +33,11 @@ export const ProjectListCard = () => {
             <>
               {projects.data.projects.map((project) =>
                 <CardListItem key={project.id} >
-                  <Link to={`${match.url}/project/${project.id}`} >
-                    {`${project.pid || ""} ${project.title}`}
+                  <Link to={`${RoutesMain.DASHBOARD}/project/${project.id}`} >
+                    {project.pid
+                      ? project.pid + " - " + project.title
+                      : project.title
+                    }
                   </Link>
                 </CardListItem>
               )}
@@ -44,9 +46,9 @@ export const ProjectListCard = () => {
         </div>
       </DashboardCard>
 
-      <Modal open={addProjectIsOpen} >
+      <Modal open={addProjectIsOpen} onClose={() => setAddProjectIsOpen(false)} >
         <Modal.Header>
-          Add Team Member
+          Create new project
         </Modal.Header>
         <Modal.Content>
           <Formik
@@ -70,7 +72,8 @@ export const ProjectListCard = () => {
           >
             {() =>
               <Form id="create-project-form">
-                <Grid>
+                <Grid stackable>
+                  <Divider hidden={true} />
                   <Grid.Row columns="equal">
                     <Grid.Column>
                       <div style={{ marginBottom: "50px" }}>
@@ -78,14 +81,15 @@ export const ProjectListCard = () => {
                         <Input name="title" type="text" />
                         <InputError name="title" />
                       </div>
+                    </Grid.Column>
 
+                    <Grid.Column>
                       <div style={{ marginBottom: "50px" }}>
                         <label>Identification Number</label>
                         <Input name="pid" type="text" />
                         <InputError name="pid" />
                       </div>
                     </Grid.Column>
-
                   </Grid.Row>
                 </Grid>
               </Form>
@@ -94,11 +98,11 @@ export const ProjectListCard = () => {
 
         </Modal.Content>
         <Modal.Actions>
-          <button type="submit" form="create-project-form">
-            Create
-          </button>
           <button onClick={() => setAddProjectIsOpen(false)}>
             Cancel
+          </button>
+          <button type="submit" form="create-project-form">
+            Create
           </button>
         </Modal.Actions>
 

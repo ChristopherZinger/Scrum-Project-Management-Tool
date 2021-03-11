@@ -20,7 +20,7 @@ export const CreateSprintButton = (props: { project: ProjectQuery["project"] }) 
         onClick={() => setIsCreateSprintModalOpen(true)}
       />
 
-      <Modal open={isCreateSprintModalOpen} >
+      <Modal open={isCreateSprintModalOpen} onClose={() => setIsCreateSprintModalOpen(false)}>
         <Modal.Header>
           Create New Sprint
         </Modal.Header>

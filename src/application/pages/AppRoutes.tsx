@@ -40,7 +40,6 @@ const AuthRoutes = () =>
     <Route path={RoutesMain.HOME} exact component={Dashboard} />
     <Route path={RoutesMain.REGISTER_COMPANY} component={RegisterCompany} />
     <Route path={RoutesMain.DASHBOARD} component={Dashboard} />
-    <Route component={NotFound} />
   </>
 
 

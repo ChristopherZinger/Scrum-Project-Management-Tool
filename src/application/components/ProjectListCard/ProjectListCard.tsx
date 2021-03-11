@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { CardButton } from "../../atoms/Buttons/CardButton";
 import { CardListItem } from "../../atoms/CardListItem/CardListItem";
 import { useRouteMatch } from "react-router-dom";
+import { RoutesMain } from "../../pages/AppRoutes";
 
 export const ProjectListCard = () => {
   const [addProjectIsOpen, setAddProjectIsOpen] = useState(false);
@@ -34,7 +35,7 @@ export const ProjectListCard = () => {
             <>
               {projects.data.projects.map((project) =>
                 <CardListItem key={project.id} >
-                  <Link to={`${match.url}/project/${project.id}`} >
+                  <Link to={`${RoutesMain.DASHBOARD}/project/${project.id}`} >
                     {project.pid
                       ? project.pid + " - " + project.title
                       : project.title

@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { Modal } from "../../atoms/Modal/Modal";
 import { Formik, Form } from "formik";
 import { ProjectDispatch } from "../../context/project-context/ProjectContext";
+import { toast } from "react-toastify";
 
 const LabelColor = styled.div`
   transform: translateY(4px);
@@ -56,7 +57,7 @@ export const StoryListItem = (props: { story: StoryResponseType }) => {
 
 
 const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }) => {
-  const [updateStory, updateStoryResult] = useUpdateStoryMutation();
+  const [updateStory, { loading, error }] = useUpdateStoryMutation();
   const projectDispatch = useContext(ProjectDispatch);
 
   return (
@@ -82,8 +83,7 @@ const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }
                 projectDispatch.updateStory(updatedStory.data.updateStory)
               }
             } catch (err) {
-              console.log(err.networkError)
-              console.log(err.graphQLErrors)
+              toast.error(error?.message || err.message || "Ups! Something went wrong.")
             }
             props.close();
           }}
@@ -140,7 +140,7 @@ const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }
       <Modal.Actions>
         <button
           onClick={() => props.close()}
-          disabled={updateStoryResult.loading}
+          disabled={loading}
         >
           Cancel
         </button>
@@ -148,7 +148,7 @@ const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }
         <button
           type="submit"
           form="update-story-form"
-          disabled={updateStoryResult.loading}
+          disabled={loading}
         >
           Update
       </button>

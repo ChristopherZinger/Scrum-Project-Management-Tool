@@ -19,7 +19,6 @@ export const Project = () => {
       {project && (
         <>
           <Grid.Row columns={3} stretched>
-
             <Grid.Column>
               <ProjectCard project={project} />
             </Grid.Column>

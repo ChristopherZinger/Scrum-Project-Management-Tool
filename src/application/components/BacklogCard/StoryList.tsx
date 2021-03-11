@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import { ProjectQuery, StoryResponseType, useUpdateStoryMutation, StoryStatus } from "../../../types.d";
-import { Checkbox, Divider, Dropdown, Grid } from "semantic-ui-react";
-import { Colors } from "../../../global-styles/global-styles";
+import { ProjectQuery, StoryResponseType, useUpdateStoryMutation, StoryStatus, useRemoveStoryMutation } from "../../../types.d";
+import { Checkbox, Divider, Dropdown, Grid, Icon } from "semantic-ui-react";
+import { Colors, Heading } from "../../../global-styles/global-styles";
 import styled from "styled-components";
 import { Modal } from "../../atoms/Modal/Modal";
 import { Formik, Form } from "formik";
@@ -31,24 +31,56 @@ export const StoryList = (props: { stories: ProjectQuery["project"]["backlog"] }
 
 export const StoryListItem = (props: { story: StoryResponseType }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [showRemoveStoryModal, setShowRemoveStoryModal] = useState(false);
+  const [removeStory, { loading, error }] = useRemoveStoryMutation();
+  const dispatch = useContext(ProjectDispatch)
 
   return (
     <>
       <Grid >
-        <Grid.Row style={{ padding: "3px 0px", cursor: "pointer" }} onClick={() => setModalIsOpen(true)}>
+        <Grid.Row style={{ padding: "3px 0px", cursor: "pointer" }}>
           <Grid.Column width={1}>
             <LabelColor />
           </Grid.Column>
 
-          <Grid.Column width={12}>
+          <Grid.Column width={12} onClick={() => setModalIsOpen(true)} >
             <CardListItem>
               {props.story.title}
             </CardListItem>
           </Grid.Column>
+
+          <Grid.Column>
+            <Icon name="cancel" color="red" onClick={() => setShowRemoveStoryModal(true)} />
+          </Grid.Column>
         </Grid.Row>
       </Grid>
-      { modalIsOpen && (
-        <UpdateStoryModal story={props.story} close={() => setModalIsOpen(false)} />
+      {
+        modalIsOpen && (
+          <UpdateStoryModal story={props.story} close={() => setModalIsOpen(false)} />
+        )
+      }
+      { showRemoveStoryModal && (
+        <Modal open onClose={() => setShowRemoveStoryModal(true)}>
+          <Modal.Header>Remove Story</Modal.Header>
+          <Modal.Content>
+            <Heading.H4>Are you sure you want to remove "{props.story.title}" story?</Heading.H4>
+          </Modal.Content>
+          <Modal.Actions>
+            <button onClick={() => setShowRemoveStoryModal(false)}>Cancel</button>
+            <button
+              disabled={loading}
+              onClick={async () => {
+                try {
+                  const story = await removeStory({ variables: { storyId: props.story.id } })
+                  if (story.data && dispatch) {
+                    dispatch.removeStory(story.data.removeStory)
+                  }
+                } catch (err) {
+                  toast.error(error?.message || err.message || "Ups! Something went wrong.")
+                }
+              }}>Remove</button>
+          </Modal.Actions>
+        </Modal>
       )}
     </>
   )

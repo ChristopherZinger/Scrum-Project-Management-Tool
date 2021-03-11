@@ -7,6 +7,7 @@ import { Modal } from "../../atoms/Modal/Modal";
 import { Formik, Form } from "formik";
 import { ProjectDispatch } from "../../context/project-context/ProjectContext";
 import { toast } from "react-toastify";
+import { CardListItem } from "../../atoms/CardListItem/CardListItem";
 
 const LabelColor = styled.div`
   transform: translateY(4px);
@@ -40,12 +41,10 @@ export const StoryListItem = (props: { story: StoryResponseType }) => {
           </Grid.Column>
 
           <Grid.Column width={12}>
-            {props.story.title}
+            <CardListItem>
+              {props.story.title}
+            </CardListItem>
           </Grid.Column>
-
-          <Grid.Column width={2}>
-            .
-        </Grid.Column>
         </Grid.Row>
       </Grid>
       { modalIsOpen && (

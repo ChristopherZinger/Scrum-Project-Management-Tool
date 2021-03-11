@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { ProjectQuery, useRemoveProjectMutation, useUpdateProjectMutation } from "../../../types.d";
 import { DashboardCard } from "../../atoms/DashboardCard/DashboardCard";
@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { RoutesMain } from "../../pages/AppRoutes";
 import { Input } from "../../atoms/Inputs/Input";
 import { Formik, Form } from "formik";
+import { ProjectDispatch } from "../../context/project-context/ProjectContext";
 
 export const ProjectCard = (props: { project: ProjectQuery["project"] }) => {
 
@@ -64,6 +65,7 @@ const RemoveProjectButton = (props: { project: ProjectQuery["project"] }) => {
 const EditProjectButton = (props: { project: ProjectQuery["project"] }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [updatedProject, { loading, error }] = useUpdateProjectMutation();
+  const dispatch = useContext(ProjectDispatch);
 
   return (
     <>
@@ -89,8 +91,11 @@ const EditProjectButton = (props: { project: ProjectQuery["project"] }) => {
                       }
                     }
                   })
-                  console.log(project)
-
+                  if (project.data && dispatch) {
+                    console.log(project.data.updateProject);
+                    dispatch.updateProject(project.data.updateProject);
+                  }
+                  setIsModalOpen(false);
                 } catch (err) {
                   toast.error(error?.message || err.message || "Ups! Something went wrong.")
                 }

@@ -9,7 +9,7 @@ import { Colors } from "../../../global-styles/global-styles";
 import styled from "styled-components";
 import { ProjectDispatch } from "../../context/project-context/ProjectContext";
 import { SprintTable } from "./SprintTable";
-
+import { Checkbox } from "semantic-ui-react"
 
 type Props = {
   project: ProjectQuery["project"]
@@ -82,12 +82,22 @@ export const ActiveSprintCard = (props: Props) => {
               setIsCreateSprintModalOpen(false)
             }}
           >
-            {() =>
+            {({ setFieldValue, values }) =>
               <Form
                 id="sprint-form"
               >
-                <label>Set as active sprint</label>
-                <Field type="checkbox" name="setAsActiveSprint" />
+                <Checkbox
+                  label={{ children: "Set as active sprint" }}
+                  name="setAsActiveSprint"
+                  onChange={(_, { name, checked }) => {
+                    if (name) {
+                      setFieldValue(name, !!checked)
+                    } else {
+                      throw new Error("Missing field name during update")
+                    }
+                  }}
+                  checked={values.setAsActiveSprint}
+                />
               </Form>
             }
           </Formik>

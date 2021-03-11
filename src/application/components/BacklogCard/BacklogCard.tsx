@@ -83,7 +83,7 @@ export const BacklogCard = (props: Props) => {
           </Modal.Content>
 
           <Modal.Actions>
-            <button onClick={() => setModalIsOpen(false)} >close</button>
+            <button onClick={() => setModalIsOpen(false)} >Cancel</button>
             <button type="submit" form="story-form" >Create</button>
           </Modal.Actions>
 

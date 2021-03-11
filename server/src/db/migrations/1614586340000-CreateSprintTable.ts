@@ -28,6 +28,7 @@ const migration = {
 					projectId: {
 						type: DataTypes.INTEGER,
 						allowNull: false,
+						onDelete: "CASCADE",
 						references: {
 							model: "Project",
 							key: "id"

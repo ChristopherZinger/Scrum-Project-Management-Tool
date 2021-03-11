@@ -34,7 +34,7 @@ export const BacklogCard = (props: Props) => {
       </DashboardCard>
 
       {modalIsOpen && (
-        <Modal open >
+        <Modal open onClose={() => setModalIsOpen(false)} >
           <Modal.Header>
             Create new story
           </Modal.Header>

@@ -61,7 +61,7 @@ const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }
   const projectDispatch = useContext(ProjectDispatch);
 
   return (
-    <Modal open>
+    <Modal open onClose={props.close}>
       <Modal.Header>
         {props.story.title}
       </Modal.Header>

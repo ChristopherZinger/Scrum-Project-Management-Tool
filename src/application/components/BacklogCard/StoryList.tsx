@@ -5,7 +5,7 @@ import { Colors } from "../../../global-styles/global-styles";
 import styled from "styled-components";
 import { Modal } from "../../atoms/Modal/Modal";
 import { Formik, Form } from "formik";
-import { ProjectDispatch } from "../../context/project-context/ProjectContext";
+import { ProjectContext, ProjectDispatch } from "../../context/project-context/ProjectContext";
 import { toast } from "react-toastify";
 import { CardListItem } from "../../atoms/CardListItem/CardListItem";
 
@@ -56,8 +56,15 @@ export const StoryListItem = (props: { story: StoryResponseType }) => {
 
 
 const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }) => {
+  const { project } = useContext(ProjectContext);
   const [updateStory, { loading, error }] = useUpdateStoryMutation();
   const projectDispatch = useContext(ProjectDispatch);
+  const storyBelonsToActiveSprint: boolean = Boolean(props.story?.sprintId && project?.activeSprintId === props.story.sprintId)
+
+  const initialValues: { status: any, addToActiveSprint?: boolean } = { status: props.story.status };
+  if (!storyBelonsToActiveSprint) {
+    initialValues.addToActiveSprint = storyBelonsToActiveSprint
+  }
 
   return (
     <Modal open onClose={props.close}>
@@ -66,7 +73,7 @@ const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }
       </Modal.Header>
       <Modal.Content>
         <Formik
-          initialValues={{ status: props.story.status, addToActiveSprint: false }}
+          initialValues={initialValues}
           onSubmit={async (values) => {
             try {
               const updatedStory = await updateStory({
@@ -74,7 +81,7 @@ const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }
                   data: {
                     storyId: props.story.id,
                     status: values.status,
-                    addToActiveSprint: values.addToActiveSprint
+                    addToActiveSprint: "addToActiveSprint" in values ? values.addToActiveSprint : false
                   }
                 }
               })
@@ -97,8 +104,7 @@ const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }
               <Form id="update-story-form">
                 <Divider hidden={true} />
 
-                <div>
-                  {/* //TODO checkbox should be hidden if story already belongs to active sprint */}
+                { !storyBelonsToActiveSprint && (<div>
                   <Checkbox
                     label={{ children: "Add to active sprint" }}
                     name="addToActiveSprint"
@@ -111,7 +117,7 @@ const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }
                     }}
                     checked={values.addToActiveSprint}
                   />
-                </div>
+                </div>)}
                 <Divider hidden={true} />
 
                 <div>

@@ -8,14 +8,12 @@ import { useCreateProjectMutation, useProjectsQuery } from "../../../types.d";
 import { Link } from "react-router-dom";
 import { CardButton } from "../../atoms/Buttons/CardButton";
 import { CardListItem } from "../../atoms/CardListItem/CardListItem";
-import { useRouteMatch } from "react-router-dom";
 import { RoutesMain } from "../../pages/AppRoutes";
 
 export const ProjectListCard = () => {
   const [addProjectIsOpen, setAddProjectIsOpen] = useState(false);
   const [createProject] = useCreateProjectMutation();
   const projects = useProjectsQuery();
-  const match = useRouteMatch();
 
   return (
     <>

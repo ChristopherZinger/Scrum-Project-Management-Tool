@@ -1,0 +1,9 @@
+mutation RemoveStory($storyId: Int!) {
+	removeStory(storyId: $storyId) {
+		id
+		title
+		description
+		status
+		sprintId
+	}
+}

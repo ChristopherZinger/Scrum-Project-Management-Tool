@@ -10,6 +10,7 @@ import styled from "styled-components";
 import { ProjectDispatch } from "../../context/project-context/ProjectContext";
 import { SprintTable } from "./SprintTable";
 import { Checkbox } from "semantic-ui-react"
+import { toast } from "react-toastify";
 
 type Props = {
   project: ProjectQuery["project"]
@@ -17,7 +18,7 @@ type Props = {
 
 export const ActiveSprintCard = (props: Props) => {
   const [isCreateSprintModalOpen, setIsCreateSprintModalOpen] = useState(false);
-  const [createSprint] = useCreateSprintMutation();
+  const [createSprint, createSprintResult] = useCreateSprintMutation();
   const [archiveActiveSprint] = useArchiveActiveSprintMutation();
   const projectDispatch = useContext(ProjectDispatch)
 
@@ -74,10 +75,10 @@ export const ActiveSprintCard = (props: Props) => {
                 if (sprint.data && projectDispatch) {
                   projectDispatch.createSprint(sprint.data.createSprint)
                 } else {
-                  throw new Error("sprint response or project dispatch is missing.")
+                  throw new Error("Server response or project dispatch is missing.")
                 }
               } catch (err) {
-                console.log(err)
+                toast.error(createSprintResult.error?.message || err.message || "Ups! Something went wrong.")
               }
               setIsCreateSprintModalOpen(false)
             }}
@@ -108,7 +109,7 @@ export const ActiveSprintCard = (props: Props) => {
           <button onClick={() => setIsCreateSprintModalOpen(false)}>
             Cancel
           </button>
-          <button type="submit" form="sprint-form">
+          <button disabled={!createSprintResult.loading} type="submit" form="sprint-form">
             Create
           </button>
         </Modal.Actions>

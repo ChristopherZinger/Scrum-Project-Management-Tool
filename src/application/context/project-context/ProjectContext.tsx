@@ -20,6 +20,7 @@ interface IActionDispatch {
 
   createStory: (data: StoryResponseType) => void,
   updateStory: (data: StoryResponseType) => void,
+  removeStory: (data: StoryResponseType) => void,
 }
 
 const initialValue: ProjectContextType = { project: null };
@@ -42,7 +43,8 @@ export const ProjectContextWrapper = (props: Props) => {
 
     // stories
     createStory: (data: StoryResponseType) => dispatch({ type: Action.CREATE_STORY, data }),
-    updateStory: (data: StoryResponseType) => dispatch({ type: Action.UPDATE_STORY, data })
+    updateStory: (data: StoryResponseType) => dispatch({ type: Action.UPDATE_STORY, data }),
+    removeStory: (data: StoryResponseType) => dispatch({ type: Action.REMOVE_STORY, data })
   }
 
   useEffect(() => {

@@ -74,6 +74,23 @@ function updateStoryReducer(
 	};
 }
 
+function removeStoryReducer(
+	state: ProjectContextType,
+	data: StoryResponseType
+): ProjectContextType {
+	if (!state.project) return { ...state };
+	const updatedBacklog = state.project.backlog
+		? [...state.project.backlog.filter(story => story.id !== data.id)]
+		: [];
+	return {
+		...state,
+		project: {
+			...state.project,
+			backlog: updatedBacklog
+		}
+	};
+}
+
 export function projectReducer(
 	state: ProjectContextType,
 	action: ProjectActionType
@@ -96,6 +113,9 @@ export function projectReducer(
 
 		case Action.UPDATE_STORY:
 			return updateStoryReducer(state, action.data);
+
+		case Action.REMOVE_STORY:
+			return removeStoryReducer(state, action.data);
 
 		default:
 			return state;

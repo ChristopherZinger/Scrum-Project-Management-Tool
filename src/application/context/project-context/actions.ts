@@ -13,7 +13,8 @@ export enum Action {
 
 	// story
 	CREATE_STORY = "CREATE_STORY",
-	UPDATE_STORY = "UPDATE_STORY"
+	UPDATE_STORY = "UPDATE_STORY",
+	REMOVE_STORY = "REMOVE_STORY"
 }
 
 export type ProjectActionType =
@@ -35,5 +36,9 @@ export type ProjectActionType =
 	  }
 	| {
 			type: Action.UPDATE_STORY;
+			data: StoryResponseType;
+	  }
+	| {
+			type: Action.REMOVE_STORY;
 			data: StoryResponseType;
 	  };

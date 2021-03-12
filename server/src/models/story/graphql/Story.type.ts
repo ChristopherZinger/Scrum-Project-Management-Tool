@@ -11,10 +11,10 @@ export class StoryType {
 	@Field(() => String)
 	title!: string;
 
-	@Field(() => String, { nullable: true })
-	description!: string | null;
+	@Field(() => String, { defaultValue: "" })
+	description?: string;
 
-	@Field(() => StoryStatus)
+	@Field(() => StoryStatus, { defaultValue: StoryStatus.BACKLOG })
 	status!: StoryStatus;
 
 	@Field(() => Int, { nullable: true })

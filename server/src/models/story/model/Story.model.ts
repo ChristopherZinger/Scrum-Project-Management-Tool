@@ -2,6 +2,7 @@ import { UserProfile } from "./../../userProfile/model/UserProfile.model";
 import { Sprint } from "./../../sprint/model/Sprint.model";
 import {
 	Column,
+	Default,
 	Model,
 	ForeignKey,
 	BelongsTo,
@@ -31,10 +32,11 @@ export class Story extends Model<Story> {
 	@Column
 	public title!: string;
 
-	@AllowNull(true)
+	@Default("")
 	@Column(DataType.STRING)
-	public description!: string | null;
+	public description!: string;
 
+	@Default(StoryStatus.BACKLOG)
 	@Column(
 		DataType.ENUM({
 			values: Object.values(StoryStatus)

@@ -15,8 +15,8 @@ export class StoryResponseType implements IStoryResponse {
 	@Field()
 	title!: string;
 
-	@Field(() => String, { nullable: true })
-	description!: string | null;
+	@Field(() => String)
+	description!: string;
 
 	@Field(() => StoryStatus)
 	status!: StoryStatus;

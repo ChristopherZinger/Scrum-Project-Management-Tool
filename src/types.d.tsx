@@ -43,7 +43,7 @@ export type StoryResponseType = {
   __typename?: 'StoryResponseType';
   id: Scalars['Float'];
   title: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
   status: StoryStatus;
   userProfileId?: Maybe<Scalars['Int']>;
   sprintId?: Maybe<Scalars['Int']>;
@@ -63,7 +63,7 @@ export type ProjectResponseType = {
   id: Scalars['Int'];
   pid?: Maybe<Scalars['String']>;
   title: Scalars['String'];
-  backlog?: Maybe<Array<StoryResponseType>>;
+  backlog: Array<StoryResponseType>;
   activeSprint?: Maybe<SprintResponseType>;
   activeSprintId?: Maybe<Scalars['Int']>;
 };
@@ -100,7 +100,7 @@ export type UpdateProjectInputType = {
 
 export type CreateStoryInputType = {
   title: Scalars['String'];
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   projectId: Scalars['Int'];
   status?: Maybe<StoryStatus>;
   sprintId?: Maybe<Scalars['Float']>;
@@ -109,6 +109,8 @@ export type CreateStoryInputType = {
 
 export type UpdateStoryInputType = {
   storyId: Scalars['Int'];
+  title: Scalars['String'];
+  description: Scalars['String'];
   status?: Maybe<StoryStatus>;
   addToActiveSprint?: Maybe<Scalars['Boolean']>;
   removeFromActiveSprint?: Maybe<Scalars['Boolean']>;
@@ -382,10 +384,10 @@ export type ProjectQuery = (
   & { project: (
     { __typename?: 'ProjectResponseType' }
     & Pick<ProjectResponseType, 'id' | 'title' | 'pid' | 'activeSprintId'>
-    & { backlog?: Maybe<Array<(
+    & { backlog: Array<(
       { __typename?: 'StoryResponseType' }
       & Pick<StoryResponseType, 'id' | 'title' | 'description' | 'status' | 'sprintId'>
-    )>>, activeSprint?: Maybe<(
+    )>, activeSprint?: Maybe<(
       { __typename?: 'SprintResponseType' }
       & Pick<SprintResponseType, 'id' | 'projectId' | 'startsAt' | 'endsAt' | 'isFinished' | 'isActive'>
     )> }
@@ -500,6 +502,10 @@ export type UpdateProjectMutation = (
   & { updateProject: (
     { __typename?: 'ProjectResponseType' }
     & Pick<ProjectResponseType, 'id' | 'title' | 'pid' | 'activeSprintId'>
+    & { backlog: Array<(
+      { __typename?: 'StoryResponseType' }
+      & Pick<StoryResponseType, 'id' | 'title' | 'description' | 'status'>
+    )> }
   ) }
 );
 
@@ -1155,6 +1161,12 @@ export const UpdateProjectDocument = gql`
     title
     pid
     activeSprintId
+    backlog {
+      id
+      title
+      description
+      status
+    }
   }
 }
     `;

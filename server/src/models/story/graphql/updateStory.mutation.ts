@@ -19,6 +19,12 @@ export class UpdateStoryInputType {
 	@Field(() => Int)
 	storyId!: number;
 
+	@Field(() => String)
+	title!: string;
+
+	@Field(() => String)
+	description!: string;
+
 	@Field(() => StoryStatus, { nullable: true })
 	status?: StoryStatus;
 
@@ -43,6 +49,7 @@ export class UpdateStoryMutation {
 		@Arg("data") data: UpdateStoryInputType
 	): Promise<StoryResponseType> {
 		const updatedStory = await this.storyRepository.update(data.storyId, data);
+
 		if (!updatedStory) {
 			throw new ApolloError("Story was not updated", "UPDATE_FAIL");
 		}

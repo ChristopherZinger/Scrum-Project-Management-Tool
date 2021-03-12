@@ -22,14 +22,14 @@ export class CreateStoryInputType {
 	@Field()
 	title!: string;
 
-	@Field()
-	description?: string;
+	@Field({ defaultValue: "" })
+	description!: string;
 
 	@Field(() => Int)
 	projectId!: number;
 
-	@Field(() => StoryStatus, { nullable: true })
-	status?: StoryStatus;
+	@Field(() => StoryStatus, { defaultValue: StoryStatus.BACKLOG })
+	status!: StoryStatus;
 
 	@Field({ nullable: true })
 	sprintId?: number;

@@ -13,16 +13,8 @@ export class StoryRepository extends BaseRepository<Story> {
 		const story = new this.model();
 		story.title = data.title;
 		story.projectId = data.projectId;
-
-		if (!data.status) {
-			story.status = StoryStatus.BACKLOG;
-		} else {
-			story.status = data.status;
-		}
-
-		if (data.description) {
-			story.description = data.description;
-		}
+		story.description = data.description;
+		story.status = data.status;
 
 		if (data.userProfileId) {
 			story.userProfileId = data.userProfileId;
@@ -59,7 +51,14 @@ export class StoryRepository extends BaseRepository<Story> {
 				);
 			}
 			story.status = data.status;
+
+			// remove sprint if set back to backlog
+			if (data.status === StoryStatus.BACKLOG) {
+				story.sprintId = null;
+			}
 		}
+		story.title = data.title;
+		story.description = data.description;
 
 		return await this.save(story);
 	}

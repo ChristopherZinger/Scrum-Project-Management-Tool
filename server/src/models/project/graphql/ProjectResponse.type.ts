@@ -14,8 +14,8 @@ export class ProjectResponseType implements IProjectResponse {
 	@Field()
 	title!: string;
 
-	@Field(() => [StoryResponseType], { nullable: true })
-	backlog?: StoryResponseType[];
+	@Field(() => [StoryResponseType])
+	backlog!: StoryResponseType[];
 
 	@Field(() => SprintResponseType, { nullable: true })
 	activeSprint?: SprintResponseType;

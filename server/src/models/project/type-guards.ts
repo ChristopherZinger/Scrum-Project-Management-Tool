@@ -5,7 +5,7 @@ export interface IProjectResponse {
 	id: number;
 	title: string;
 	pid: string | null;
-	backlog?: StoryResponseType[];
+	backlog: StoryResponseType[];
 	activeSprint?: SprintResponseType;
 	activeSprintId: number | null;
 }

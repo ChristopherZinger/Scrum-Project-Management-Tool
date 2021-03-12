@@ -18,7 +18,7 @@ const migration = {
 					},
 					description: {
 						type: DataTypes.STRING,
-						allowNull: true
+						allowNull: false
 					},
 					status: {
 						type: DataTypes.ENUM({

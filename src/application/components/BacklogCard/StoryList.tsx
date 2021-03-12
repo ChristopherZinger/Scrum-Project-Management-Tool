@@ -8,6 +8,7 @@ import { Formik, Form } from "formik";
 import { ProjectContext, ProjectDispatch } from "../../context/project-context/ProjectContext";
 import { toast } from "react-toastify";
 import { CardListItem } from "../../atoms/CardListItem/CardListItem";
+import { Input } from "../../atoms/Inputs/Input";
 
 const LabelColor = styled.div`
   transform: translateY(4px);
@@ -93,7 +94,18 @@ const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }
   const projectDispatch = useContext(ProjectDispatch);
   const storyBelonsToActiveSprint: boolean = Boolean(props.story?.sprintId && project?.activeSprintId === props.story.sprintId)
 
-  const initialValues: { status: any, addToActiveSprint?: boolean } = { status: props.story.status };
+  const initialValues: {
+    status: any,
+    addToActiveSprint?: boolean,
+    title: string,
+    description: string
+  } = {
+    status: props.story.status,
+    title: props.story.title,
+    description: props.story.description,
+    addToActiveSprint: storyBelonsToActiveSprint
+  };
+
   if (!storyBelonsToActiveSprint) {
     initialValues.addToActiveSprint = storyBelonsToActiveSprint
   }
@@ -113,7 +125,9 @@ const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }
                   data: {
                     storyId: props.story.id,
                     status: values.status,
-                    addToActiveSprint: "addToActiveSprint" in values ? values.addToActiveSprint : false
+                    addToActiveSprint: "addToActiveSprint" in values ? values.addToActiveSprint : false,
+                    title: values.title,
+                    description: values.description
                   }
                 }
               })
@@ -134,41 +148,69 @@ const UpdateStoryModal = (props: { story: StoryResponseType, close: () => void }
 
             return (
               <Form id="update-story-form">
-                <Divider hidden={true} />
+                <Grid stackable>
+                  <Divider hidden={true} />
 
-                { !storyBelonsToActiveSprint && (<div>
-                  <Checkbox
-                    label={{ children: "Add to active sprint" }}
-                    name="addToActiveSprint"
-                    onChange={(_, { name, checked }) => {
-                      if (name) {
-                        setFieldValue(name, !!checked)
-                      } else {
-                        throw new Error("Missing field name during update")
-                      }
-                    }}
-                    checked={values.addToActiveSprint}
-                  />
-                </div>)}
-                <Divider hidden={true} />
+                  <Grid.Row>
+                    <Grid.Column width={6}>
+                      {!storyBelonsToActiveSprint && (
+                        <Checkbox
+                          label={{ children: "Add to active sprint" }}
+                          name="addToActiveSprint"
+                          onChange={(_, { name, checked }) => {
+                            if (name) {
+                              setFieldValue(name, !!checked)
+                            } else {
+                              throw new Error("Missing field name during update")
+                            }
+                          }}
+                          checked={values.addToActiveSprint}
+                        />
+                      )}
+                    </Grid.Column>
+                  </Grid.Row>
 
-                <div>
-                  <Dropdown
-                    name="status"
-                    fluid
-                    selection
-                    onChange={(_, data) => {
-                      if (data.name) {
-                        setFieldValue(data.name, data.value)
-                      } else {
-                        throw new Error("Missing field name during update")
-                      }
-                    }}
-                    options={storyStatusDropdownOptions}
-                    defaultValue={props.story.status.toString()} />
+                  <Divider hidden={true} />
 
-                </div>
-                <Divider hidden={true} />
+                  <Grid.Row>
+                    <Grid.Column computer={10}>
+                      <Dropdown
+                        name="status"
+                        fluid
+                        selection
+                        onChange={(_, data) => {
+                          if (data.name) {
+                            setFieldValue(data.name, data.value)
+                          } else {
+                            throw new Error("Missing field name during update")
+                          }
+                        }}
+                        options={storyStatusDropdownOptions}
+                        defaultValue={props.story.status} />
+                    </Grid.Column>
+                  </Grid.Row>
+
+                  <Divider hidden={true} />
+
+                  <Grid.Row>
+                    <Grid.Column computer={10}>
+                      <label htmlFor="title">Title</label>
+                      <Input name="title" />
+                    </Grid.Column>
+                  </Grid.Row>
+
+                  <Divider hidden={true} />
+
+                  <Grid.Row>
+                    <Grid.Column computer={10}>
+                      <label htmlFor="description">description</label>
+                      <Input name="description" />
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+
+
+
               </Form>
             )
           }}

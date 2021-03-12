@@ -14,6 +14,7 @@ type Props = {
 
 interface IActionDispatch {
   loadProject: (data: ProjectResponseType) => void,
+  updateProject: (data: ProjectResponseType) => void,
 
   createSprint: (data: SprintResponseType) => void,
   archiveSprint: (data: SprintResponseType) => void,
@@ -36,6 +37,7 @@ export const ProjectContextWrapper = (props: Props) => {
   const actions: IActionDispatch = {
     // project
     loadProject: (data: ProjectResponseType) => dispatch({ type: Action.LOAD_PROJECT, data }),
+    updateProject: (data: ProjectResponseType) => dispatch({ type: Action.UPDATE_PROJECT, data }),
 
     // sprint
     createSprint: (data: SprintResponseType) => dispatch({ type: Action.CREATE_SPRINT, data }),

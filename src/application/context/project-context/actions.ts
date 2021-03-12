@@ -6,6 +6,7 @@ import {
 export enum Action {
 	// project
 	LOAD_PROJECT = "LOAD_PROJECT",
+	UPDATE_PROJECT = "UPDATE_PROJECT",
 
 	// sprint
 	CREATE_SPRINT = "CREATE_SPRINT",
@@ -20,6 +21,10 @@ export enum Action {
 export type ProjectActionType =
 	| {
 			type: Action.LOAD_PROJECT;
+			data: ProjectResponseType;
+	  }
+	| {
+			type: Action.UPDATE_PROJECT;
 			data: ProjectResponseType;
 	  }
 	| {

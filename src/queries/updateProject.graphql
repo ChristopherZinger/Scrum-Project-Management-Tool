@@ -1,0 +1,8 @@
+mutation UpdateProject($data: UpdateProjectInputType!) {
+	updateProject(data: $data) {
+		id
+		title
+		pid
+		activeSprintId
+	}
+}

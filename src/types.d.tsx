@@ -92,6 +92,12 @@ export type CreateProjectInputType = {
   pid: Scalars['String'];
 };
 
+export type UpdateProjectInputType = {
+  projectId: Scalars['Int'];
+  title: Scalars['String'];
+  pid: Scalars['String'];
+};
+
 export type CreateStoryInputType = {
   title: Scalars['String'];
   description: Scalars['String'];
@@ -157,6 +163,7 @@ export type Mutation = {
   RegisterCompany: Scalars['Boolean'];
   createProject: ProjectResponseType;
   removeProject: ProjectResponseType;
+  updateProject: ProjectResponseType;
   archiveActiveSprint: SprintResponseType;
   createSprint: SprintResponseType;
   createStory: StoryResponseType;
@@ -187,6 +194,11 @@ export type MutationCreateProjectArgs = {
 
 export type MutationRemoveProjectArgs = {
   projectId: Scalars['Int'];
+};
+
+
+export type MutationUpdateProjectArgs = {
+  data: UpdateProjectInputType;
 };
 
 
@@ -475,6 +487,19 @@ export type TeammatesQuery = (
       { __typename?: 'TeammateResponse' }
       & Pick<TeammateResponse, 'firstname' | 'lastname' | 'email'>
     )> }
+  ) }
+);
+
+export type UpdateProjectMutationVariables = Exact<{
+  data: UpdateProjectInputType;
+}>;
+
+
+export type UpdateProjectMutation = (
+  { __typename?: 'Mutation' }
+  & { updateProject: (
+    { __typename?: 'ProjectResponseType' }
+    & Pick<ProjectResponseType, 'id' | 'title' | 'pid' | 'activeSprintId'>
   ) }
 );
 
@@ -1123,6 +1148,41 @@ export function useTeammatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type TeammatesQueryHookResult = ReturnType<typeof useTeammatesQuery>;
 export type TeammatesLazyQueryHookResult = ReturnType<typeof useTeammatesLazyQuery>;
 export type TeammatesQueryResult = Apollo.QueryResult<TeammatesQuery, TeammatesQueryVariables>;
+export const UpdateProjectDocument = gql`
+    mutation UpdateProject($data: UpdateProjectInputType!) {
+  updateProject(data: $data) {
+    id
+    title
+    pid
+    activeSprintId
+  }
+}
+    `;
+export type UpdateProjectMutationFn = Apollo.MutationFunction<UpdateProjectMutation, UpdateProjectMutationVariables>;
+
+/**
+ * __useUpdateProjectMutation__
+ *
+ * To run a mutation, you first call `useUpdateProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProjectMutation, { data, loading, error }] = useUpdateProjectMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateProjectMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProjectMutation, UpdateProjectMutationVariables>) {
+        return Apollo.useMutation<UpdateProjectMutation, UpdateProjectMutationVariables>(UpdateProjectDocument, baseOptions);
+      }
+export type UpdateProjectMutationHookResult = ReturnType<typeof useUpdateProjectMutation>;
+export type UpdateProjectMutationResult = Apollo.MutationResult<UpdateProjectMutation>;
+export type UpdateProjectMutationOptions = Apollo.BaseMutationOptions<UpdateProjectMutation, UpdateProjectMutationVariables>;
 export const UpdateStoryDocument = gql`
     mutation UpdateStory($data: UpdateStoryInputType!) {
   updateStory(data: $data) {

@@ -10,6 +10,20 @@ function loadProjectReducer(data: ProjectResponseType): ProjectContextType {
 	return { project: data };
 }
 
+function updateProjectReducer(
+	state: ProjectContextType,
+	data: ProjectResponseType
+): ProjectContextType {
+	if (!state.project) return { ...state };
+	return {
+		...state,
+		project: {
+			...state.project,
+			...data
+		}
+	};
+}
+
 function createSprintReducer(
 	state: ProjectContextType,
 	data: SprintResponseType
@@ -99,6 +113,9 @@ export function projectReducer(
 		// PROJECT
 		case Action.LOAD_PROJECT:
 			return loadProjectReducer(action.data);
+
+		case Action.UPDATE_PROJECT:
+			return updateProjectReducer(state, action.data);
 
 		// SPRINT
 		case Action.CREATE_SPRINT:

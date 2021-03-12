@@ -4,5 +4,11 @@ mutation UpdateProject($data: UpdateProjectInputType!) {
 		title
 		pid
 		activeSprintId
+		backlog {
+			id
+			title
+			description
+			status
+		}
 	}
 }
